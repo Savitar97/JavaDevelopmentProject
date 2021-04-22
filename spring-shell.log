@@ -4,3 +4,44 @@
 1618888386442:exit
 1618888633104:yasuooo
 1618888635855:exit
+1619047122067:help
+1619047129631:list movies
+1619048821311:delete movie ASD
+1619049015933:create movie Sátántangó drama 450
+1619049053644:create movie Sátántangó "drama,comedy" 450
+1619049071406:create movie Sátántangó "drama comedy" 450
+1619050917790:create movie Sátántangó drama 450
+1619050921481:list movies
+1619051114844:create movie Sátántangó drama 450
+1619051117469:list movies
+1619051197403:create movie Sátántangó drama 450
+1619051399357:stacktrace
+1619051659808:create movie Sátántangó drama 450
+1619053978358:list movies
+1619054218543:Objects.requireNonNull(productDto, "Product cannot be null");
+1619054249035:create movie Sátántangó drama 450
+1619054265904:stacktrace
+1619054335244:create movie Sátántangó drama 450
+1619054342860:help
+1619054346099:list movies
+1619054633907:private void deleteMovieByTitle(String title) {
+1619054647389:create movie Sátántangó drama 450
+1619054656943:movie list
+1619054661976:list movies
+1619054689028:delete movie Sátánhágó
+1619054692170:list movies
+1619054725742:delete movie Sátántangó
+1619054756238:stacktrace
+1619054772792:list movies
+1619054780825:delete movie Sátántangó
+1619054792515:create movie Sátántangó drama 450
+1619054796371:help
+1619054802534:delete movie Sátántangó
+1619054997451:create movie Sátántangó drama 450
+1619055002743:delete movie Sátántangó
+1619055005570:list movies
+1619056329277:create movie Sátántangó drama 450
+1619056332108:list movies
+1619056352318:update movieSátántangó drama 480
+1619056383457:update movie Sátántangó comedy 300
+1619056385988:list movies
