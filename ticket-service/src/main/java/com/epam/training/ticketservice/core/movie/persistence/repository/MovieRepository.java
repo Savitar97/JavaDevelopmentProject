@@ -7,8 +7,9 @@ import org.springframework.stereotype.Repository;
 import javax.transaction.Transactional;
 
 @Repository
-public interface MovieRepository extends JpaRepository<Movie,Integer> {
+public interface MovieRepository extends JpaRepository<Movie,Long> {
     Movie findByTitle(String title);
+
     @Transactional
     void deleteByTitle(String title);
 }

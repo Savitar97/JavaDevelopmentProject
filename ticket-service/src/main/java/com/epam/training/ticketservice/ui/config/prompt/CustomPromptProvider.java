@@ -1,4 +1,4 @@
-package com.epam.training.ticketservice.promptconfig;
+package com.epam.training.ticketservice.ui.config.prompt;
 
 import org.jline.utils.AttributedString;
 import org.jline.utils.AttributedStyle;

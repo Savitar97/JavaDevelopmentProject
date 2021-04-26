@@ -6,6 +6,8 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @ShellComponent
 public class MovieCommands {
@@ -15,14 +17,18 @@ public class MovieCommands {
         this.movieService = movieService;
     }
 
-    @ShellMethod(value="Movie List",key="list movies")
-    public List<MovieDto> listOfMovies(){
-        return movieService.getMovieList();
+    @ShellMethod(value = "List the available movies", key = "list movies")
+    public String listOfMovies() {
+        List<MovieDto> movies = movieService.getMovieList();
+        if (movies == null || movies.isEmpty()) {
+            return "There are no movies at the moment";
+        }
+        return movies.stream().map(Objects::toString).collect(Collectors.joining());
     }
 
-    @ShellMethod(value="Create Movie",key="create movie")
-    public MovieDto createMovie(String title,String genre,Integer length){
-        MovieDto movieDto=new MovieDto.Builder()
+    @ShellMethod(value = "Add a movie to movies",key = "create movie")
+    public MovieDto createMovie(String title,String genre,Integer length) {
+        MovieDto movieDto = new MovieDto.Builder()
                 .withTitle(title)
                 .withGenre(genre)
                 .withLength(length)
@@ -31,14 +37,14 @@ public class MovieCommands {
         return movieDto;
     }
 
-    @ShellMethod(value="Delete Movie",key="delete movie")
-    public void deleteMovieByTitle(String title){
+    @ShellMethod(value = "Delete a movie from movies", key = "delete movie")
+    public void deleteMovieByTitle(String title) {
         movieService.deleteMovieByTitle(title);
     }
 
-    @ShellMethod(value="Update Movie",key="update movie")
-    public void updateMovie(String title,String genre,Integer length){
-        MovieDto movieDto=new MovieDto.Builder()
+    @ShellMethod(value = "Update a movie from movies", key = "update movie")
+    public void updateMovie(String title,String genre,Integer length) {
+        MovieDto movieDto = new MovieDto.Builder()
                 .withTitle(title)
                 .withGenre(genre)
                 .withLength(length)

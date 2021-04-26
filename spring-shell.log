@@ -45,3 +45,52 @@
 1619056352318:update movieSátántangó drama 480
 1619056383457:update movie Sátántangó comedy 300
 1619056385988:list movies
+1619075708147:create movie Sátántangó drama 450
+1619075725771:list movies
+1619075918034:create movie Sátántangó drama 450
+1619075941719:delete movie Sátántangó
+1619075945559:list movies
+1619075956369:stacktrace
+1619075994005:create movie Sátántangó drama 450
+1619076001663:create movie X-Man drama 450
+1619076006274:list movies
+1619076124920:create movie Sátántangó drama 450
+1619076135407:exit
+1619333151187:list movies
+1619351572970:exit
+1619353289149:help
+1619353305858:exit
+1619356387414:crate room A1 10 10
+1619356397536:create room A1 10 10
+1619356413735:list rooms
+1619356425253:create room A2 20 20
+1619356429647:list rooms
+1619356443196:exit
+1619359451787:create movie Sátántangó drama 450
+1619359461011:list movies
+1619359473726:help
+1619359533458:update movie Sátántangó comedy 450
+1619359536037:list movies
+1619359591714:create room A1 5 10
+1619359622547:list rooms
+1619359632092:delete room A1
+1619359637851:exit
+1619359722708:create room A1 5 10
+1619359728864:delete room A1
+1619359732155:list rooms
+1619361678702:exit
+1619364915036:create movie Sátántangó drama 450
+1619364922554:create room A1 10 10
+1619364964868:create screening Sátántangó A1 "2021-03-14 16:00"
+1619364973572:exit
+1619365390817:create movie Sátántangó drama 450
+1619365398456:create room A1 10 10
+1619365418994:create screening Sátántangó A1
+1619365439023:create screening Sátántangó A1 "2021-03-14 16:00"
+1619384997345:exit
+1619447891531:create movie Sátántangó drama 450
+1619447897338:list movies
+1619448361806:exit
+1619454608744:create movie Sátántangó drama 450
+1619454612137:list movies
+1619454632659:exit
