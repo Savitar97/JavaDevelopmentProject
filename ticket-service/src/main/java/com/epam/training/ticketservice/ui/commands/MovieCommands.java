@@ -23,7 +23,7 @@ public class MovieCommands {
         if (movies == null || movies.isEmpty()) {
             return "There are no movies at the moment";
         }
-        return movies.stream().map(Objects::toString).collect(Collectors.joining());
+        return movies.stream().map(Objects::toString).collect(Collectors.joining("\n"));
     }
 
     @ShellMethod(value = "Add a movie to movies",key = "create movie")
