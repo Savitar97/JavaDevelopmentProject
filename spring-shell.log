@@ -98,3 +98,16 @@
 1619456402493:create movie Avangers action 450
 1619456405686:list movies
 1619456420150:exit
+1619457792290:create movie Sátántangó drama 450
+1619531195433:create movie "Sprited Away" animation 125
+1619531198426:list movies
+1619531202881:exit
+1619531341793:create movie "Sprited Away" animation 125
+1619531344550:list movies
+1619531346576:exit
+1619610024433:create movie "Sprited Away" animation 125
+1619610035130:create room A1 5 5
+1619610079998:create screening "Sprited Away" A1 "2021-03-14 16:00"
+1619610094962:exit
+1619622533033:list movies
+1619622536187:exit

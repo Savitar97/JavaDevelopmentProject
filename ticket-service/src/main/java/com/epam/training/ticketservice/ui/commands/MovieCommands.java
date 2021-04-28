@@ -2,19 +2,20 @@ package com.epam.training.ticketservice.ui.commands;
 
 import com.epam.training.ticketservice.core.movie.MovieService;
 import com.epam.training.ticketservice.core.movie.model.MovieDto;
+import com.epam.training.ticketservice.ui.utilities.out.helper.ConvertListToString;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 @ShellComponent
-public class MovieCommands {
+public class MovieCommands extends CommandAvailability {
     private final MovieService movieService;
+    private final ConvertListToString convertListToString;
 
-    public MovieCommands(MovieService movieService) {
+    public MovieCommands(MovieService movieService, ConvertListToString convertListToString) {
         this.movieService = movieService;
+        this.convertListToString = convertListToString;
     }
 
     @ShellMethod(value = "List the available movies", key = "list movies")
@@ -23,18 +24,21 @@ public class MovieCommands {
         if (movies == null || movies.isEmpty()) {
             return "There are no movies at the moment";
         }
-        return movies.stream().map(Objects::toString).collect(Collectors.joining("\n"));
+        return convertListToString.listToString(movies);
     }
 
     @ShellMethod(value = "Add a movie to movies",key = "create movie")
-    public MovieDto createMovie(String title,String genre,Integer length) {
+    public String createMovie(String title,String genre,Integer length) {
+        if (movieService.existsByTitle(title)) {
+           return "Movie with this name already exist.";
+        }
         MovieDto movieDto = new MovieDto.Builder()
                 .withTitle(title)
                 .withGenre(genre)
                 .withLength(length)
                 .build();
         movieService.createMovie(movieDto);
-        return movieDto;
+        return movieDto.toString();
     }
 
     @ShellMethod(value = "Delete a movie from movies", key = "delete movie")

@@ -15,7 +15,7 @@ public class RoomServiceImpl implements RoomService {
 
     private final RoomRepository roomRepository;
 
-    public RoomServiceImpl(RoomRepository roomRepository) {
+    RoomServiceImpl(RoomRepository roomRepository) {
         this.roomRepository = roomRepository;
     }
 
@@ -47,7 +47,12 @@ public class RoomServiceImpl implements RoomService {
         roomRepository.deleteByName(name);
     }
 
-    private RoomDto convertEntityToDto(Room room){
+    @Override
+    public boolean existsByName(String name) {
+        return roomRepository.existsByName(name);
+    }
+
+    private RoomDto convertEntityToDto(Room room) {
         return new RoomDto.Builder()
                 .withRoomName(room.getName())
                 .withSeatRows(room.getSeatRows())

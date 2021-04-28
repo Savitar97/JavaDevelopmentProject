@@ -18,8 +18,8 @@ public class RoomDto {
     public String toString() {
         return "Room "
                 + roomName
-                + " with " + seatRows*seatColumns + " seats, "
-                + seatRows +" rows"
+                + " with " + seatRows * seatColumns + " seats, "
+                + seatRows + " rows"
                 + " and " + seatColumns + " columns";
     }
 
@@ -33,7 +33,7 @@ public class RoomDto {
             return this;
         }
 
-        public Builder withSeatRows(Integer seatRows){
+        public Builder withSeatRows(Integer seatRows) {
             this.seatRows = seatRows;
             return this;
         }

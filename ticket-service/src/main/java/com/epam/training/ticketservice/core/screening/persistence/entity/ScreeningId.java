@@ -7,7 +7,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Embeddable;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -18,10 +21,10 @@ import java.util.Date;
 @NoArgsConstructor
 public class ScreeningId implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="movie_id",referencedColumnName = "id")
+    @JoinColumn(name = "movie_id", referencedColumnName = "id")
     Movie movie;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="room_id",referencedColumnName = "id")
+    @JoinColumn(name = "room_id", referencedColumnName = "id")
     Room room;
     Date startTime;
 

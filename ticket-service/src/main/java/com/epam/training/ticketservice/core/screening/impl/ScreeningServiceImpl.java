@@ -9,7 +9,6 @@ import com.epam.training.ticketservice.core.screening.persistence.entity.Screeni
 import com.epam.training.ticketservice.core.screening.persistence.entity.Screening;
 import com.epam.training.ticketservice.core.screening.persistence.repository.ScreeningRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.Date;
 import java.util.List;
 
@@ -22,7 +21,9 @@ public class ScreeningServiceImpl implements ScreeningService {
 
     private final ScreeningRepository screeningRepository;
 
-    public ScreeningServiceImpl(RoomRepository roomRepository, MovieRepository movieRepository, ScreeningRepository screeningRepository) {
+    ScreeningServiceImpl(RoomRepository roomRepository,
+                         MovieRepository movieRepository,
+                         ScreeningRepository screeningRepository) {
         this.roomRepository = roomRepository;
         this.movieRepository = movieRepository;
         this.screeningRepository = screeningRepository;
@@ -35,9 +36,9 @@ public class ScreeningServiceImpl implements ScreeningService {
 
     @Override
     public void createScreening(String movieTitle, String roomName, Date starTime) {
-        Movie movie=movieRepository.findByTitle(movieTitle);
-        Room room= roomRepository.findByName(roomName);
-        ScreeningId screeningId =new ScreeningId(movie,room,starTime);
+        Movie movie = movieRepository.getMovieByTitle(movieTitle);
+        Room room = roomRepository.findByName(roomName);
+        ScreeningId screeningId = new ScreeningId(movie,room,starTime);
         screeningRepository.save(new Screening(screeningId));
     }
 }

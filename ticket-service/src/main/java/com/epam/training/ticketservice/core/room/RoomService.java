@@ -13,4 +13,5 @@ public interface RoomService {
 
     void deleteRoomByName(String name);
 
+    boolean existsByName(String name);
 }

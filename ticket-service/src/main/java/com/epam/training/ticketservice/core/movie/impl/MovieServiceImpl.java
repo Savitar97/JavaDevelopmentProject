@@ -16,7 +16,7 @@ public class MovieServiceImpl implements MovieService {
 
     private final MovieRepository movieRepository;
 
-    public MovieServiceImpl(MovieRepository movieRepository) {
+    MovieServiceImpl(MovieRepository movieRepository) {
         this.movieRepository = movieRepository;
     }
 
@@ -31,6 +31,7 @@ public class MovieServiceImpl implements MovieService {
         Objects.requireNonNull(movieDto, "Movie cannot be null");
         Objects.requireNonNull(movieDto.getTitle(), "Movie Title cannot be null");
         Objects.requireNonNull(movieDto.getLength(), "Movie Length cannot be null");
+        Objects.requireNonNull(movieDto.getGenre(), "Movie Genre cannot be null");
         Movie movie = new Movie(null,
                 movieDto.getTitle(),
                 movieDto.getGenre(),
@@ -45,10 +46,25 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public void updateMovie(MovieDto movieDto) {
-        Movie movie = movieRepository.findByTitle(movieDto.getTitle());
-        movie.setGenre(movieDto.getGenre());
-        movie.setLength(movieDto.getLength());
-        movieRepository.save(movie);
+        if (movieRepository.existsByTitle(movieDto.getTitle())) {
+            Movie movie = movieRepository.getMovieByTitle(movieDto.getTitle());
+            movie.setGenre(movieDto.getGenre());
+            movie.setLength(movieDto.getLength());
+            movieRepository.save(movie);
+        }
+        else {
+            throw new IllegalArgumentException("Movie with this title doesn't exist!");
+        }
+    }
+
+    @Override
+    public Optional<MovieDto> findByTitle(String title) {
+        return convertEntityToDto(movieRepository.findByTitle(title));
+    }
+
+    @Override
+    public Boolean existsByTitle(String title) {
+        return movieRepository.existsByTitle(title);
     }
 
 
