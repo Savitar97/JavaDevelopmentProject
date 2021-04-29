@@ -48,7 +48,7 @@ public class MovieServiceImplTest {
     }
 
     @Test
-    public void testExistByTitleShouldCallMovieRepositoryAndReturnToTrueWhenTitleExist(){
+    public void testExistByTitleShouldCallMovieRepositoryAndReturnTrueWhenTitleExist(){
         //Given
         Mockito.when(movieRepository.existsByTitle("Sprited Away")).thenReturn(true);
 
@@ -56,13 +56,27 @@ public class MovieServiceImplTest {
         Boolean actual = underTest.existsByTitle("Sprited Away");
 
         //Then
-        Assertions.assertEquals(true, actual);
+        Assertions.assertTrue(actual);
         Mockito.verify(movieRepository).existsByTitle("Sprited Away");
         Mockito.verifyNoMoreInteractions(movieRepository);
     }
 
     @Test
-    public void testCreateMovieShouldCallMovieRepositoryWhenTheInputProductIsValid() {
+    public void testExistByTitleShouldCallMovieRepositoryAndReturnFalseWhenTitleNotExist(){
+        //Given
+        Mockito.when(movieRepository.existsByTitle("Sprited Away")).thenReturn(false);
+
+        //When
+        Boolean actual = underTest.existsByTitle("Sprited Away");
+
+        //Then
+        Assertions.assertFalse(actual);
+        Mockito.verify(movieRepository).existsByTitle("Sprited Away");
+        Mockito.verifyNoMoreInteractions(movieRepository);
+    }
+
+    @Test
+    public void testCreateMovieShouldCallMovieRepositoryWhenTheInputMovieIsValid() {
         // Given
         Mockito.when(movieRepository.save(MOVIE_ENTITY)).thenReturn(MOVIE_ENTITY);
 
@@ -202,4 +216,29 @@ public class MovieServiceImplTest {
         Mockito.verifyNoMoreInteractions(movieRepository);
     }
 
+    @Test
+    public void testDeleteMovieShouldCallRepositoryWhenTheInputValidThenDeleteMovie() {
+        //Given
+        Mockito.when(movieRepository.existsByTitle("Sprited Away")).thenReturn(true);
+        //When
+        underTest.deleteMovieByTitle("Sprited Away");
+        //Then
+        Mockito.verify(movieRepository).existsByTitle("Sprited Away");
+        Mockito.verify(movieRepository).deleteByTitle("Sprited Away");
+        Mockito.verifyNoMoreInteractions(movieRepository);
+
+    }
+
+    @Test
+    public void testDeleteMovieShouldCallMovieRepositoryWhenTheInputInValidThenShouldThrowIllegalArgumentException() {
+        //Given
+        Mockito.when(movieRepository.existsByTitle("Sprited Away")).thenReturn(false);
+
+        //When
+        Assertions.assertThrows(IllegalArgumentException.class,()-> underTest.deleteMovieByTitle("Sprited Away"));
+
+        Mockito.verify(movieRepository).existsByTitle("Sprited Away");
+        Mockito.verifyNoMoreInteractions(movieRepository);
+
+    }
 }

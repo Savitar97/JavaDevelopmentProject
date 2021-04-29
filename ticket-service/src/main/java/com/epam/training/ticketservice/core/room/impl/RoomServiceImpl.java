@@ -52,7 +52,11 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public void deleteRoomByName(String name) {
-        roomRepository.deleteByName(name);
+        if (roomRepository.existsByName(name)) {
+            roomRepository.deleteByName(name);
+        } else {
+            throw new IllegalArgumentException("Room with this name doesn't exist!");
+        }
     }
 
     @Override

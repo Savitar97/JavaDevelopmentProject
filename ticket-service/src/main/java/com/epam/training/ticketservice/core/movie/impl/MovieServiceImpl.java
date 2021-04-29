@@ -36,12 +36,16 @@ public class MovieServiceImpl implements MovieService {
                 movieDto.getTitle(),
                 movieDto.getGenre(),
                 movieDto.getLength()
-                );
+        );
         movieRepository.save(movie);
     }
 
     public void deleteMovieByTitle(String title) {
-        movieRepository.deleteByTitle(title);
+        if (movieRepository.existsByTitle(title)) {
+            movieRepository.deleteByTitle(title);
+        } else {
+            throw new IllegalArgumentException("Movie with this title doesn't exist!");
+        }
     }
 
     @Override
