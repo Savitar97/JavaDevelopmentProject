@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ScreeningRepository extends JpaRepository<Screening, ScreeningId> {
-
+    boolean existsById_Movie_TitleAndId_Room_NameAndId_StartTime();
 }

@@ -13,7 +13,6 @@ import javax.persistence.Column;
 
 @Entity
 @Data
-@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
 public class Room {

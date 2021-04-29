@@ -6,7 +6,6 @@ import com.epam.training.ticketservice.core.room.persistence.repository.RoomRepo
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import java.util.List;

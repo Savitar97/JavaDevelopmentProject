@@ -10,7 +10,6 @@ import javax.persistence.Entity;
 
 @Entity
 @Data
-@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
 public class Screening {

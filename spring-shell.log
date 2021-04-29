@@ -111,3 +111,6 @@
 1619610094962:exit
 1619622533033:list movies
 1619622536187:exit
+1619699971233:create movie "Sprited Away" animation 125
+1619699996128:create room Pedersoli 10 10
+1619700007204:create screening "Spirited Away" Pedersoli "2021-03-14"

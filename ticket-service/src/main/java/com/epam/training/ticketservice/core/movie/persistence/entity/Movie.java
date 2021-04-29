@@ -2,7 +2,6 @@ package com.epam.training.ticketservice.core.movie.persistence.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
@@ -14,7 +13,6 @@ import javax.persistence.Column;
 
 @Entity
 @Data
-@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
 public class Movie {

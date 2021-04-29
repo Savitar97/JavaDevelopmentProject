@@ -11,6 +11,7 @@ import com.epam.training.ticketservice.core.screening.persistence.repository.Scr
 import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class ScreeningServiceImpl implements ScreeningService {
@@ -36,6 +37,9 @@ public class ScreeningServiceImpl implements ScreeningService {
 
     @Override
     public void createScreening(String movieTitle, String roomName, Date starTime) {
+        Objects.requireNonNull(movieTitle,"Movie title cannot be null");
+        Objects.requireNonNull(roomName,"Room name cannot be null");
+        Objects.requireNonNull(starTime,"Start time cannot be null");
         Movie movie = movieRepository.getMovieByTitle(movieTitle);
         Room room = roomRepository.findByName(roomName);
         ScreeningId screeningId = new ScreeningId(movie,room,starTime);

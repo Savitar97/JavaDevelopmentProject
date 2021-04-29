@@ -16,7 +16,6 @@ import java.util.Date;
 
 @Embeddable
 @Data
-@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
 public class ScreeningId implements Serializable {
