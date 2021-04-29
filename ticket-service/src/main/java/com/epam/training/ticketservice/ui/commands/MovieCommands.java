@@ -27,10 +27,10 @@ public class MovieCommands extends CommandAvailability {
         return convertListToString.listToString(movies);
     }
 
-    @ShellMethod(value = "Add a movie to movies",key = "create movie")
-    public String createMovie(String title,String genre,Integer length) {
+    @ShellMethod(value = "Add a movie to movies", key = "create movie")
+    public String createMovie(String title, String genre, Integer length) {
         if (movieService.existsByTitle(title)) {
-           return "Movie with this name already exist.";
+            return "Movie with this name already exist.";
         }
         MovieDto movieDto = new MovieDto.Builder()
                 .withTitle(title)
@@ -47,7 +47,7 @@ public class MovieCommands extends CommandAvailability {
     }
 
     @ShellMethod(value = "Update a movie from movies", key = "update movie")
-    public void updateMovie(String title,String genre,Integer length) {
+    public void updateMovie(String title, String genre, Integer length) {
         MovieDto movieDto = new MovieDto.Builder()
                 .withTitle(title)
                 .withGenre(genre)

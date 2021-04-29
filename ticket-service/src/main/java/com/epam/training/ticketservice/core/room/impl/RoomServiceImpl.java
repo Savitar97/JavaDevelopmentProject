@@ -26,10 +26,10 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public void createRoom(RoomDto roomDto) {
-        Objects.requireNonNull(roomDto,"Room cannot be null!");
-        Objects.requireNonNull(roomDto.getRoomName(),"Room name cannot be null!");
-        Objects.requireNonNull(roomDto.getSeatColumns(),"Room's seat columns cannot be null!");
-        Objects.requireNonNull(roomDto.getSeatRows(),"Room's seat rows cannot be null!");
+        Objects.requireNonNull(roomDto, "Room cannot be null!");
+        Objects.requireNonNull(roomDto.getRoomName(), "Room name cannot be null!");
+        Objects.requireNonNull(roomDto.getSeatColumns(), "Room's seat columns cannot be null!");
+        Objects.requireNonNull(roomDto.getSeatRows(), "Room's seat rows cannot be null!");
 
         roomRepository.save(new Room(null,
                 roomDto.getRoomName(),
@@ -39,7 +39,15 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public void updateRoom(RoomDto roomDto) {
+        if (roomRepository.existsByName(roomDto.getRoomName())) {
+            Room room = roomRepository.findByName(roomDto.getRoomName());
+            room.setSeatColumns(roomDto.getSeatColumns());
+            room.setSeatRows(roomDto.getSeatRows());
+            roomRepository.save(room);
 
+        } else {
+            throw new IllegalArgumentException("Room with this name doesn't exist!");
+        }
     }
 
     @Override

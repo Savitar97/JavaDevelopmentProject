@@ -48,4 +48,14 @@ public class RoomCommand extends CommandAvailability {
         roomService.deleteRoomByName(name);
     }
 
+    @ShellMethod(value = "Update a room from rooms", key = "update room")
+    public void updateMovie(String name,Integer rows,Integer columns) {
+        RoomDto roomDto = new RoomDto.Builder()
+                .withRoomName(name)
+                .withSeatRows(rows)
+                .withSeatColumns(columns)
+                .build();
+        roomService.updateRoom(roomDto);
+    }
+
 }

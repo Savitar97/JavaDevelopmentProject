@@ -51,8 +51,7 @@ public class MovieServiceImpl implements MovieService {
             movie.setGenre(movieDto.getGenre());
             movie.setLength(movieDto.getLength());
             movieRepository.save(movie);
-        }
-        else {
+        } else {
             throw new IllegalArgumentException("Movie with this title doesn't exist!");
         }
     }
