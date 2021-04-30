@@ -162,3 +162,12 @@
 1619736190807:create screening "Sprited Away" A1 "2021-03-14 23:35"
 1619736222585:create screening "Sprited Away" A1 "2021-03-14 16:00"
 1619736235145:exit
+1619769725534:create movie "Sprited Away" animation 125
+1619769736710:create movie Sátántangó drama 450
+1619769745744:list movies
+1619769757665:create room A1 10 10
+1619769778722:create screening "Sprited Away" A1 "2021-03-14 16:00"
+1619769800528:create screening Sátántangó A1 "2021-03-14 16:00"
+1619769843113:create screening Sátántangó A1 "2021-03-14 18:10"
+1619769904118:create screening Sátántangó A1 "2021-03-14 18:15"
+1619769910348:exit

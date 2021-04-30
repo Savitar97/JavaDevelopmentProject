@@ -21,7 +21,7 @@ public class MovieCommands extends CommandAvailability {
     @ShellMethod(value = "List the available movies", key = "list movies")
     public String listOfMovies() {
         List<MovieDto> movies = movieService.getMovieList();
-        if (movies == null || movies.isEmpty()) {
+        if (movies.isEmpty()) {
             return "There are no movies at the moment";
         }
         return convertListToString.listToString(movies);

@@ -30,7 +30,7 @@ public class RoomServiceImpl implements RoomService {
         Objects.requireNonNull(roomDto.getRoomName(), "Room name cannot be null!");
         Objects.requireNonNull(roomDto.getSeatColumns(), "Room's seat columns cannot be null!");
         Objects.requireNonNull(roomDto.getSeatRows(), "Room's seat rows cannot be null!");
-        if(roomRepository.existsByName(roomDto.getRoomName())){
+        if (roomRepository.existsByName(roomDto.getRoomName())) {
             throw new IllegalArgumentException("Room with this name already exist");
         } else {
             roomRepository.save(new Room(null,

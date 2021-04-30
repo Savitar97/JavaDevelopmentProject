@@ -10,6 +10,7 @@ import com.epam.training.ticketservice.core.screening.persistence.entity.Screeni
 import com.epam.training.ticketservice.core.screening.persistence.repository.ScreeningRepository;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.stereotype.Service;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -38,42 +39,40 @@ public class ScreeningServiceImpl implements ScreeningService {
 
     @Override
     public void createScreening(String movieTitle, String roomName, Date startTime) {
-        Objects.requireNonNull(movieTitle,"Movie title cannot be null");
-        Objects.requireNonNull(roomName,"Room name cannot be null");
-        Objects.requireNonNull(startTime,"Start time cannot be null");
+        Objects.requireNonNull(movieTitle, "Movie title cannot be null");
+        Objects.requireNonNull(roomName, "Room name cannot be null");
+        Objects.requireNonNull(startTime, "Start time cannot be null");
 
         Movie movie = movieRepository.getMovieByTitle(movieTitle);
         Room room = roomRepository.findByName(roomName);
-        if(checkOverlapping(roomName,startTime,movie.getLength())){
-            ScreeningId screeningId = new ScreeningId(movie, room, startTime);
-            screeningRepository.save(new Screening(screeningId));
+        checkOverlapping(room.getName(), startTime, movie.getLength());
+        ScreeningId screeningId = new ScreeningId(movie, room, startTime);
+        screeningRepository.save(new Screening(screeningId));
+    }
+
+    public void checkOverlapping(String roomName, Date desiredDate, Integer movieLength) {
+        List<Screening> screenings = screeningRepository.getAllByIdRoomNameEquals(roomName);
+        Date desiredDateEnd = DateUtils.addMinutes(desiredDate, movieLength + 10);
+        if (!screenings.isEmpty()) {
+            for (Screening screening : screenings) {
+                Date screeningStartTime = screening.getId().getStartTime();
+                Date screeningEndTime = DateUtils.addMinutes(screening.getId().getStartTime(),
+                        screening.getId().getMovie().getLength());
+                Date screeningEndTimeWithBreak = DateUtils.addMinutes(screeningEndTime, 10);
+                if (isOverlapping(screeningStartTime, screeningEndTime, desiredDate, desiredDateEnd)) {
+                    throw new IllegalArgumentException("There is an overlapping screening");
+                }
+                if (isOverlapping(screeningEndTime, screeningEndTimeWithBreak, desiredDate, desiredDateEnd)) {
+                    throw new IllegalArgumentException(
+                            "This would start in the break period after another screening in this room");
+                }
+
+            }
         }
 
     }
 
-    public boolean checkOverlapping(String roomName,Date desiredDate,Integer movieLength) {
-        List<Screening> screenings = screeningRepository.getAllByIdRoomNameEquals(roomName);
-        Date desiredDateEnd=DateUtils.addMinutes(desiredDate,movieLength+10);
-        if (screenings==null || screenings.isEmpty()){
-            return true;
-        }
-        for (Screening screening : screenings) {
-            Date screeningEndTime = DateUtils.addMinutes(screening.getId().getStartTime(),
-                    screening.getId().getMovie().getLength());
-            Date screeningEndTimeWithBreak = DateUtils.addMinutes(screeningEndTime,10);
-            if (desiredDate.after(screening.getId().getStartTime()) &&
-                    desiredDate.before(screeningEndTime) ||
-                    desiredDate==screening.getId().getStartTime()) {
-                System.out.println("There is an overlapping screening");
-                return false;
-            }
-            if (desiredDate.after(screeningEndTime)&&desiredDate.before(screeningEndTimeWithBreak))
-            {
-                System.out.println("This would start in the break period after another screening in this room");
-                return false;
-            }
-        }
-        return true;
-
+    public boolean isOverlapping(Date startDate, Date endDate, Date desiredDate, Date endDesiredDate) {
+        return endDate.after(desiredDate) && startDate.before(endDesiredDate);
     }
 }

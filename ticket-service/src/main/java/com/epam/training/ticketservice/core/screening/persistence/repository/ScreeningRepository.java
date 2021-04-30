@@ -10,9 +10,14 @@ import java.util.List;
 
 @Repository
 public interface ScreeningRepository extends JpaRepository<Screening, ScreeningId> {
-    boolean existsById_Movie_TitleAndId_Room_NameAndId_StartTime(String id_movie_title, String id_room_name, Date id_startTime);
 
-    Screening getScreeningById_Movie_TitleAndId_Room_NameAndId_StartTime(String id_movie_title, String id_room_name, Date id_startTime);
+    boolean existsById_Movie_TitleAndId_Room_NameAndId_StartTime(String movieTitle,
+                                                                 String roomName,
+                                                                 Date startTime);
+
+    Screening getScreeningById_Movie_TitleAndId_Room_NameAndId_StartTime(String movieTitle,
+                                                                         String roomName,
+                                                                         Date startTime);
 
     List<Screening> getAllByIdRoomNameEquals(String roomName);
 }
