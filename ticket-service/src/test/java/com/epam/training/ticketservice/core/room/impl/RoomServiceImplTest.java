@@ -76,31 +76,42 @@ class RoomServiceImplTest {
     @Test
     public void testCreateRoomShouldCallRoomRepositoryWhenTheInputRoomIsValid() {
         //Given
-        Mockito.when(roomRepository.save(ROOM_ENTITY)).thenReturn(ROOM_ENTITY);
-        Mockito.when(roomRepository.existsByName(ROOM.getRoomName())).thenReturn(false);
+        Mockito.when(roomRepository
+                .save(ROOM_ENTITY))
+                .thenReturn(ROOM_ENTITY);
+        Mockito.when(roomRepository
+                .existsByName(ROOM.getRoomName()))
+                .thenReturn(false);
         //When
         underTest.createRoom(ROOM);
         //Then
-        Mockito.verify(roomRepository).existsByName(ROOM.getRoomName());
-        Mockito.verify(roomRepository).save(ROOM_ENTITY);
+        Mockito.verify(roomRepository)
+                .existsByName(ROOM.getRoomName());
+        Mockito.verify(roomRepository)
+                .save(ROOM_ENTITY);
         Mockito.verifyNoMoreInteractions(roomRepository);
     }
 
     @Test
     public void testCreateRoomShouldThrowIllegalArgumentExceptionWhenTheInputRoomIsInValid() {
         //Given
-        Mockito.when(roomRepository.existsByName(ROOM.getRoomName())).thenReturn(true);
+        Mockito.when(roomRepository
+                .existsByName(ROOM.getRoomName()))
+                .thenReturn(true);
         //When
-        Assertions.assertThrows(IllegalArgumentException.class,()->underTest.createRoom(ROOM));
+        Assertions.assertThrows(IllegalArgumentException.class
+                ,()->underTest.createRoom(ROOM));
         //Then
-        Mockito.verify(roomRepository).existsByName(ROOM.getRoomName());
+        Mockito.verify(roomRepository)
+                .existsByName(ROOM.getRoomName());
         Mockito.verifyNoMoreInteractions(roomRepository);
     }
 
     @Test
     public void testCreateRoomShouldThrowNullPointerExceptionWhenRoomIsNull() {
         //When
-        Assertions.assertThrows(NullPointerException.class, () -> underTest.createRoom(null));
+        Assertions.assertThrows(NullPointerException.class
+                , () -> underTest.createRoom(null));
         //Then
         Mockito.verifyNoMoreInteractions(roomRepository);
 
@@ -115,7 +126,8 @@ class RoomServiceImplTest {
                 .withSeatRows(10)
                 .build();
         //When
-        Assertions.assertThrows(NullPointerException.class, () -> underTest.createRoom(roomDto));
+        Assertions.assertThrows(NullPointerException.class
+                , () -> underTest.createRoom(roomDto));
         //Then
         Mockito.verifyNoMoreInteractions(roomRepository);
     }
@@ -129,7 +141,8 @@ class RoomServiceImplTest {
                 .withSeatRows(10)
                 .build();
         //When
-        Assertions.assertThrows(NullPointerException.class, () -> underTest.createRoom(roomDto));
+        Assertions.assertThrows(NullPointerException.class
+                , () -> underTest.createRoom(roomDto));
         //Then
         Mockito.verifyNoMoreInteractions(roomRepository);
     }
@@ -143,7 +156,8 @@ class RoomServiceImplTest {
                 .withSeatRows(null)
                 .build();
         //When
-        Assertions.assertThrows(NullPointerException.class, () -> underTest.createRoom(roomDto));
+        Assertions.assertThrows(NullPointerException.class
+                , () -> underTest.createRoom(roomDto));
         //Then
         Mockito.verifyNoMoreInteractions(roomRepository);
     }
@@ -151,37 +165,53 @@ class RoomServiceImplTest {
     @Test
     public void testDeleteRoomShouldCallRoomRepositoryWhenTheInputValidThenDeleteMovie() {
         //Given
-        Mockito.when(roomRepository.existsByName("A1")).thenReturn(true);
+        Mockito.when(roomRepository
+                .existsByName("A1"))
+                .thenReturn(true);
         //When
         underTest.deleteRoomByName("A1");
-        Mockito.verify(roomRepository).existsByName("A1");
-        Mockito.verify(roomRepository).deleteByName("A1");
+
+        //Then
+        Mockito.verify(roomRepository)
+                .existsByName("A1");
+        Mockito.verify(roomRepository)
+                .deleteByName("A1");
+
         Mockito.verifyNoMoreInteractions(roomRepository);
     }
 
     @Test
     public void testDeleteRoomShouldCallRoomRepositoryWhenTheInputInValidThenShouldThrowIllegalArgumentException() {
         //Given
-        Mockito.when(roomRepository.existsByName("A1")).thenReturn(false);
+        Mockito.when(roomRepository.existsByName("A1"))
+                .thenReturn(false);
         //When
-        Assertions.assertThrows(IllegalArgumentException.class,()-> underTest.deleteRoomByName("A1"));
+        Assertions.assertThrows(IllegalArgumentException.class
+                ,()-> underTest.deleteRoomByName("A1"));
         //Then
-        Mockito.verify(roomRepository).existsByName("A1");
+        Mockito.verify(roomRepository)
+                .existsByName("A1");
         Mockito.verifyNoMoreInteractions(roomRepository);
     }
 
     @Test
     public void testUpdateRoomShouldCallRoomRepositoryAndShouldThrowIllegalArgumentExceptionWhenTheInputInValid() {
         //Given
-        Mockito.when(roomRepository.existsByName("A1")).thenReturn(false);
-        //When
+        Mockito.when(roomRepository.existsByName("A1"))
+                .thenReturn(false);
+
         RoomDto requiredRoom = new RoomDto.Builder()
                 .withRoomName("A1")
                 .withSeatColumns(10)
                 .withSeatRows(10)
                 .build();
-        Assertions.assertThrows(IllegalArgumentException.class,()-> underTest.updateRoom(requiredRoom));
-        Mockito.verify(roomRepository).existsByName("A1");
+        //When
+        Assertions.assertThrows(IllegalArgumentException.class
+                ,()-> underTest.updateRoom(requiredRoom));
+
+        //Then
+        Mockito.verify(roomRepository)
+                .existsByName("A1");
         Mockito.verifyNoMoreInteractions(roomRepository);
     }
 
@@ -189,24 +219,39 @@ class RoomServiceImplTest {
     public void testUpdateRoomShouldCallRoomRepositoryAndShouldModifyTheEntityWhenTheInputValid() {
         //Given
         Room room = new Room(null,"A1",10,10);
-        Mockito.when(roomRepository.existsByName("A1")).thenReturn(true);
-        Mockito.when(roomRepository.findByName("A1")).thenReturn(room);
-        //When
+
+        Mockito.when(roomRepository
+                .existsByName("A1"))
+                .thenReturn(true);
+        Mockito.when(roomRepository
+                .findByName("A1"))
+                .thenReturn(room);
+
         RoomDto requiredRoom = new RoomDto.Builder()
                 .withRoomName("A1")
                 .withSeatColumns(20)
                 .withSeatRows(20)
                 .build();
-        underTest.updateRoom(requiredRoom);
+
         Room expected = new Room(null,
                 requiredRoom.getRoomName(),
                 requiredRoom.getSeatRows(),
                 requiredRoom.getSeatColumns());
+        //When
+
+        underTest.updateRoom(requiredRoom);
+
+
         //Then
-        Assertions.assertEquals(expected,roomRepository.findByName("A1"));
-        Mockito.verify(roomRepository).existsByName("A1");
-        Mockito.verify(roomRepository,Mockito.times(2)).findByName("A1");
-        Mockito.verify(roomRepository).save(expected);
+        Assertions.assertEquals(expected,roomRepository
+                .findByName("A1"));
+        Mockito.verify(roomRepository)
+                .existsByName("A1");
+        Mockito.verify(roomRepository,Mockito.times(2))
+                .findByName("A1");
+        Mockito.verify(roomRepository)
+                .save(expected);
+
         Mockito.verifyNoMoreInteractions(roomRepository);
 
     }

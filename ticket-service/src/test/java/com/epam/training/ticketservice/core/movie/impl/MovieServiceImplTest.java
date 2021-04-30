@@ -38,7 +38,9 @@ public class MovieServiceImplTest {
     @Test
     public void testGetMovieListShouldCallMovieRepositoryAndReturnADtoList(){
         //Given
-        Mockito.when(movieRepository.findAll()).thenReturn(List.of(MOVIE_ENTITY));
+        Mockito.when(movieRepository
+                .findAll())
+                .thenReturn(List.of(MOVIE_ENTITY));
         List<MovieDto> expected = List.of(MOVIE);
 
         //When
@@ -46,61 +48,80 @@ public class MovieServiceImplTest {
 
         //Then
         Assertions.assertEquals(expected, actual);
-        Mockito.verify(movieRepository).findAll();
+        Mockito.verify(movieRepository)
+                .findAll();
         Mockito.verifyNoMoreInteractions(movieRepository);
     }
 
     @Test
     public void testExistByTitleShouldCallMovieRepositoryAndReturnTrueWhenTitleExist(){
         //Given
-        Mockito.when(movieRepository.existsByTitle("Sprited Away")).thenReturn(true);
+        Mockito.when(movieRepository
+                .existsByTitle("Sprited Away"))
+                .thenReturn(true);
 
         //When
-        Boolean actual = underTest.existsByTitle("Sprited Away");
+        Boolean actual = underTest
+                .existsByTitle("Sprited Away");
 
         //Then
         Assertions.assertTrue(actual);
-        Mockito.verify(movieRepository).existsByTitle("Sprited Away");
+        Mockito.verify(movieRepository)
+                .existsByTitle("Sprited Away");
         Mockito.verifyNoMoreInteractions(movieRepository);
     }
 
     @Test
     public void testExistByTitleShouldCallMovieRepositoryAndReturnFalseWhenTitleNotExist(){
         //Given
-        Mockito.when(movieRepository.existsByTitle("Sprited Away")).thenReturn(false);
+        Mockito.when(movieRepository
+                .existsByTitle("Sprited Away"))
+                .thenReturn(false);
 
         //When
-        Boolean actual = underTest.existsByTitle("Sprited Away");
+        Boolean actual = underTest
+                .existsByTitle("Sprited Away");
 
         //Then
         Assertions.assertFalse(actual);
-        Mockito.verify(movieRepository).existsByTitle("Sprited Away");
+        Mockito.verify(movieRepository)
+                .existsByTitle("Sprited Away");
         Mockito.verifyNoMoreInteractions(movieRepository);
     }
 
     @Test
     public void testCreateMovieShouldCallMovieRepositoryWhenTheInputMovieIsValid() {
         // Given
-        Mockito.when(movieRepository.save(MOVIE_ENTITY)).thenReturn(MOVIE_ENTITY);
-        Mockito.when(movieRepository.existsByTitle(MOVIE.getTitle())).thenReturn(false);
+        Mockito.when(movieRepository
+                .save(MOVIE_ENTITY))
+                .thenReturn(MOVIE_ENTITY);
+        Mockito.when(movieRepository
+                .existsByTitle(MOVIE.getTitle()))
+                .thenReturn(false);
         // When
         underTest.createMovie(MOVIE);
 
         // Then
-        Mockito.verify(movieRepository).save(MOVIE_ENTITY);
-        Mockito.verify(movieRepository).existsByTitle(MOVIE.getTitle());
+        Mockito.verify(movieRepository)
+                .save(MOVIE_ENTITY);
+        Mockito.verify(movieRepository)
+                .existsByTitle(MOVIE.getTitle());
         Mockito.verifyNoMoreInteractions(movieRepository);
     }
 
     @Test
     public void testCreateMovieShouldThrowIllegalArgumentExceptionWhenTheInputMovieIsInValid() {
         // Given
-        Mockito.when(movieRepository.existsByTitle(MOVIE.getTitle())).thenReturn(true);
+        Mockito.when(movieRepository
+                .existsByTitle(MOVIE.getTitle()))
+                .thenReturn(true);
         // When
-        Assertions.assertThrows(IllegalArgumentException.class, ()->underTest.createMovie(MOVIE));
+        Assertions.assertThrows(IllegalArgumentException.class
+                , ()->underTest.createMovie(MOVIE));
 
         // Then
-        Mockito.verify(movieRepository).existsByTitle(MOVIE.getTitle());
+        Mockito.verify(movieRepository)
+                .existsByTitle(MOVIE.getTitle());
         Mockito.verifyNoMoreInteractions(movieRepository);
     }
 
@@ -109,7 +130,8 @@ public class MovieServiceImplTest {
         // Given
 
         // When
-        Assertions.assertThrows(NullPointerException.class, () -> underTest.createMovie(null));
+        Assertions.assertThrows(NullPointerException.class
+                , () -> underTest.createMovie(null));
 
         // Then
         Mockito.verifyNoMoreInteractions(movieRepository);
@@ -125,7 +147,8 @@ public class MovieServiceImplTest {
                 .build();
 
         // When
-        Assertions.assertThrows(NullPointerException.class, () -> underTest.createMovie(movie));
+        Assertions.assertThrows(NullPointerException.class
+                , () -> underTest.createMovie(movie));
 
         // Then
         Mockito.verifyNoMoreInteractions(movieRepository);
@@ -141,7 +164,8 @@ public class MovieServiceImplTest {
                 .build();
 
         // When
-        Assertions.assertThrows(NullPointerException.class, () -> underTest.createMovie(movie));
+        Assertions.assertThrows(NullPointerException.class
+                , () -> underTest.createMovie(movie));
 
         // Then
         Mockito.verifyNoMoreInteractions(movieRepository);
@@ -157,7 +181,8 @@ public class MovieServiceImplTest {
                 .build();
 
         // When
-        Assertions.assertThrows(NullPointerException.class, () -> underTest.createMovie(movie));
+        Assertions.assertThrows(NullPointerException.class
+                , () -> underTest.createMovie(movie));
 
         // Then
         Mockito.verifyNoMoreInteractions(movieRepository);
@@ -166,80 +191,113 @@ public class MovieServiceImplTest {
     @Test
     public void testFindByTitleShouldCallMovieRepositoryAndShouldReturnOptionalMovieDtoWhenTheInputIsValid() {
         //Given
-        Mockito.when(movieRepository.findByTitle("Sprited Away")).thenReturn(java.util.Optional.of(MOVIE_ENTITY));
+        Mockito.when(movieRepository
+                .findByTitle("Sprited Away"))
+                .thenReturn(java.util.Optional.of(MOVIE_ENTITY));
         //When
-        Optional<MovieDto> actual = underTest.findByTitle("Sprited Away");
+        Optional<MovieDto> actual = underTest
+                .findByTitle("Sprited Away");
         //Then
-        Mockito.verify(movieRepository).findByTitle("Sprited Away");
         Assertions.assertTrue(actual.isPresent());
         Assertions.assertEquals(MOVIE,actual.get());
+
+        Mockito.verify(movieRepository)
+                .findByTitle("Sprited Away");
         Mockito.verifyNoMoreInteractions(movieRepository);
     }
 
     @Test
     public void testFindByTitleShouldCallMovieRepositoryAndShouldReturnOptionalEmptyWhenTheInputIsInValid() {
         //Given
-        Mockito.when(movieRepository.findByTitle("Avangers")).thenReturn(Optional.empty());
+        Mockito.when(movieRepository
+                .findByTitle("Avangers"))
+                .thenReturn(Optional.empty());
         //When
-        Optional<MovieDto> actual = underTest.findByTitle("Avangers");
+        Optional<MovieDto> actual = underTest
+                .findByTitle("Avangers");
         //Then
-        Mockito.verify(movieRepository).findByTitle("Avangers");
         Assertions.assertFalse(actual.isPresent());
         Assertions.assertTrue(actual.isEmpty());
+
+        Mockito.verify(movieRepository)
+                .findByTitle("Avangers");
         Mockito.verifyNoMoreInteractions(movieRepository);
     }
 
     @Test
     public void testUpdateMovieShouldCallMovieRepositoryAndShouldModifyTheEntityWhenTheInputValid() {
         //Given
-        Movie movie = new Movie(null,"Sprited Away","animation",125);
-        Mockito.when(movieRepository.getMovieByTitle("Sprited Away")).thenReturn(movie);
-        Mockito.when(movieRepository.existsByTitle("Sprited Away")).thenReturn(true);
-        //When
+        Movie movie = new Movie(null
+                ,"Sprited Away"
+                ,"animation"
+                ,125);
+        Mockito.when(movieRepository
+                .getMovieByTitle("Sprited Away"))
+                .thenReturn(movie);
+        Mockito.when(movieRepository
+                .existsByTitle("Sprited Away"))
+                .thenReturn(true);
+
         MovieDto requiredMovie = new MovieDto.Builder()
                 .withTitle("Sprited Away")
                 .withGenre("comedy")
                 .withLength(400)
                 .build();
 
-        underTest.updateMovie(requiredMovie);
         Movie expected = new Movie(null,
                 requiredMovie.getTitle(),
                 requiredMovie.getGenre(),
                 requiredMovie.getLength());
+        //When
+        underTest.updateMovie(requiredMovie);
+
         //Then
-        Assertions.assertEquals(expected,movieRepository.getMovieByTitle("Sprited Away"));
-        Mockito.verify(movieRepository).existsByTitle("Sprited Away");
-        Mockito.verify(movieRepository,Mockito.times(2)).getMovieByTitle("Sprited Away");
-        Mockito.verify(movieRepository).save(expected);
+        Assertions.assertEquals(expected,movieRepository
+                .getMovieByTitle("Sprited Away"));
+        Mockito.verify(movieRepository)
+                .existsByTitle("Sprited Away");
+        Mockito.verify(movieRepository,Mockito.times(2))
+                .getMovieByTitle("Sprited Away");
+        Mockito.verify(movieRepository)
+                .save(expected);
         Mockito.verifyNoMoreInteractions(movieRepository);
     }
     @Test
     public void testUpdateMovieShouldCallMovieRepositoryAndShouldThrowIllegalArgumentExceptionWhenTheInputInValid() {
         //Given
-        Mockito.when(movieRepository.existsByTitle("Sprited Away")).thenReturn(false);
-        //When
+        Mockito.when(movieRepository
+                .existsByTitle("Sprited Away"))
+                .thenReturn(false);
+
         MovieDto requiredMovie = new MovieDto.Builder()
                 .withTitle("Sprited Away")
                 .withGenre("comedy")
                 .withLength(400)
                 .build();
-
-        Assertions.assertThrows(IllegalArgumentException.class,()->underTest.updateMovie(requiredMovie));
+        //When
+        Assertions.assertThrows(IllegalArgumentException.class
+                ,()->underTest.updateMovie(requiredMovie));
         //Then
-        Mockito.verify(movieRepository).existsByTitle("Sprited Away");
+        Mockito.verify(movieRepository)
+                .existsByTitle("Sprited Away");
+
         Mockito.verifyNoMoreInteractions(movieRepository);
     }
 
     @Test
     public void testDeleteMovieShouldCallRepositoryWhenTheInputValidThenDeleteMovie() {
         //Given
-        Mockito.when(movieRepository.existsByTitle("Sprited Away")).thenReturn(true);
+        Mockito.when(movieRepository
+                .existsByTitle("Sprited Away"))
+                .thenReturn(true);
         //When
         underTest.deleteMovieByTitle("Sprited Away");
         //Then
-        Mockito.verify(movieRepository).existsByTitle("Sprited Away");
-        Mockito.verify(movieRepository).deleteByTitle("Sprited Away");
+        Mockito.verify(movieRepository)
+                .existsByTitle("Sprited Away");
+        Mockito.verify(movieRepository)
+                .deleteByTitle("Sprited Away");
+
         Mockito.verifyNoMoreInteractions(movieRepository);
 
     }
@@ -247,12 +305,17 @@ public class MovieServiceImplTest {
     @Test
     public void testDeleteMovieShouldCallMovieRepositoryWhenTheInputInValidThenShouldThrowIllegalArgumentException() {
         //Given
-        Mockito.when(movieRepository.existsByTitle("Sprited Away")).thenReturn(false);
+        Mockito.when(movieRepository
+                .existsByTitle("Sprited Away"))
+                .thenReturn(false);
 
         //When
-        Assertions.assertThrows(IllegalArgumentException.class,()-> underTest.deleteMovieByTitle("Sprited Away"));
+        Assertions.assertThrows(IllegalArgumentException.class
+                ,()-> underTest.deleteMovieByTitle("Sprited Away"));
 
-        Mockito.verify(movieRepository).existsByTitle("Sprited Away");
+        //Then
+        Mockito.verify(movieRepository)
+                .existsByTitle("Sprited Away");
         Mockito.verifyNoMoreInteractions(movieRepository);
 
     }

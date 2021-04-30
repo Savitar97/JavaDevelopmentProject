@@ -4,6 +4,7 @@ import com.epam.training.ticketservice.core.screening.persistence.entity.Screeni
 import com.epam.training.ticketservice.core.screening.persistence.entity.Screening;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -19,7 +20,8 @@ public interface ScreeningRepository extends JpaRepository<Screening, ScreeningI
                                                                          String roomName,
                                                                          Date startTime);
 
-    void deleteScreeningById_Movie_TitleAndAndId_Room_NameAndAndId_StartTime(
+    @Transactional
+    void deleteScreeningById_Movie_TitleAndId_Room_NameAndAndId_StartTime(
             String movieTitle, String roomName, Date startTime
     );
 

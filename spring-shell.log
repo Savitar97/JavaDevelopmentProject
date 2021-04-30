@@ -181,3 +181,18 @@
 1619778446311:create screening "Sprited Away" Pedersoli "2021-03-14 16:00"
 1619778450674:list screenings
 1619778943203:exit
+1619781158056:create movie Sátántangó drama 450
+1619781167777:create room A1 10 10
+1619781184578:create screening Sátántangó A1 "2021-03-14 16:00"
+1619781186970:list screening
+1619781192281:list screenings
+1619781240811:delete screening Sátántangó A1 "2021-03-14 16:00"
+1619781250631:exit
+1619781280477:create movie Sátántangó drama 450
+1619781286772:create room A1 10 10
+1619781310571:create screening Sátántangó A1 "2021-03-14 16:00"
+1619781317600:list screening
+1619781323429:list screenings
+1619781334698:delete screening Sátántangó A1 "2021-03-14 16:00"
+1619781338575:list screenings
+1619781342051:exit
