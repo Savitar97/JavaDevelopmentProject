@@ -42,7 +42,16 @@ public class ScreeningServiceImpl implements ScreeningService {
         Objects.requireNonNull(movieTitle, "Movie title cannot be null");
         Objects.requireNonNull(roomName, "Room name cannot be null");
         Objects.requireNonNull(startTime, "Start time cannot be null");
-
+        if (!movieRepository.existsByTitle(movieTitle)) {
+            throw new IllegalArgumentException("Movie with this title not exist");
+        }
+        if (!roomRepository.existsByName(roomName)) {
+            throw new IllegalArgumentException("Room with this name not exist");
+        }
+        if (screeningRepository.existsById_Movie_TitleAndId_Room_NameAndId_StartTime(
+                movieTitle, roomName, startTime)) {
+            throw new IllegalArgumentException("Screening already exist");
+        }
         Movie movie = movieRepository.getMovieByTitle(movieTitle);
         Room room = roomRepository.findByName(roomName);
         checkOverlapping(room.getName(), startTime, movie.getLength());
@@ -59,10 +68,12 @@ public class ScreeningServiceImpl implements ScreeningService {
                 Date screeningEndTime = DateUtils.addMinutes(screening.getId().getStartTime(),
                         screening.getId().getMovie().getLength());
                 Date screeningEndTimeWithBreak = DateUtils.addMinutes(screeningEndTime, 10);
-                if (isOverlapping(screeningStartTime, screeningEndTime, desiredDate, desiredDateEnd)) {
+                if (isOverlapping(screeningStartTime, screeningEndTime,
+                        desiredDate, desiredDateEnd)) {
                     throw new IllegalArgumentException("There is an overlapping screening");
                 }
-                if (isOverlapping(screeningEndTime, screeningEndTimeWithBreak, desiredDate, desiredDateEnd)) {
+                if (isOverlapping(screeningEndTime, screeningEndTimeWithBreak,
+                        desiredDate, desiredDateEnd)) {
                     throw new IllegalArgumentException(
                             "This would start in the break period after another screening in this room");
                 }
