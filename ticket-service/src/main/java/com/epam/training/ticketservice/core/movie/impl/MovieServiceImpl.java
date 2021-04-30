@@ -1,5 +1,6 @@
 package com.epam.training.ticketservice.core.movie.impl;
 
+import com.epam.training.ticketservice.core.mapper.EntityToDtoMapper;
 import com.epam.training.ticketservice.core.movie.MovieService;
 import com.epam.training.ticketservice.core.movie.model.MovieDto;
 import com.epam.training.ticketservice.core.movie.persistence.entity.Movie;
@@ -15,14 +16,16 @@ import java.util.stream.Collectors;
 public class MovieServiceImpl implements MovieService {
 
     private final MovieRepository movieRepository;
+    private final EntityToDtoMapper entityToDtoMapper;
 
-    MovieServiceImpl(MovieRepository movieRepository) {
+    MovieServiceImpl(MovieRepository movieRepository, EntityToDtoMapper entityToDtoMapper) {
         this.movieRepository = movieRepository;
+        this.entityToDtoMapper = entityToDtoMapper;
     }
 
     @Override
     public List<MovieDto> getMovieList() {
-        return movieRepository.findAll().stream().map(this::convertEntityToDto).collect(Collectors.toList());
+        return movieRepository.findAll().stream().map(entityToDtoMapper::convertEntityToDto).collect(Collectors.toList());
     }
 
 
@@ -66,7 +69,7 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public Optional<MovieDto> findByTitle(String title) {
-        return convertEntityToDto(movieRepository.findByTitle(title));
+        return entityToDtoMapper.convertEntityToDto(movieRepository.findByTitle(title));
     }
 
     @Override
@@ -74,23 +77,5 @@ public class MovieServiceImpl implements MovieService {
         return movieRepository.existsByTitle(title);
     }
 
-
-    private MovieDto convertEntityToDto(Movie movie) {
-        return new MovieDto.Builder()
-                .withTitle(movie.getTitle())
-                .withLength(movie.getLength())
-                .withGenre(movie.getGenre())
-                .build();
-    }
-
-    private Optional<MovieDto> convertEntityToDto(Optional<Movie> movie) {
-        Optional<MovieDto> movieDto;
-        if (movie.isEmpty()) {
-            movieDto = Optional.empty();
-        } else {
-            movieDto = Optional.of(convertEntityToDto(movie.get()));
-        }
-        return movieDto;
-    }
 
 }

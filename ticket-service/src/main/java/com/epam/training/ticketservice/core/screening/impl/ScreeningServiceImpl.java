@@ -1,10 +1,12 @@
 package com.epam.training.ticketservice.core.screening.impl;
 
+import com.epam.training.ticketservice.core.mapper.EntityToDtoMapper;
 import com.epam.training.ticketservice.core.movie.persistence.entity.Movie;
 import com.epam.training.ticketservice.core.movie.persistence.repository.MovieRepository;
 import com.epam.training.ticketservice.core.room.persistence.entity.Room;
 import com.epam.training.ticketservice.core.room.persistence.repository.RoomRepository;
 import com.epam.training.ticketservice.core.screening.ScreeningService;
+import com.epam.training.ticketservice.core.screening.model.ScreeningDto;
 import com.epam.training.ticketservice.core.screening.persistence.entity.ScreeningId;
 import com.epam.training.ticketservice.core.screening.persistence.entity.Screening;
 import com.epam.training.ticketservice.core.screening.persistence.repository.ScreeningRepository;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class ScreeningServiceImpl implements ScreeningService {
@@ -24,17 +27,20 @@ public class ScreeningServiceImpl implements ScreeningService {
 
     private final ScreeningRepository screeningRepository;
 
+    private final EntityToDtoMapper entityToDtoMapper;
+
     ScreeningServiceImpl(RoomRepository roomRepository,
                          MovieRepository movieRepository,
-                         ScreeningRepository screeningRepository) {
+                         ScreeningRepository screeningRepository, EntityToDtoMapper entityToDtoMapper) {
         this.roomRepository = roomRepository;
         this.movieRepository = movieRepository;
         this.screeningRepository = screeningRepository;
+        this.entityToDtoMapper = entityToDtoMapper;
     }
 
     @Override
-    public List<Screening> getScreening() {
-        return null;
+    public List<ScreeningDto> getScreening() {
+        return screeningRepository.findAll().stream().map(entityToDtoMapper::convertEntityToDto).collect(Collectors.toList());
     }
 
     @Override
@@ -86,4 +92,6 @@ public class ScreeningServiceImpl implements ScreeningService {
     public boolean isOverlapping(Date startDate, Date endDate, Date desiredDate, Date endDesiredDate) {
         return endDate.after(desiredDate) && startDate.before(endDesiredDate);
     }
+
+
 }

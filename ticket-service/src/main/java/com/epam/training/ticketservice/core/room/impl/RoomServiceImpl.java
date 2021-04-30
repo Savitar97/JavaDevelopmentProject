@@ -1,5 +1,6 @@
 package com.epam.training.ticketservice.core.room.impl;
 
+import com.epam.training.ticketservice.core.mapper.EntityToDtoMapper;
 import com.epam.training.ticketservice.core.room.RoomService;
 import com.epam.training.ticketservice.core.room.model.RoomDto;
 import com.epam.training.ticketservice.core.room.persistence.entity.Room;
@@ -14,14 +15,16 @@ import java.util.stream.Collectors;
 public class RoomServiceImpl implements RoomService {
 
     private final RoomRepository roomRepository;
+    private final EntityToDtoMapper entityToDtoMapper;
 
-    RoomServiceImpl(RoomRepository roomRepository) {
+    RoomServiceImpl(RoomRepository roomRepository, EntityToDtoMapper entityToDtoMapper) {
         this.roomRepository = roomRepository;
+        this.entityToDtoMapper = entityToDtoMapper;
     }
 
     @Override
     public List<RoomDto> getRoomList() {
-        return roomRepository.findAll().stream().map(this::convertEntityToDto).collect(Collectors.toList());
+        return roomRepository.findAll().stream().map(entityToDtoMapper::convertEntityToDto).collect(Collectors.toList());
     }
 
     @Override
@@ -65,13 +68,5 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public boolean existsByName(String name) {
         return roomRepository.existsByName(name);
-    }
-
-    private RoomDto convertEntityToDto(Room room) {
-        return new RoomDto.Builder()
-                .withRoomName(room.getName())
-                .withSeatRows(room.getSeatRows())
-                .withSeatColumns(room.getSeatColumns())
-                .build();
     }
 }
