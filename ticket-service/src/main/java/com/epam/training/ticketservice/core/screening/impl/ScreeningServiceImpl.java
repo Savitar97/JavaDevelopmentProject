@@ -40,7 +40,9 @@ public class ScreeningServiceImpl implements ScreeningService {
 
     @Override
     public List<ScreeningDto> getScreening() {
-        return screeningRepository.findAll().stream().map(entityToDtoMapper::convertEntityToDto).collect(Collectors.toList());
+        return screeningRepository.findAll().stream()
+                .map(entityToDtoMapper::convertEntityToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -63,6 +65,17 @@ public class ScreeningServiceImpl implements ScreeningService {
         checkOverlapping(room.getName(), startTime, movie.getLength());
         ScreeningId screeningId = new ScreeningId(movie, room, startTime);
         screeningRepository.save(new Screening(screeningId));
+    }
+
+    @Override
+    public void deleteScreening(String movieTitle, String roomName, Date startTime) {
+        if (screeningRepository.existsById_Movie_TitleAndId_Room_NameAndId_StartTime(
+                movieTitle, roomName, startTime)) {
+            screeningRepository.deleteScreeningById_Movie_TitleAndAndId_Room_NameAndAndId_StartTime(
+                    movieTitle, roomName, startTime);
+        } else {
+            throw new IllegalArgumentException("Screening not exist");
+        }
     }
 
     public void checkOverlapping(String roomName, Date desiredDate, Integer movieLength) {

@@ -36,4 +36,9 @@ public class ScreeningCommand extends CommandAvailability {
         }
         return convertListToString.listToString(screenings);
     }
+
+    @ShellMethod(value = "Delete a screening", key = "delete screening")
+    public void deleteScreening(String movieTitle, String roomName, Date date) {
+        screeningService.deleteScreening(movieTitle, roomName, date);
+    }
 }

@@ -19,5 +19,9 @@ public interface ScreeningRepository extends JpaRepository<Screening, ScreeningI
                                                                          String roomName,
                                                                          Date startTime);
 
+    void deleteScreeningById_Movie_TitleAndAndId_Room_NameAndAndId_StartTime(
+            String movieTitle, String roomName, Date startTime
+    );
+
     List<Screening> getAllByIdRoomNameEquals(String roomName);
 }

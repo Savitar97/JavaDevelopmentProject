@@ -25,7 +25,9 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public List<MovieDto> getMovieList() {
-        return movieRepository.findAll().stream().map(entityToDtoMapper::convertEntityToDto).collect(Collectors.toList());
+        return movieRepository.findAll().stream()
+                .map(entityToDtoMapper::convertEntityToDto)
+                .collect(Collectors.toList());
     }
 
 
