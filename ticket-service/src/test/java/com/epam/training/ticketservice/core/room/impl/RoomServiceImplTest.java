@@ -74,10 +74,23 @@ class RoomServiceImplTest {
     public void testCreateRoomShouldCallRoomRepositoryWhenTheInputRoomIsValid() {
         //Given
         Mockito.when(roomRepository.save(ROOM_ENTITY)).thenReturn(ROOM_ENTITY);
+        Mockito.when(roomRepository.existsByName(ROOM.getRoomName())).thenReturn(false);
         //When
         underTest.createRoom(ROOM);
         //Then
+        Mockito.verify(roomRepository).existsByName(ROOM.getRoomName());
         Mockito.verify(roomRepository).save(ROOM_ENTITY);
+        Mockito.verifyNoMoreInteractions(roomRepository);
+    }
+
+    @Test
+    public void testCreateRoomShouldThrowIllegalArgumentExceptionWhenTheInputRoomIsInValid() {
+        //Given
+        Mockito.when(roomRepository.existsByName(ROOM.getRoomName())).thenReturn(true);
+        //When
+        Assertions.assertThrows(IllegalArgumentException.class,()->underTest.createRoom(ROOM));
+        //Then
+        Mockito.verify(roomRepository).existsByName(ROOM.getRoomName());
         Mockito.verifyNoMoreInteractions(roomRepository);
     }
 

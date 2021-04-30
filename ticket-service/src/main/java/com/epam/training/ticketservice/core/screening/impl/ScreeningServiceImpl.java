@@ -8,6 +8,7 @@ import com.epam.training.ticketservice.core.screening.ScreeningService;
 import com.epam.training.ticketservice.core.screening.persistence.entity.ScreeningId;
 import com.epam.training.ticketservice.core.screening.persistence.entity.Screening;
 import com.epam.training.ticketservice.core.screening.persistence.repository.ScreeningRepository;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
@@ -36,13 +37,43 @@ public class ScreeningServiceImpl implements ScreeningService {
     }
 
     @Override
-    public void createScreening(String movieTitle, String roomName, Date starTime) {
+    public void createScreening(String movieTitle, String roomName, Date startTime) {
         Objects.requireNonNull(movieTitle,"Movie title cannot be null");
         Objects.requireNonNull(roomName,"Room name cannot be null");
-        Objects.requireNonNull(starTime,"Start time cannot be null");
+        Objects.requireNonNull(startTime,"Start time cannot be null");
+
         Movie movie = movieRepository.getMovieByTitle(movieTitle);
         Room room = roomRepository.findByName(roomName);
-        ScreeningId screeningId = new ScreeningId(movie,room,starTime);
-        screeningRepository.save(new Screening(screeningId));
+        if(checkOverlapping(roomName,startTime,movie.getLength())){
+            ScreeningId screeningId = new ScreeningId(movie, room, startTime);
+            screeningRepository.save(new Screening(screeningId));
+        }
+
+    }
+
+    public boolean checkOverlapping(String roomName,Date desiredDate,Integer movieLength) {
+        List<Screening> screenings = screeningRepository.getAllByIdRoomNameEquals(roomName);
+        Date desiredDateEnd=DateUtils.addMinutes(desiredDate,movieLength+10);
+        if (screenings==null || screenings.isEmpty()){
+            return true;
+        }
+        for (Screening screening : screenings) {
+            Date screeningEndTime = DateUtils.addMinutes(screening.getId().getStartTime(),
+                    screening.getId().getMovie().getLength());
+            Date screeningEndTimeWithBreak = DateUtils.addMinutes(screeningEndTime,10);
+            if (desiredDate.after(screening.getId().getStartTime()) &&
+                    desiredDate.before(screeningEndTime) ||
+                    desiredDate==screening.getId().getStartTime()) {
+                System.out.println("There is an overlapping screening");
+                return false;
+            }
+            if (desiredDate.after(screeningEndTime)&&desiredDate.before(screeningEndTimeWithBreak))
+            {
+                System.out.println("This would start in the break period after another screening in this room");
+                return false;
+            }
+        }
+        return true;
+
     }
 }

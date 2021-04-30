@@ -79,15 +79,27 @@ public class MovieServiceImplTest {
     public void testCreateMovieShouldCallMovieRepositoryWhenTheInputMovieIsValid() {
         // Given
         Mockito.when(movieRepository.save(MOVIE_ENTITY)).thenReturn(MOVIE_ENTITY);
-
+        Mockito.when(movieRepository.existsByTitle(MOVIE.getTitle())).thenReturn(false);
         // When
         underTest.createMovie(MOVIE);
 
         // Then
         Mockito.verify(movieRepository).save(MOVIE_ENTITY);
+        Mockito.verify(movieRepository).existsByTitle(MOVIE.getTitle());
         Mockito.verifyNoMoreInteractions(movieRepository);
     }
 
+    @Test
+    public void testCreateMovieShouldThrowIllegalArgumentExceptionWhenTheInputMovieIsInValid() {
+        // Given
+        Mockito.when(movieRepository.existsByTitle(MOVIE.getTitle())).thenReturn(true);
+        // When
+        Assertions.assertThrows(IllegalArgumentException.class, ()->underTest.createMovie(MOVIE));
+
+        // Then
+        Mockito.verify(movieRepository).existsByTitle(MOVIE.getTitle());
+        Mockito.verifyNoMoreInteractions(movieRepository);
+    }
 
     @Test
     public void testCreateMovieShouldThrowNullPointerExceptionWhenMovieIsNull() {

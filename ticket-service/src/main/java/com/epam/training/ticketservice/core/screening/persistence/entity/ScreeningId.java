@@ -19,10 +19,10 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ScreeningId implements Serializable {
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "movie_id", referencedColumnName = "id")
     Movie movie;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "room_id", referencedColumnName = "id")
     Room room;
     Date startTime;

@@ -32,12 +32,16 @@ public class MovieServiceImpl implements MovieService {
         Objects.requireNonNull(movieDto.getTitle(), "Movie Title cannot be null");
         Objects.requireNonNull(movieDto.getLength(), "Movie Length cannot be null");
         Objects.requireNonNull(movieDto.getGenre(), "Movie Genre cannot be null");
-        Movie movie = new Movie(null,
-                movieDto.getTitle(),
-                movieDto.getGenre(),
-                movieDto.getLength()
-        );
-        movieRepository.save(movie);
+        if( movieRepository.existsByTitle(movieDto.getTitle())){
+            throw new IllegalArgumentException("Movie with this title already exist");
+        } else {
+            Movie movie = new Movie(null,
+                    movieDto.getTitle(),
+                    movieDto.getGenre(),
+                    movieDto.getLength()
+            );
+            movieRepository.save(movie);
+        }
     }
 
     public void deleteMovieByTitle(String title) {
