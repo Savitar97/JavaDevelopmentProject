@@ -13,4 +13,11 @@ import javax.persistence.Embeddable;
 public class Seat {
     private Integer seatRow;
     private Integer seatColumn;
+
+    @Override
+    public String toString() {
+        return "(" + seatRow
+                + ","+ seatColumn
+                + ')';
+    }
 }

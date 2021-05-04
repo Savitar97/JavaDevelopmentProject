@@ -19,8 +19,7 @@ public class BookingCommand extends CommandAvailability {
     @ShellMethod(value = "Book for a screening", key = "book")
     public String booking(String movieTitle, String roomName, Date startTime, List<SeatDto> seats) {
         try {
-            bookingService.createBooking(movieTitle, roomName, startTime, seats);
-            return "Booking success";
+            return bookingService.createBooking(movieTitle, roomName, startTime, seats);
         } catch (Exception e) {
             return e.getMessage();
         }

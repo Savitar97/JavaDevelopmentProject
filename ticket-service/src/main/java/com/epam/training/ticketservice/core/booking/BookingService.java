@@ -7,5 +7,5 @@ import java.util.Date;
 import java.util.List;
 
 public interface BookingService {
-    public void createBooking(String movieTitle, String roomName, Date startTime, List<SeatDto> seats);
+    public String createBooking(String movieTitle, String roomName, Date startTime, List<SeatDto> seats);
 }

@@ -13,7 +13,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.ElementCollection;
 import javax.persistence.FetchType;
+import java.util.Currency;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Entity
 @Data
@@ -32,4 +35,17 @@ public class Booking {
 
     @ElementCollection(fetch = FetchType.EAGER)
     List<Seat> seats;
+
+    private Integer ticketPrice;
+
+    @Override
+    public String toString() {
+        return "Seats booked:"
+                +seats.stream()
+                .map(Objects::toString)
+                .collect(Collectors.joining(", "))
+                +"; the price for this booking is "
+                +ticketPrice
+                +"HUF";
+    }
 }

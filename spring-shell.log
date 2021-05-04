@@ -330,3 +330,35 @@
 1620161411652:book "Sprited Away" Pedersoli "2021-03-14 16:00" "5,5 5,6"
 1620161551033:sign in privileged admin admin
 1620161553022:book "Sprited Away" Pedersoli "2021-03-14 16:00" "5,5 5,6"
+1620163025744:"Sprited Away" Pedersoli "2021-03-14 16:00" "5,5 5,"
+1620163039681:"Sprited Away" Pedersoli "2021-03-14 16:00" "5,5 "
+1620163044997:"Sprited Away" Pedersoli "2021-03-14 16:00" "5,5 5,6"
+1620163069313:sign in privileged admin admin
+1620163078313:book "Sprited Away" Pedersoli "2021-03-14 16:00" "5,5 5,"
+1620163091608:"Sprited Away" Pedersoli "2021-03-14 16:00" "5,5 "
+1620163100268:book "Sprited Away" Pedersoli "2021-03-14 16:00" "5,5 "
+1620163135511:book "Sprited Away" Pedersoli "2021-03-14 16:00" "5,5 ,"
+1620163148772:exit
+1620164292386:"Sprited Away" Pedersoli "2021-03-14 16:00" "5,5 5,6"
+1620164306047:sign in privileged admin admin
+1620164315054:book "Sprited Away" Pedersoli "2021-03-14 16:00" "5,5 5,6"
+1620164328481:"Sprited Away" Pedersoli "2021-03-14 16:00" "5,5 5,6"
+1620164360373:create movie "Sprited Away" animation 125
+1620164367402:create movie Sátántangó drama 450
+1620164373730:create room Pedersoli 10 10
+1620164381206:create screening "Sprited Away" Pedersoli "2021-03-14 16:00"
+1620164404474:book "Sprited Away" Pedersoli "2021-03-14 16:00" "5,5 5,6"
+1620164411704:book "Sprited Away" Pedersoli "2021-03-14 16:00" "5,5 5,11"
+1620164437189:book "Sprited Away" Pedersoli "2021-03-14 16:00" "5,5 11,6"
+1620166330585:sign in privileged
+1620166336206:sign in privileged admin admin
+1620166338481:create movie "Sprited Away" animation 125
+1620166344008:create room Pedersoli 10 10
+1620166348819:create screening "Sprited Away" Pedersoli "2021-03-14 16:00"
+1620166382521:book "Sprited Away" Pedersoli "2021-03-14 16:00" "5,5 5,6"
+1620166813711:sign in privileged admin admin
+1620166820940:create movie "Sprited Away" animation 125
+1620166824622:create room Pedersoli 10 10
+1620166832925:create screening "Sprited Away" Pedersoli "2021-03-14 16:00"
+1620166844602:book "Sprited Away" Pedersoli "2021-03-14 16:00" "5,5 5,6"
+1620166917039:exit

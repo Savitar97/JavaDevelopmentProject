@@ -10,6 +10,7 @@ import com.epam.training.ticketservice.core.user.persistence.repository.UserRepo
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,6 +21,8 @@ public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
     private final UserRepository userRepository;
 
+    private final Integer TICKET_PRICE = 1500;
+
     public BookingServiceImpl(ScreeningRepository screeningRepository,
                               BookingRepository bookingRepository,
                               UserRepository userRepository) {
@@ -29,7 +32,8 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public void createBooking(String movieTitle, String roomName, Date startTime, List<SeatDto> seats) {
+    public String createBooking(String movieTitle, String roomName, Date startTime, List<SeatDto> seats) {
+
         if (!screeningRepository.existsById_Movie_TitleAndId_Room_NameAndId_StartTime(movieTitle,
                         roomName,
                         startTime)) {
@@ -47,8 +51,46 @@ public class BookingServiceImpl implements BookingService {
                 screeningRepository
                         .getScreeningById_Movie_TitleAndId_Room_NameAndId_StartTime(movieTitle,
                                 roomName,
-                                startTime), seatEntities);
+                                startTime),
+                seatEntities,
+                seatEntities.size()*TICKET_PRICE);
+        checkSeatExisting(booking);
+        checkSeatAlreadyBooked(booking);
         bookingRepository.save(booking);
+        return booking.toString();
+    }
 
+    public void checkSeatExisting(Booking booking){
+        Integer seatColumns = booking
+                .getScreening()
+                .getId()
+                .getRoom()
+                .getSeatColumns();
+
+        Integer seatRows = booking
+                .getScreening()
+                .getId()
+                .getRoom()
+                .getSeatRows();
+
+        booking.getSeats().forEach(seat->{
+            if (seatRows<seat.getSeatRow()||seatColumns<seat.getSeatColumn()){
+                throw new IllegalArgumentException("Seat "+seat+" does not exist in this room");
+            }
+        });
+    }
+
+    public void checkSeatAlreadyBooked(Booking booking){
+        List<Seat> seats = bookingRepository
+                .getBookingByScreening(booking.getScreening())
+                .stream()
+                .map(Booking::getSeats)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+        booking.getSeats().forEach(seat -> {
+            if (seats.contains(seat)){
+                throw new IllegalArgumentException("Seat "+seat+" is already taken");
+            }
+        });
     }
 }
