@@ -246,3 +246,71 @@
 1620135587265:sign in privileged admin admin
 1620135589195:create movie Sátántangó drama 450
 1620135596559:exit
+1620138628239:sign in user user
+1620138635465:sign up user user
+1620138639699:sign in user user
+1620138641695:exi
+1620138642953:exit
+1620139950543:sign up user user
+1620139956007:sign in user user
+1620139965501:sign in privileged admin admin
+1620139969734:describe user
+1620139976450:help
+1620139982384:describe account
+1620139996151:sign in user user
+1620139999689:describe account
+1620140004514:exit
+1620142679724:sign up user user
+1620142687109:exit
+1620143028565:sign inprivileged admin admin
+1620143035687:sign in privileged admin admin
+1620143039838:describe account
+1620143078083:create movie "Sprited Away" animation 125
+1620143090274:create room A1 10 10
+1620143122203:create screening "Sprited Away" A1 "2021-03-14 16:00"
+1620143197225:list screening
+1620143201320:list screenings
+1620143211675:help
+1620143218557:list screenings
+1620143226511:stacktrace
+1620143445825:create movie "Spirited Away" animation 125
+1620143452733:sign in privileged admin admin
+1620143460746:create movie "Spirited Away" animation 125
+1620143478723:create room Pedersoli 10 10
+1620143486535:create screening "Spirited Away" Pedersoli "2021-03-14 16:00"
+1620143500117:list screenings
+1620143514150:stacktrace
+1620143692904:create movie "Spirited Away" animation 125
+1620143705478:sign in privileged admin admin
+1620143708358:create movie "Sprited Away" animation 125
+1620143719193:create room Pedersoli 10 10
+1620143728710:create screening "Spirited Away" Pedersoli "2021-03-14 16:00"
+1620143740225:create screening "Sprited Away" Pedersoli "2021-03-14 16:00"
+1620143743885:list screenings
+1620143844869:create movie "Spirited Away" animation 125
+1620143855832:sign in privileged admin admin
+1620143860374:create movie "Spirited Away" animation 125
+1620143868609:create room Pedersoli 10 1 0
+1620143879357:create room Pedersoli 10 10
+1620143887711:create screening "Spirited Away" Pedersoli "2021-03-14 16:00"
+1620143911713:list screenings
+1620143920686:exit
+1620146105322:create movie "Spirited Away" animation 125
+1620146114909:sign in privileged admin admin
+1620146120374:desribe account
+1620146130882:describe account
+1620146152695:sign up user user
+1620146157106:sign in user user
+1620146161954:describe account
+1620146172498:sign out
+1620146180084:describe account
+1620146746770:sign in privileged admin admin
+1620146753832:describe account
+1620146767918:sign in privileged admin admin
+1620146772731:sign out
+1620146777951:describe account
+1620146797491:sign in privileged admin asdQWE123
+1620146867574:sign in privileged admin admin
+1620146874996:exit
+1620146943096:sign in privileged admin asdQWE123
+1620146951602:describe account

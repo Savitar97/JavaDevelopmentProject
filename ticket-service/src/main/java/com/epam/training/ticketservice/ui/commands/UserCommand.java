@@ -3,6 +3,9 @@ package com.epam.training.ticketservice.ui.commands;
 import com.epam.training.ticketservice.core.user.LoginService;
 import com.epam.training.ticketservice.core.user.UserService;
 import com.epam.training.ticketservice.core.user.model.RegistrationUserDto;
+import com.epam.training.ticketservice.core.user.model.UserDto;
+import com.epam.training.ticketservice.core.user.persistence.entity.Role;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellMethodAvailability;
@@ -21,14 +24,14 @@ public class UserCommand extends CommandAvailability {
     }
 
     @ShellMethod(value = "Login as Admin", key = "sign in privileged")
-    public void loginPrivileged(String name, String password) {
-        loginService.login(name,password);
+    public String loginPrivileged(String name, String password) {
+        return loginService.signIn(name, password);
     }
 
     @ShellMethod(value = "Register as User", key = "sign up")
     public String register(String name, String password) {
         try {
-            userService.registerUser(new RegistrationUserDto(name,password));
+            userService.registerUser(new RegistrationUserDto(name, password));
             return "Registration was successful";
         } catch (IllegalArgumentException e) {
             return e.getMessage();
@@ -36,8 +39,8 @@ public class UserCommand extends CommandAvailability {
     }
 
     @ShellMethod(value = "Login as User", key = "sign in")
-    public void login(String name, String password) {
-        loginService.login(name,password);
+    public String login(String name, String password) {
+        return loginService.signIn(name, password);
     }
 
     @ShellMethodAvailability(value = "isUserSignedIn")
@@ -49,7 +52,20 @@ public class UserCommand extends CommandAvailability {
 
     @ShellMethod(value = "Logout", key = "describe account")
     public String describeAccount() {
-        return userService.describeAccount();
+        try {
+            UserDto userDto = userService.describeAccount();
+            if (userDto.getRole().equals(Role.ROLE_ADMIN)) {
+                return "Signed in with privileged account '"
+                        + userDto.getUsername()
+                        + "'";
+            } else {
+                return "Signed in with account '"
+                        + userDto.getUsername()
+                        + "'";
+            }
+        } catch (IllegalStateException e) {
+            return e.getMessage();
+        }
     }
 
 

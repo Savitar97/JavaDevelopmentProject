@@ -2,6 +2,7 @@ package com.epam.training.ticketservice.core.user.impl;
 
 import com.epam.training.ticketservice.core.user.UserService;
 import com.epam.training.ticketservice.core.user.model.RegistrationUserDto;
+import com.epam.training.ticketservice.core.user.model.UserDto;
 import com.epam.training.ticketservice.core.user.persistence.entity.Role;
 import com.epam.training.ticketservice.core.user.persistence.entity.User;
 import com.epam.training.ticketservice.core.user.persistence.repository.UserRepository;
@@ -44,20 +45,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String describeAccount() {
+    public UserDto describeAccount() {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             Optional<? extends GrantedAuthority> role = authentication.getAuthorities().stream().findFirst();
-            if (role.get().equals(Role.ROLE_ADMIN)) {
-                return "Signed in with privileged account "
-                        + SecurityContextHolder.getContext().getAuthentication().getName();
-            } else {
-                return "Signed in with account "
-                        + SecurityContextHolder.getContext().getAuthentication().getName();
-            }
+            return UserDto.builder()
+                    .username(SecurityContextHolder.getContext().getAuthentication().getName())
+                    .role((Role) role.get())
+                    .build();
         } catch (Exception e) {
-            return "You are not signed in";
+            throw new IllegalStateException("You are not signed in");
         }
-
     }
 }
