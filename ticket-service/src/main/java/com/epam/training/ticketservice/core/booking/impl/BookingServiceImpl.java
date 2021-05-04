@@ -20,7 +20,9 @@ public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
     private final UserRepository userRepository;
 
-    public BookingServiceImpl(ScreeningRepository screeningRepository, BookingRepository bookingRepository, UserRepository userRepository) {
+    public BookingServiceImpl(ScreeningRepository screeningRepository,
+                              BookingRepository bookingRepository,
+                              UserRepository userRepository) {
         this.screeningRepository = screeningRepository;
         this.bookingRepository = bookingRepository;
         this.userRepository = userRepository;
@@ -28,10 +30,9 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public void createBooking(String movieTitle, String roomName, Date startTime, List<SeatDto> seats) {
-        if(!screeningRepository
-                .existsById_Movie_TitleAndId_Room_NameAndId_StartTime(movieTitle,
-                roomName,
-                startTime)){
+        if (!screeningRepository.existsById_Movie_TitleAndId_Room_NameAndId_StartTime(movieTitle,
+                        roomName,
+                        startTime)) {
             throw new IllegalArgumentException("Screening not exist");
         }
         List<Seat> seatEntities = seats.stream()
@@ -41,13 +42,12 @@ public class BookingServiceImpl implements BookingService {
         Booking booking = new Booking(null,
                 userRepository.findByUsername(
                         SecurityContextHolder.getContext()
-                        .getAuthentication()
-                        .getName()).orElseThrow(IllegalStateException::new)
-                ,
+                                .getAuthentication()
+                                .getName()).orElseThrow(IllegalStateException::new),
                 screeningRepository
-                .getScreeningById_Movie_TitleAndId_Room_NameAndId_StartTime(movieTitle,
-                        roomName,
-                        startTime),seatEntities);
+                        .getScreeningById_Movie_TitleAndId_Room_NameAndId_StartTime(movieTitle,
+                                roomName,
+                                startTime), seatEntities);
         bookingRepository.save(booking);
 
     }

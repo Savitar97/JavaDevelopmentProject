@@ -37,34 +37,30 @@ public class RoomServiceImpl implements RoomService {
         Objects.requireNonNull(roomDto.getSeatRows(), "Room's seat rows cannot be null!");
         if (roomRepository.existsByName(roomDto.getRoomName())) {
             throw new IllegalArgumentException("Room with this name already exist");
-        } else {
-            roomRepository.save(new Room(null,
+        }
+        roomRepository.save(new Room(null,
                     roomDto.getRoomName(),
                     roomDto.getSeatRows(),
                     roomDto.getSeatColumns()));
-        }
     }
 
     @Override
     public void updateRoom(RoomDto roomDto) {
-        if (roomRepository.existsByName(roomDto.getRoomName())) {
-            Room room = roomRepository.findByName(roomDto.getRoomName());
-            room.setSeatColumns(roomDto.getSeatColumns());
-            room.setSeatRows(roomDto.getSeatRows());
-            roomRepository.save(room);
-
-        } else {
+        if (!roomRepository.existsByName(roomDto.getRoomName())) {
             throw new IllegalArgumentException("Room with this name doesn't exist!");
         }
+        Room room = roomRepository.findByName(roomDto.getRoomName());
+        room.setSeatColumns(roomDto.getSeatColumns());
+        room.setSeatRows(roomDto.getSeatRows());
+        roomRepository.save(room);
     }
 
     @Override
     public void deleteRoomByName(String name) {
-        if (roomRepository.existsByName(name)) {
-            roomRepository.deleteByName(name);
-        } else {
+        if (!roomRepository.existsByName(name)) {
             throw new IllegalArgumentException("Room with this name doesn't exist!");
         }
+        roomRepository.deleteByName(name);
     }
 
     @Override

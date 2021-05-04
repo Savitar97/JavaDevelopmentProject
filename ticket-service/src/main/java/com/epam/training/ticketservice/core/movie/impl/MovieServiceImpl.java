@@ -39,34 +39,31 @@ public class MovieServiceImpl implements MovieService {
         Objects.requireNonNull(movieDto.getGenre(), "Movie Genre cannot be null");
         if (movieRepository.existsByTitle(movieDto.getTitle())) {
             throw new IllegalArgumentException("Movie with this title already exist");
-        } else {
-            Movie movie = new Movie(null,
-                    movieDto.getTitle(),
-                    movieDto.getGenre(),
-                    movieDto.getLength()
-            );
-            movieRepository.save(movie);
         }
+        Movie movie = new Movie(null,
+                movieDto.getTitle(),
+                movieDto.getGenre(),
+                movieDto.getLength()
+        );
+        movieRepository.save(movie);
     }
 
     public void deleteMovieByTitle(String title) {
-        if (movieRepository.existsByTitle(title)) {
-            movieRepository.deleteByTitle(title);
-        } else {
+        if (!movieRepository.existsByTitle(title)) {
             throw new IllegalArgumentException("Movie with this title doesn't exist!");
         }
+        movieRepository.deleteByTitle(title);
     }
 
     @Override
     public void updateMovie(MovieDto movieDto) {
-        if (movieRepository.existsByTitle(movieDto.getTitle())) {
-            Movie movie = movieRepository.getMovieByTitle(movieDto.getTitle());
-            movie.setGenre(movieDto.getGenre());
-            movie.setLength(movieDto.getLength());
-            movieRepository.save(movie);
-        } else {
+        if (!movieRepository.existsByTitle(movieDto.getTitle())) {
             throw new IllegalArgumentException("Movie with this title doesn't exist!");
         }
+        Movie movie = movieRepository.getMovieByTitle(movieDto.getTitle());
+        movie.setGenre(movieDto.getGenre());
+        movie.setLength(movieDto.getLength());
+        movieRepository.save(movie);
     }
 
     @Override

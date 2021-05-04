@@ -15,9 +15,9 @@ public class SeatDto {
 
     @Override
     public String toString() {
-        return "SeatDto{" +
-                "row=" + row +
-                ", column=" + column +
-                '}';
+        return "SeatDto{"
+                + "row=" + row
+                + ", column=" + column
+                + '}';
     }
 }

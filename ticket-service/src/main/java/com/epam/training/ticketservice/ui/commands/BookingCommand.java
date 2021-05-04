@@ -2,7 +2,6 @@ package com.epam.training.ticketservice.ui.commands;
 
 import com.epam.training.ticketservice.core.booking.BookingService;
 import com.epam.training.ticketservice.core.booking.model.SeatDto;
-import com.epam.training.ticketservice.core.movie.model.MovieDto;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 
@@ -19,10 +18,10 @@ public class BookingCommand extends CommandAvailability {
 
     @ShellMethod(value = "Book for a screening", key = "book")
     public String booking(String movieTitle, String roomName, Date startTime, List<SeatDto> seats) {
-        try{
+        try {
             bookingService.createBooking(movieTitle, roomName, startTime, seats);
             return "Booking success";
-        } catch (Exception e){
+        } catch (Exception e) {
             return e.getMessage();
         }
 

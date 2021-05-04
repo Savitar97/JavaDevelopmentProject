@@ -32,16 +32,15 @@ public class UserServiceImpl implements UserService {
     public void registerUser(RegistrationUserDto registrationUser) {
         Objects.requireNonNull(registrationUser.getUsername(), "Username can not be null");
         Objects.requireNonNull(registrationUser.getPassword(), "Password can not be null");
-        if (!userRepository.existsByUsername(registrationUser.getUsername())) {
-            User user = new User();
-            user.setUsername(registrationUser.getUsername());
-            user.setPassword(passwordEncoder.encode(registrationUser.getPassword()));
-            user.setRole(Role.ROLE_USER);
-
-            userRepository.save(user);
-        } else {
+        if (userRepository.existsByUsername(registrationUser.getUsername())) {
             throw new IllegalArgumentException("User with this name already exist");
         }
+        User user = new User();
+        user.setUsername(registrationUser.getUsername());
+        user.setPassword(passwordEncoder.encode(registrationUser.getPassword()));
+        user.setRole(Role.ROLE_USER);
+
+        userRepository.save(user);
     }
 
     @Override

@@ -7,7 +7,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.Collections;
 
 @Component
 public class DbInitializer {
@@ -22,7 +21,7 @@ public class DbInitializer {
 
     @PostConstruct
     public void init() {
-        if(!userRepository.existsByUsername("admin")) {
+        if (!userRepository.existsByUsername("admin")) {
             User user = new User(null, "admin",
                     passwordEncoder.encode("admin"),
                     Role.ROLE_ADMIN);

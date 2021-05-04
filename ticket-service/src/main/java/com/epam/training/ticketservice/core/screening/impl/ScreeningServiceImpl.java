@@ -73,13 +73,13 @@ public class ScreeningServiceImpl implements ScreeningService {
 
     @Override
     public void deleteScreening(String movieTitle, String roomName, Date startTime) {
-        if (screeningRepository.existsById_Movie_TitleAndId_Room_NameAndId_StartTime(
+        if (!screeningRepository.existsById_Movie_TitleAndId_Room_NameAndId_StartTime(
                 movieTitle, roomName, startTime)) {
-            screeningRepository.deleteScreeningById_Movie_TitleAndId_Room_NameAndId_StartTime(
-                    movieTitle, roomName, startTime);
-        } else {
             throw new IllegalArgumentException("Screening not exist");
         }
+
+        screeningRepository.deleteScreeningById_Movie_TitleAndId_Room_NameAndId_StartTime(
+                movieTitle, roomName, startTime);
     }
 
     public void checkOverlapping(String roomName, Date desiredDate, Integer movieLength) {
