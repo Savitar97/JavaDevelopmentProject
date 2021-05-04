@@ -8,6 +8,8 @@ import com.epam.training.ticketservice.core.room.model.RoomDto;
 import com.epam.training.ticketservice.core.room.persistence.entity.Room;
 import com.epam.training.ticketservice.core.screening.model.ScreeningDto;
 import com.epam.training.ticketservice.core.screening.persistence.entity.Screening;
+import com.epam.training.ticketservice.core.user.model.RegistrationUserDto;
+import com.epam.training.ticketservice.core.user.persistence.entity.User;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -48,6 +50,7 @@ public class EntityToDtoMapperImpl implements EntityToDtoMapper {
                 .startTime(screening.getId().getStartTime())
                 .build();
     }
+
 
 
 }

@@ -42,11 +42,11 @@ public class ScreeningServiceImpl implements ScreeningService {
     public List<ScreeningDto> getScreening() {
         return screeningRepository.findAll().stream()
                 .map(entityToDtoMapper::convertEntityToDto)
-                .collect(Collectors.toList());
+                .collect(Collectors.toUnmodifiableList());
     }
 
     @Override
-    public void createScreening(String movieTitle, String roomName, Date startTime) {
+    public String createScreening(String movieTitle, String roomName, Date startTime) {
         Objects.requireNonNull(movieTitle, "Movie title cannot be null");
         Objects.requireNonNull(roomName, "Room name cannot be null");
         Objects.requireNonNull(startTime, "Start time cannot be null");
@@ -64,7 +64,10 @@ public class ScreeningServiceImpl implements ScreeningService {
         Room room = roomRepository.findByName(roomName);
         checkOverlapping(room.getName(), startTime, movie.getLength());
         ScreeningId screeningId = new ScreeningId(movie, room, startTime);
-        screeningRepository.save(new Screening(screeningId));
+        Screening screening = new Screening(screeningId);
+        screeningRepository.save(screening);
+        return screening.toString();
+
     }
 
     @Override

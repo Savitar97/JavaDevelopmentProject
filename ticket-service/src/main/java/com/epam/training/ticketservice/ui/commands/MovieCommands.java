@@ -5,6 +5,7 @@ import com.epam.training.ticketservice.core.movie.model.MovieDto;
 import com.epam.training.ticketservice.ui.utilities.out.helper.ConvertListToString;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
+import org.springframework.shell.standard.ShellMethodAvailability;
 
 import java.util.List;
 
@@ -27,6 +28,7 @@ public class MovieCommands extends CommandAvailability {
         return convertListToString.listToString(movies);
     }
 
+    @ShellMethodAvailability(value = "isUserAdmin")
     @ShellMethod(value = "Add a movie to movies", key = "create movie")
     public String createMovie(String title, String genre, Integer length) {
         if (movieService.existsByTitle(title)) {
@@ -41,11 +43,13 @@ public class MovieCommands extends CommandAvailability {
         return movieDto.toString();
     }
 
+    @ShellMethodAvailability(value = "isUserAdmin")
     @ShellMethod(value = "Delete a movie from movies", key = "delete movie")
     public void deleteMovieByTitle(String title) {
         movieService.deleteMovieByTitle(title);
     }
 
+    @ShellMethodAvailability(value = "isUserAdmin")
     @ShellMethod(value = "Update a movie from movies", key = "update movie")
     public void updateMovie(String title, String genre, Integer length) {
         MovieDto movieDto = new MovieDto.Builder()

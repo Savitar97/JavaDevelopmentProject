@@ -5,6 +5,7 @@ import com.epam.training.ticketservice.core.room.model.RoomDto;
 import com.epam.training.ticketservice.ui.utilities.out.helper.ConvertListToString;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
+import org.springframework.shell.standard.ShellMethodAvailability;
 
 import java.util.List;
 
@@ -19,8 +20,9 @@ public class RoomCommand extends CommandAvailability {
         this.convertListToString = convertListToString;
     }
 
-    @ShellMethod(value = "Add a room to rooms",key = "create room")
-    public String createRoom(String name,Integer rows,Integer columns) {
+    @ShellMethodAvailability(value = "isUserAdmin")
+    @ShellMethod(value = "Add a room to rooms", key = "create room")
+    public String createRoom(String name, Integer rows, Integer columns) {
         if (roomService.existsByName(name)) {
             return "Room with this name already exist";
         }
@@ -34,7 +36,7 @@ public class RoomCommand extends CommandAvailability {
         return roomDto.toString();
     }
 
-    @ShellMethod(value = "List the available rooms",key = "list rooms")
+    @ShellMethod(value = "List the available rooms", key = "list rooms")
     public String getRoomList() {
         List<RoomDto> rooms = roomService.getRoomList();
         if (rooms == null || rooms.isEmpty()) {
@@ -43,13 +45,15 @@ public class RoomCommand extends CommandAvailability {
         return convertListToString.listToString(rooms);
     }
 
-    @ShellMethod(value = "Delete a room from rooms",key = "delete room")
+    @ShellMethodAvailability(value = "isUserAdmin")
+    @ShellMethod(value = "Delete a room from rooms", key = "delete room")
     public void deleteRoom(String name) {
         roomService.deleteRoomByName(name);
     }
 
+    @ShellMethodAvailability(value = "isUserAdmin")
     @ShellMethod(value = "Update a room from rooms", key = "update room")
-    public void updateMovie(String name,Integer rows,Integer columns) {
+    public void updateRoom(String name, Integer rows, Integer columns) {
         RoomDto roomDto = new RoomDto.Builder()
                 .withRoomName(name)
                 .withSeatRows(rows)

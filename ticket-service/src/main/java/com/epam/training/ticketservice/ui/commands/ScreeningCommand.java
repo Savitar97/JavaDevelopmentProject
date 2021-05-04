@@ -5,6 +5,7 @@ import com.epam.training.ticketservice.core.screening.model.ScreeningDto;
 import com.epam.training.ticketservice.ui.utilities.out.helper.ConvertListToString;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
+import org.springframework.shell.standard.ShellMethodAvailability;
 
 import java.util.Date;
 import java.util.List;
@@ -19,16 +20,17 @@ public class ScreeningCommand extends CommandAvailability {
         this.convertListToString = convertListToString;
     }
 
+    @ShellMethodAvailability(value = "isUserAdmin")
     @ShellMethod(value = "Store a screening", key = "create screening")
-    public void createScreening(String movieTitle, String roomName, Date date) {
+    public String createScreening(String movieTitle, String roomName, Date date) {
         try {
-            screeningService.createScreening(movieTitle, roomName, date);
+            return screeningService.createScreening(movieTitle, roomName, date);
         } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
+            return e.getMessage();
         }
     }
 
-    @ShellMethod(value = "List the available screenings",key = "list screenings")
+    @ShellMethod(value = "List the available screenings", key = "list screenings")
     public String getScreeningList() {
         List<ScreeningDto> screenings = screeningService.getScreening();
         if (screenings.isEmpty()) {
@@ -37,6 +39,7 @@ public class ScreeningCommand extends CommandAvailability {
         return convertListToString.listToString(screenings);
     }
 
+    @ShellMethodAvailability(value = "isUserAdmin")
     @ShellMethod(value = "Delete a screening", key = "delete screening")
     public void deleteScreening(String movieTitle, String roomName, Date date) {
         screeningService.deleteScreening(movieTitle, roomName, date);

@@ -123,7 +123,8 @@ class ScreeningServiceImplTest {
                 .findByName(ROOM_NAME))
                 .thenReturn(ROOM_ENTITY);
         //When
-        underTest.createScreening(TITLE, ROOM_NAME, DATE);
+        Assertions.assertEquals(SCREENING_ENTITY.toString()
+                , underTest.createScreening(TITLE, ROOM_NAME, DATE));
         //Then
         Mockito.verify(movieRepository)
                 .existsByTitle(TITLE);

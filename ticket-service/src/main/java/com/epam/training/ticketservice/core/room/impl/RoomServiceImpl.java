@@ -26,7 +26,7 @@ public class RoomServiceImpl implements RoomService {
     public List<RoomDto> getRoomList() {
         return roomRepository.findAll().stream()
                 .map(entityToDtoMapper::convertEntityToDto)
-                .collect(Collectors.toList());
+                .collect(Collectors.toUnmodifiableList());
     }
 
     @Override

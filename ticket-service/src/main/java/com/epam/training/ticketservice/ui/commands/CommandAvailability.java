@@ -1,5 +1,6 @@
 package com.epam.training.ticketservice.ui.commands;
 
+import com.epam.training.ticketservice.core.user.persistence.entity.Role;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -9,7 +10,7 @@ public abstract class CommandAvailability {
 
     public Availability isUserSignedIn() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !(authentication instanceof UsernamePasswordAuthenticationToken)) {
+        if (!(authentication instanceof UsernamePasswordAuthenticationToken)) {
             return Availability.unavailable("You are not signed in");
         }
         return Availability.available();
@@ -17,10 +18,10 @@ public abstract class CommandAvailability {
 
     public Availability isUserAdmin() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !(authentication instanceof  UsernamePasswordAuthenticationToken)) {
+        if (!(authentication instanceof UsernamePasswordAuthenticationToken)) {
             return Availability.unavailable("You are not signed in");
         }
-        if (!authentication.getAuthorities().contains("ROLE_ADMIN")) {
+        if (!authentication.getAuthorities().contains(Role.ROLE_ADMIN)) {
             return Availability.unavailable("Permission denied");
         }
         return Availability.available();

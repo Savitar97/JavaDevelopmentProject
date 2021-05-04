@@ -27,7 +27,7 @@ public class MovieServiceImpl implements MovieService {
     public List<MovieDto> getMovieList() {
         return movieRepository.findAll().stream()
                 .map(entityToDtoMapper::convertEntityToDto)
-                .collect(Collectors.toList());
+                .collect(Collectors.toUnmodifiableList());
     }
 
 
