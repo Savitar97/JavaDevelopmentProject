@@ -22,9 +22,11 @@ public class DbInitializer {
 
     @PostConstruct
     public void init() {
-        User user = new User(null,"admin",
-                passwordEncoder.encode("admin"),
-                Role.ROLE_ADMIN);
-        userRepository.save(user);
+        if(!userRepository.existsByUsername("admin")) {
+            User user = new User(null, "admin",
+                    passwordEncoder.encode("admin"),
+                    Role.ROLE_ADMIN);
+            userRepository.save(user);
+        }
     }
 }

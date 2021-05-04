@@ -434,7 +434,7 @@ class ScreeningServiceImplTest {
         Mockito.verify(screeningRepository)
                 .existsById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE,ROOM_NAME,DATE);
         Mockito.verify(screeningRepository)
-                .deleteScreeningById_Movie_TitleAndId_Room_NameAndAndId_StartTime(TITLE,ROOM_NAME,DATE);
+                .deleteScreeningById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE,ROOM_NAME,DATE);
 
         Mockito.verifyNoMoreInteractions(screeningRepository);
     }

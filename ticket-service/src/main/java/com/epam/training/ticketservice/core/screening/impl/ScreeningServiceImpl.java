@@ -31,7 +31,8 @@ public class ScreeningServiceImpl implements ScreeningService {
 
     ScreeningServiceImpl(RoomRepository roomRepository,
                          MovieRepository movieRepository,
-                         ScreeningRepository screeningRepository, EntityToDtoMapper entityToDtoMapper) {
+                         ScreeningRepository screeningRepository,
+                         EntityToDtoMapper entityToDtoMapper) {
         this.roomRepository = roomRepository;
         this.movieRepository = movieRepository;
         this.screeningRepository = screeningRepository;
@@ -74,7 +75,7 @@ public class ScreeningServiceImpl implements ScreeningService {
     public void deleteScreening(String movieTitle, String roomName, Date startTime) {
         if (screeningRepository.existsById_Movie_TitleAndId_Room_NameAndId_StartTime(
                 movieTitle, roomName, startTime)) {
-            screeningRepository.deleteScreeningById_Movie_TitleAndId_Room_NameAndAndId_StartTime(
+            screeningRepository.deleteScreeningById_Movie_TitleAndId_Room_NameAndId_StartTime(
                     movieTitle, roomName, startTime);
         } else {
             throw new IllegalArgumentException("Screening not exist");

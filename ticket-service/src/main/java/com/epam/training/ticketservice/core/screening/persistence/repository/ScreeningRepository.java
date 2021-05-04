@@ -21,7 +21,7 @@ public interface ScreeningRepository extends JpaRepository<Screening, ScreeningI
                                                                          Date startTime);
 
     @Transactional
-    void deleteScreeningById_Movie_TitleAndId_Room_NameAndAndId_StartTime(String movieTitle,
+    void deleteScreeningById_Movie_TitleAndId_Room_NameAndId_StartTime(String movieTitle,
                                                                           String roomName,
                                                                           Date startTime);
 

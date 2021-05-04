@@ -314,3 +314,19 @@
 1620146874996:exit
 1620146943096:sign in privileged admin asdQWE123
 1620146951602:describe account
+1620157979082:exit
+1620160832143:create movie "Sprited Away" animation 125
+1620160841156:sign in privileged admin admin
+1620160843794:create movie "Sprited Away" animation 125
+1620160858142:create movie Sátántangó drama 450
+1620160885145:create room Pedersoli 10 10
+1620160902818:create screening "Sprited Away" Pedersoli "2021-03-14 16:00"
+1620161001828:book "Sprited Away" Pedersoli "2021-03-14 16:00" "5,5 5,6"
+1620161125932:sign in privileged admin admin
+1620161130314:book "Sprited Away" Pedersoli "2021-03-14 16:00" "5,5 5,6"
+1620161310157:sign in privileged
+1620161316080:sign in privileged admin admin
+1620161385894:book "prited Away" Pedersoli "2021-03-14 16:00"
+1620161411652:book "Sprited Away" Pedersoli "2021-03-14 16:00" "5,5 5,6"
+1620161551033:sign in privileged admin admin
+1620161553022:book "Sprited Away" Pedersoli "2021-03-14 16:00" "5,5 5,6"
