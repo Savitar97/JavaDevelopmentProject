@@ -20,7 +20,7 @@ class RoomServiceImplTest {
     private static final String ROOM_NAME = "A1";
     private static final Integer ROWS = 10;
     private static final Integer COLUMNS = 10;
-    private static final Room ROOM_ENTITY = new Room(null,"A1",10,10);
+    private static final Room ROOM_ENTITY = new Room(null, "A1", 10, 10);
     private static final RoomDto ROOM = new RoomDto.Builder()
             .withRoomName(ROOM_NAME)
             .withSeatRows(ROWS)
@@ -100,7 +100,7 @@ class RoomServiceImplTest {
                 .thenReturn(true);
         //When
         Assertions.assertThrows(IllegalArgumentException.class
-                ,()->underTest.createRoom(ROOM));
+                , () -> underTest.createRoom(ROOM));
         //Then
         Mockito.verify(roomRepository)
                 .existsByName(ROOM.getRoomName());
@@ -118,7 +118,7 @@ class RoomServiceImplTest {
     }
 
     @Test
-    public void testCreateRoomShouldThrowNullPointerExceptionWhenRoomNameIsNull(){
+    public void testCreateRoomShouldThrowNullPointerExceptionWhenRoomNameIsNull() {
         //Given
         RoomDto roomDto = new RoomDto.Builder()
                 .withRoomName(null)
@@ -133,7 +133,7 @@ class RoomServiceImplTest {
     }
 
     @Test
-    public void testCreateRoomShouldThrowNullPointerExceptionWhenSeatColumnsIsNull(){
+    public void testCreateRoomShouldThrowNullPointerExceptionWhenSeatColumnsIsNull() {
         //Given
         RoomDto roomDto = new RoomDto.Builder()
                 .withRoomName("A1")
@@ -148,7 +148,7 @@ class RoomServiceImplTest {
     }
 
     @Test
-    public void testCreateRoomShouldThrowNullPointerExceptionWhenSeatRowsIsNull(){
+    public void testCreateRoomShouldThrowNullPointerExceptionWhenSeatRowsIsNull() {
         //Given
         RoomDto roomDto = new RoomDto.Builder()
                 .withRoomName("A1")
@@ -187,7 +187,7 @@ class RoomServiceImplTest {
                 .thenReturn(false);
         //When
         Assertions.assertThrows(IllegalArgumentException.class
-                ,()-> underTest.deleteRoomByName("A1"));
+                , () -> underTest.deleteRoomByName("A1"));
         //Then
         Mockito.verify(roomRepository)
                 .existsByName("A1");
@@ -207,7 +207,7 @@ class RoomServiceImplTest {
                 .build();
         //When
         Assertions.assertThrows(IllegalArgumentException.class
-                ,()-> underTest.updateRoom(requiredRoom));
+                , () -> underTest.updateRoom(requiredRoom));
 
         //Then
         Mockito.verify(roomRepository)
@@ -218,7 +218,7 @@ class RoomServiceImplTest {
     @Test
     public void testUpdateRoomShouldCallRoomRepositoryAndShouldModifyTheEntityWhenTheInputValid() {
         //Given
-        Room room = new Room(null,"A1",10,10);
+        Room room = new Room(null, "A1", 10, 10);
 
         Mockito.when(roomRepository
                 .existsByName("A1"))
@@ -243,11 +243,11 @@ class RoomServiceImplTest {
 
 
         //Then
-        Assertions.assertEquals(expected,roomRepository
+        Assertions.assertEquals(expected, roomRepository
                 .findByName("A1"));
         Mockito.verify(roomRepository)
                 .existsByName("A1");
-        Mockito.verify(roomRepository,Mockito.times(2))
+        Mockito.verify(roomRepository, Mockito.times(2))
                 .findByName("A1");
         Mockito.verify(roomRepository)
                 .save(expected);

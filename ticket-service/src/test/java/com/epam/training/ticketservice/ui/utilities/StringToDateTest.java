@@ -15,11 +15,12 @@ class StringToDateTest {
         //Given
         StringToDate stringToDate = new StringToDate();
         String date = "2021-03-14 16:00";
-        Date expected = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(date);
+        Date expected = new SimpleDateFormat("yyyy-MM-dd HH:mm")
+                .parse(date);
         //When
         Date actual = stringToDate.convert(date);
         //Then
-        Assertions.assertEquals(expected,actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -28,7 +29,8 @@ class StringToDateTest {
         StringToDate stringToDate = new StringToDate();
         String date = "2021-03-14";
         //When
-        Assertions.assertThrows(ParseException.class,()->stringToDate.convert(date));
+        Assertions.assertThrows(ParseException.class,
+                () -> stringToDate.convert(date));
 
     }
 

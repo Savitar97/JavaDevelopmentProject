@@ -8,7 +8,7 @@ import java.util.List;
 
 class ConvertListToStringImplTest {
     @Test
-    public void testShouldConvertAListToString(){
+    public void testShouldConvertAListToString() {
         //Given
         ConvertListToStringImpl convertListToString = new ConvertListToStringImpl();
         MovieDto movie1 = new MovieDto.Builder()
@@ -21,12 +21,12 @@ class ConvertListToStringImplTest {
                 .withGenre("action")
                 .withLength(180)
                 .build();
-        List<MovieDto> movies = List.of(movie1,movie2);
-        String expected = movie1.toString()+System.lineSeparator()+movie2.toString();
+        List<MovieDto> movies = List.of(movie1, movie2);
+        String expected = movie1.toString() + System.lineSeparator() + movie2.toString();
         //When
         String actual = convertListToString.listToString(movies);
         //Then
-        Assertions.assertEquals(expected,actual);
+        Assertions.assertEquals(expected, actual);
     }
 
 }

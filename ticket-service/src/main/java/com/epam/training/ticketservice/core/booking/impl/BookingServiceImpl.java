@@ -21,7 +21,7 @@ public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
     private final UserRepository userRepository;
 
-    private final Integer TICKET_PRICE = 1500;
+    private static final Integer TICKET_PRICE = 1500;
 
     public BookingServiceImpl(ScreeningRepository screeningRepository,
                               BookingRepository bookingRepository,
@@ -35,8 +35,8 @@ public class BookingServiceImpl implements BookingService {
     public String createBooking(String movieTitle, String roomName, Date startTime, List<SeatDto> seats) {
 
         if (!screeningRepository.existsById_Movie_TitleAndId_Room_NameAndId_StartTime(movieTitle,
-                        roomName,
-                        startTime)) {
+                roomName,
+                startTime)) {
             throw new IllegalArgumentException("Screening not exist");
         }
         List<Seat> seatEntities = seats.stream()
@@ -53,14 +53,14 @@ public class BookingServiceImpl implements BookingService {
                                 roomName,
                                 startTime),
                 seatEntities,
-                seatEntities.size()*TICKET_PRICE);
+                seatEntities.size() * TICKET_PRICE);
         checkSeatExisting(booking);
         checkSeatAlreadyBooked(booking);
         bookingRepository.save(booking);
         return booking.toString();
     }
 
-    public void checkSeatExisting(Booking booking){
+    public void checkSeatExisting(Booking booking) {
         Integer seatColumns = booking
                 .getScreening()
                 .getId()
@@ -73,14 +73,14 @@ public class BookingServiceImpl implements BookingService {
                 .getRoom()
                 .getSeatRows();
 
-        booking.getSeats().forEach(seat->{
-            if (seatRows<seat.getSeatRow()||seatColumns<seat.getSeatColumn()){
-                throw new IllegalArgumentException("Seat "+seat+" does not exist in this room");
+        booking.getSeats().forEach(seat -> {
+            if (seatRows < seat.getSeatRow() || seatColumns < seat.getSeatColumn()) {
+                throw new IllegalArgumentException("Seat " + seat + " does not exist in this room");
             }
         });
     }
 
-    public void checkSeatAlreadyBooked(Booking booking){
+    public void checkSeatAlreadyBooked(Booking booking) {
         List<Seat> seats = bookingRepository
                 .getBookingByScreening(booking.getScreening())
                 .stream()
@@ -88,8 +88,8 @@ public class BookingServiceImpl implements BookingService {
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
         booking.getSeats().forEach(seat -> {
-            if (seats.contains(seat)){
-                throw new IllegalArgumentException("Seat "+seat+" is already taken");
+            if (seats.contains(seat)) {
+                throw new IllegalArgumentException("Seat " + seat + " is already taken");
             }
         });
     }

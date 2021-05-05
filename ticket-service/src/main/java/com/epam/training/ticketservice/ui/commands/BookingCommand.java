@@ -4,6 +4,7 @@ import com.epam.training.ticketservice.core.booking.BookingService;
 import com.epam.training.ticketservice.core.booking.model.SeatDto;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
+import org.springframework.shell.standard.ShellMethodAvailability;
 
 import java.util.Date;
 import java.util.List;
@@ -16,6 +17,7 @@ public class BookingCommand extends CommandAvailability {
         this.bookingService = bookingService;
     }
 
+    @ShellMethodAvailability(value = "isUserSignedIn")
     @ShellMethod(value = "Book for a screening", key = "book")
     public String booking(String movieTitle, String roomName, Date startTime, List<SeatDto> seats) {
         try {

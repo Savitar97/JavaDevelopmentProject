@@ -10,9 +10,9 @@ class CustomPromptProviderTest {
     CustomPromptProvider underTest;
 
     @Test
-    public void testShouldReturnCorrectPromp(){
+    public void testShouldReturnCorrectPromp() {
         //Given
-        underTest=new CustomPromptProvider();
+        underTest = new CustomPromptProvider();
         //When
         AttributedString attributedString = underTest.getPrompt();
         //Then

@@ -17,7 +17,7 @@ public class MovieServiceImplTest {
     private static final String TITLE = "Sprited Away";
     private static final String GENRE = "animation";
     private static final Integer LENGTH = 125;
-    private static final Movie MOVIE_ENTITY = new Movie(null,"Sprited Away","animation",125);
+    private static final Movie MOVIE_ENTITY = new Movie(null, "Sprited Away", "animation", 125);
     private static final MovieDto MOVIE = new MovieDto.Builder()
             .withTitle(TITLE)
             .withGenre(GENRE)
@@ -36,7 +36,7 @@ public class MovieServiceImplTest {
     }
 
     @Test
-    public void testGetMovieListShouldCallMovieRepositoryAndReturnADtoList(){
+    public void testGetMovieListShouldCallMovieRepositoryAndReturnADtoList() {
         //Given
         Mockito.when(movieRepository
                 .findAll())
@@ -54,7 +54,7 @@ public class MovieServiceImplTest {
     }
 
     @Test
-    public void testExistByTitleShouldCallMovieRepositoryAndReturnTrueWhenTitleExist(){
+    public void testExistByTitleShouldCallMovieRepositoryAndReturnTrueWhenTitleExist() {
         //Given
         Mockito.when(movieRepository
                 .existsByTitle("Sprited Away"))
@@ -72,7 +72,7 @@ public class MovieServiceImplTest {
     }
 
     @Test
-    public void testExistByTitleShouldCallMovieRepositoryAndReturnFalseWhenTitleNotExist(){
+    public void testExistByTitleShouldCallMovieRepositoryAndReturnFalseWhenTitleNotExist() {
         //Given
         Mockito.when(movieRepository
                 .existsByTitle("Sprited Away"))
@@ -117,7 +117,7 @@ public class MovieServiceImplTest {
                 .thenReturn(true);
         // When
         Assertions.assertThrows(IllegalArgumentException.class
-                , ()->underTest.createMovie(MOVIE));
+                , () -> underTest.createMovie(MOVIE));
 
         // Then
         Mockito.verify(movieRepository)
@@ -199,7 +199,7 @@ public class MovieServiceImplTest {
                 .findByTitle("Sprited Away");
         //Then
         Assertions.assertTrue(actual.isPresent());
-        Assertions.assertEquals(MOVIE,actual.get());
+        Assertions.assertEquals(MOVIE, actual.get());
 
         Mockito.verify(movieRepository)
                 .findByTitle("Sprited Away");
@@ -228,9 +228,9 @@ public class MovieServiceImplTest {
     public void testUpdateMovieShouldCallMovieRepositoryAndShouldModifyTheEntityWhenTheInputValid() {
         //Given
         Movie movie = new Movie(null
-                ,"Sprited Away"
-                ,"animation"
-                ,125);
+                , "Sprited Away"
+                , "animation"
+                , 125);
         Mockito.when(movieRepository
                 .getMovieByTitle("Sprited Away"))
                 .thenReturn(movie);
@@ -252,16 +252,17 @@ public class MovieServiceImplTest {
         underTest.updateMovie(requiredMovie);
 
         //Then
-        Assertions.assertEquals(expected,movieRepository
+        Assertions.assertEquals(expected, movieRepository
                 .getMovieByTitle("Sprited Away"));
         Mockito.verify(movieRepository)
                 .existsByTitle("Sprited Away");
-        Mockito.verify(movieRepository,Mockito.times(2))
+        Mockito.verify(movieRepository, Mockito.times(2))
                 .getMovieByTitle("Sprited Away");
         Mockito.verify(movieRepository)
                 .save(expected);
         Mockito.verifyNoMoreInteractions(movieRepository);
     }
+
     @Test
     public void testUpdateMovieShouldCallMovieRepositoryAndShouldThrowIllegalArgumentExceptionWhenTheInputInValid() {
         //Given
@@ -276,7 +277,7 @@ public class MovieServiceImplTest {
                 .build();
         //When
         Assertions.assertThrows(IllegalArgumentException.class
-                ,()->underTest.updateMovie(requiredMovie));
+                , () -> underTest.updateMovie(requiredMovie));
         //Then
         Mockito.verify(movieRepository)
                 .existsByTitle("Sprited Away");
@@ -311,7 +312,7 @@ public class MovieServiceImplTest {
 
         //When
         Assertions.assertThrows(IllegalArgumentException.class
-                ,()-> underTest.deleteMovieByTitle("Sprited Away"));
+                , () -> underTest.deleteMovieByTitle("Sprited Away"));
 
         //Then
         Mockito.verify(movieRepository)

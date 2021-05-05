@@ -31,32 +31,42 @@ public class MovieCommands extends CommandAvailability {
     @ShellMethodAvailability(value = "isUserAdmin")
     @ShellMethod(value = "Add a movie to movies", key = "create movie")
     public String createMovie(String title, String genre, Integer length) {
-        if (movieService.existsByTitle(title)) {
-            return "Movie with this name already exist.";
-        }
         MovieDto movieDto = new MovieDto.Builder()
                 .withTitle(title)
                 .withGenre(genre)
                 .withLength(length)
                 .build();
-        movieService.createMovie(movieDto);
-        return movieDto.toString();
+        try {
+            return movieService.createMovie(movieDto);
+        } catch (IllegalArgumentException e) {
+            return e.getMessage();
+        }
     }
 
     @ShellMethodAvailability(value = "isUserAdmin")
     @ShellMethod(value = "Delete a movie from movies", key = "delete movie")
-    public void deleteMovieByTitle(String title) {
-        movieService.deleteMovieByTitle(title);
+    public String deleteMovieByTitle(String title) {
+        try {
+            movieService.deleteMovieByTitle(title);
+            return "Delete was successful";
+        } catch (IllegalArgumentException e) {
+            return e.getMessage();
+        }
     }
 
     @ShellMethodAvailability(value = "isUserAdmin")
     @ShellMethod(value = "Update a movie from movies", key = "update movie")
-    public void updateMovie(String title, String genre, Integer length) {
+    public String updateMovie(String title, String genre, Integer length) {
         MovieDto movieDto = new MovieDto.Builder()
                 .withTitle(title)
                 .withGenre(genre)
                 .withLength(length)
                 .build();
-        movieService.updateMovie(movieDto);
+        try {
+            movieService.updateMovie(movieDto);
+            return "Update Success";
+        } catch (IllegalArgumentException e) {
+            return e.getMessage();
+        }
     }
 }

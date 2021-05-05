@@ -362,3 +362,13 @@
 1620166832925:create screening "Sprited Away" Pedersoli "2021-03-14 16:00"
 1620166844602:book "Sprited Away" Pedersoli "2021-03-14 16:00" "5,5 5,6"
 1620166917039:exit
+1620169343771:sign in privileged
+1620169350007:sign in privileged admin admin
+1620169376835:create movie "Spirited Away" animation 125
+1620173024733:create movie "Sprited Away" animation 125
+1620173030192:sign in priviliged admin admin
+1620173041070:sign in privileged admin admin
+1620173044121:create movie "Sprited Away" animation 125
+1620173053680:delete movie "Sprited Away"
+1620173057486:list movies
+1620173060848:exit

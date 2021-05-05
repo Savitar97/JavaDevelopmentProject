@@ -5,7 +5,6 @@ import com.epam.training.ticketservice.core.mapper.impl.EntityToDtoMapperImpl;
 import com.epam.training.ticketservice.core.movie.model.MovieDto;
 import com.epam.training.ticketservice.core.movie.persistence.entity.Movie;
 import com.epam.training.ticketservice.core.movie.persistence.repository.MovieRepository;
-import com.epam.training.ticketservice.core.room.impl.RoomServiceImpl;
 import com.epam.training.ticketservice.core.room.model.RoomDto;
 import com.epam.training.ticketservice.core.room.persistence.entity.Room;
 import com.epam.training.ticketservice.core.room.persistence.repository.RoomRepository;
@@ -18,11 +17,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.util.Assert;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -410,31 +406,31 @@ class ScreeningServiceImplTest {
     public void testDeleteShouldThrowIllegalArgumentExceptionIfTheScreeningNotExist() {
         //Given
         Mockito.when(screeningRepository
-                .existsById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE,ROOM_NAME,DATE))
+                .existsById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE, ROOM_NAME, DATE))
                 .thenReturn(false);
 
         //When
         Assertions.assertThrows(IllegalArgumentException.class
-                ,()->underTest.deleteScreening(TITLE,ROOM_NAME,DATE));
+                , () -> underTest.deleteScreening(TITLE, ROOM_NAME, DATE));
         //Then
         Mockito.verify(screeningRepository)
-                .existsById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE,ROOM_NAME,DATE);
+                .existsById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE, ROOM_NAME, DATE);
         Mockito.verifyNoMoreInteractions(screeningRepository);
     }
 
     @Test
-    public void testDeleteScreeningShouldDeleteScreeningWhenTheScreeningExist(){
+    public void testDeleteScreeningShouldDeleteScreeningWhenTheScreeningExist() {
         //Given
         Mockito.when(screeningRepository
-                .existsById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE,ROOM_NAME,DATE))
+                .existsById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE, ROOM_NAME, DATE))
                 .thenReturn(true);
         //When
-        underTest.deleteScreening(TITLE,ROOM_NAME,DATE);
+        underTest.deleteScreening(TITLE, ROOM_NAME, DATE);
         //Then
         Mockito.verify(screeningRepository)
-                .existsById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE,ROOM_NAME,DATE);
+                .existsById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE, ROOM_NAME, DATE);
         Mockito.verify(screeningRepository)
-                .deleteScreeningById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE,ROOM_NAME,DATE);
+                .deleteScreeningById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE, ROOM_NAME, DATE);
 
         Mockito.verifyNoMoreInteractions(screeningRepository);
     }

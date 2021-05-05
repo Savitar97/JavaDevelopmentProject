@@ -7,13 +7,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.ManyToOne;
 import javax.persistence.ElementCollection;
 import javax.persistence.FetchType;
-import java.util.Currency;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -41,11 +41,11 @@ public class Booking {
     @Override
     public String toString() {
         return "Seats booked:"
-                +seats.stream()
+                + seats.stream()
                 .map(Objects::toString)
                 .collect(Collectors.joining(", "))
-                +"; the price for this booking is "
-                +ticketPrice
-                +"HUF";
+                + "; the price for this booking is "
+                + ticketPrice
+                + "HUF";
     }
 }

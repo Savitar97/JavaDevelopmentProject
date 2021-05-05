@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 
 class DbInitializerTest {
     private UserRepository userRepository;
@@ -16,37 +15,46 @@ class DbInitializerTest {
     private final static PasswordEncoder passwordEncoder
             = NoOpPasswordEncoder.getInstance();
 
-    private User user = new User(null,"admin",
+    private User user = new User(null, "admin",
             passwordEncoder.encode("admin"),
             Role.ROLE_ADMIN);
 
     @BeforeEach
     public void init() {
         userRepository = Mockito.mock(UserRepository.class);
-        underTest = new DbInitializer(passwordEncoder,userRepository);
+        underTest = new DbInitializer(passwordEncoder, userRepository);
     }
 
     @Test
-    public void initShouldCallTheUserRepositoryAndSaveAdminUserWhenAdminNotExist(){
+    public void initShouldCallTheUserRepositoryAndSaveAdminUserWhenAdminNotExist() {
         //Given
-        Mockito.when(userRepository.existsByUsername("admin")).thenReturn(false);
-        Mockito.when(userRepository.save(user)).thenReturn(user);
+        Mockito.when(userRepository
+                .existsByUsername("admin"))
+                .thenReturn(false);
+        Mockito.when(userRepository
+                .save(user))
+                .thenReturn(user);
         //When
         underTest.init();
         //Then
-        Mockito.verify(userRepository).save(user);
-        Mockito.verify(userRepository).existsByUsername("admin");
+        Mockito.verify(userRepository)
+                .save(user);
+        Mockito.verify(userRepository)
+                .existsByUsername("admin");
         Mockito.verifyNoMoreInteractions(userRepository);
     }
 
     @Test
-    public void initShouldCallTheUserRepositoryAndSaveAdminUserWhenAdminExist(){
+    public void initShouldCallTheUserRepositoryAndSaveAdminUserWhenAdminExist() {
         //Given
-        Mockito.when(userRepository.existsByUsername("admin")).thenReturn(true);
+        Mockito.when(userRepository
+                .existsByUsername("admin"))
+                .thenReturn(true);
         //When
         underTest.init();
         //Then
-        Mockito.verify(userRepository).existsByUsername("admin");
+        Mockito.verify(userRepository)
+                .existsByUsername("admin");
         Mockito.verifyNoMoreInteractions(userRepository);
     }
 

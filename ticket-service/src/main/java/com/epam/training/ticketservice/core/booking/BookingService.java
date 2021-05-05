@@ -1,7 +1,6 @@
 package com.epam.training.ticketservice.core.booking;
 
 import com.epam.training.ticketservice.core.booking.model.SeatDto;
-import com.epam.training.ticketservice.core.booking.persistence.entity.Seat;
 
 import java.util.Date;
 import java.util.List;
