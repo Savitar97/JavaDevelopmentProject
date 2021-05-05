@@ -372,3 +372,6 @@
 1620173053680:delete movie "Sprited Away"
 1620173057486:list movies
 1620173060848:exit
+1620251933797:sign in privileged
+1620251940412:sign in privileged admin admin
+1620251941903:exit

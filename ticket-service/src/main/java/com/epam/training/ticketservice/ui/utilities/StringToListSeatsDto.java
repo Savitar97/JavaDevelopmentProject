@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class StringToListSeats implements Converter<String, List<SeatDto>> {
+public class StringToListSeatsDto implements Converter<String, List<SeatDto>> {
     @Override
     public List<SeatDto> convert(String s) {
         return Arrays.stream(s.split(" ")).map(element -> {

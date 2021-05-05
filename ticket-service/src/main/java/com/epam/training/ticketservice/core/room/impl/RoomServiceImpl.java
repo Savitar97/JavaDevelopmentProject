@@ -49,7 +49,7 @@ public class RoomServiceImpl implements RoomService {
         if (!roomRepository.existsByName(roomDto.getRoomName())) {
             throw new IllegalArgumentException("Room with this name doesn't exist!");
         }
-        Room room = roomRepository.findByName(roomDto.getRoomName());
+        Room room = roomRepository.getRoomByName(roomDto.getRoomName());
         room.setSeatColumns(roomDto.getSeatColumns());
         room.setSeatRows(roomDto.getSeatRows());
         roomRepository.save(room);
@@ -57,6 +57,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public void deleteRoomByName(String name) {
+        Objects.requireNonNull(name, "RoomName cannot be null!");
         if (!roomRepository.existsByName(name)) {
             throw new IllegalArgumentException("Room with this name doesn't exist!");
         }

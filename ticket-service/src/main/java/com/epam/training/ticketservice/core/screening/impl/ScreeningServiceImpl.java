@@ -62,7 +62,7 @@ public class ScreeningServiceImpl implements ScreeningService {
             throw new IllegalArgumentException("Screening already exist");
         }
         Movie movie = movieRepository.getMovieByTitle(movieTitle);
-        Room room = roomRepository.findByName(roomName);
+        Room room = roomRepository.getRoomByName(roomName);
         checkOverlapping(room.getName(), startTime, movie.getLength());
         ScreeningId screeningId = new ScreeningId(movie, room, startTime);
         Screening screening = new Screening(screeningId);
@@ -73,6 +73,10 @@ public class ScreeningServiceImpl implements ScreeningService {
 
     @Override
     public void deleteScreening(String movieTitle, String roomName, Date startTime) {
+        Objects.requireNonNull(movieTitle, "Movie title cannot be null");
+        Objects.requireNonNull(roomName, "Room name cannot be null");
+        Objects.requireNonNull(startTime, "Start time cannot be null");
+
         if (!screeningRepository.existsById_Movie_TitleAndId_Room_NameAndId_StartTime(
                 movieTitle, roomName, startTime)) {
             throw new IllegalArgumentException("Screening not exist");

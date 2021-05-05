@@ -116,12 +116,16 @@ class ScreeningServiceImplTest {
                 .getMovieByTitle(TITLE))
                 .thenReturn(MOVIE_ENTITY);
         Mockito.when(roomRepository
-                .findByName(ROOM_NAME))
+                .getRoomByName(ROOM_NAME))
                 .thenReturn(ROOM_ENTITY);
         //When
-        Assertions.assertEquals(SCREENING_ENTITY.toString()
-                , underTest.createScreening(TITLE, ROOM_NAME, DATE));
+        String actual = underTest.createScreening(TITLE, ROOM_NAME, DATE);
+
+
         //Then
+        Assertions.assertEquals(SCREENING_ENTITY.toString()
+                , actual);
+
         Mockito.verify(movieRepository)
                 .existsByTitle(TITLE);
         Mockito.verify(roomRepository)
@@ -135,7 +139,7 @@ class ScreeningServiceImplTest {
         Mockito.verify(movieRepository)
                 .getMovieByTitle(TITLE);
         Mockito.verify(roomRepository)
-                .findByName(ROOM_NAME);
+                .getRoomByName(ROOM_NAME);
         Mockito.verifyNoMoreInteractions(movieRepository);
         Mockito.verifyNoMoreInteractions(roomRepository);
         Mockito.verifyNoMoreInteractions(screeningRepository);
@@ -167,7 +171,7 @@ class ScreeningServiceImplTest {
                 .getMovieByTitle(TITLE))
                 .thenReturn(MOVIE_ENTITY);
         Mockito.when(roomRepository
-                .findByName(ROOM_NAME))
+                .getRoomByName(ROOM_NAME))
                 .thenReturn(ROOM_ENTITY);
 
 
@@ -188,7 +192,7 @@ class ScreeningServiceImplTest {
         Mockito.verify(movieRepository)
                 .getMovieByTitle(TITLE);
         Mockito.verify(roomRepository)
-                .findByName(ROOM_NAME);
+                .getRoomByName(ROOM_NAME);
         Mockito.verifyNoMoreInteractions(movieRepository);
         Mockito.verifyNoMoreInteractions(roomRepository);
         Mockito.verifyNoMoreInteractions(screeningRepository);
@@ -219,7 +223,7 @@ class ScreeningServiceImplTest {
                 .getMovieByTitle(TITLE))
                 .thenReturn(MOVIE_ENTITY);
         Mockito.when(roomRepository
-                .findByName(ROOM_NAME))
+                .getRoomByName(ROOM_NAME))
                 .thenReturn(ROOM_ENTITY);
 
 
@@ -239,7 +243,7 @@ class ScreeningServiceImplTest {
         Mockito.verify(movieRepository)
                 .getMovieByTitle(TITLE);
         Mockito.verify(roomRepository)
-                .findByName(ROOM_NAME);
+                .getRoomByName(ROOM_NAME);
 
         Mockito.verifyNoMoreInteractions(movieRepository);
         Mockito.verifyNoMoreInteractions(roomRepository);
@@ -270,7 +274,7 @@ class ScreeningServiceImplTest {
                 .getMovieByTitle(TITLE))
                 .thenReturn(MOVIE_ENTITY);
         Mockito.when(roomRepository
-                .findByName(ROOM_NAME))
+                .getRoomByName(ROOM_NAME))
                 .thenReturn(ROOM_ENTITY);
 
         //When
@@ -291,7 +295,7 @@ class ScreeningServiceImplTest {
         Mockito.verify(movieRepository)
                 .getMovieByTitle(TITLE);
         Mockito.verify(roomRepository)
-                .findByName(ROOM_NAME);
+                .getRoomByName(ROOM_NAME);
 
         Mockito.verifyNoMoreInteractions(movieRepository);
         Mockito.verifyNoMoreInteractions(roomRepository);

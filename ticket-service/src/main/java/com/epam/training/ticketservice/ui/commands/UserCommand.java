@@ -61,7 +61,9 @@ public class UserCommand extends CommandAvailability {
             } else {
                 return "Signed in with account '"
                         + userDto.getUsername()
-                        + "'";
+                        + "'"
+                        + System.lineSeparator()
+                        + "You have not booked any tickets yet";
             }
         } catch (IllegalStateException e) {
             return e.getMessage();

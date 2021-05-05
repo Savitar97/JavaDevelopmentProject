@@ -40,12 +40,12 @@ public class Booking {
 
     @Override
     public String toString() {
-        return "Seats booked:"
+        return "Seats booked: "
                 + seats.stream()
                 .map(Objects::toString)
                 .collect(Collectors.joining(", "))
                 + "; the price for this booking is "
                 + ticketPrice
-                + "HUF";
+                + " HUF";
     }
 }

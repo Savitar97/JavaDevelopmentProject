@@ -41,7 +41,13 @@ public class ScreeningCommand extends CommandAvailability {
 
     @ShellMethodAvailability(value = "isUserAdmin")
     @ShellMethod(value = "Delete a screening", key = "delete screening")
-    public void deleteScreening(String movieTitle, String roomName, Date date) {
-        screeningService.deleteScreening(movieTitle, roomName, date);
+    public String deleteScreening(String movieTitle, String roomName, Date date) {
+        try {
+            screeningService.deleteScreening(movieTitle, roomName, date);
+            return "Delete was successful";
+        } catch (IllegalArgumentException e) {
+            return e.getMessage();
+        }
+
     }
 }

@@ -23,17 +23,17 @@ public class RoomCommand extends CommandAvailability {
     @ShellMethodAvailability(value = "isUserAdmin")
     @ShellMethod(value = "Add a room to rooms", key = "create room")
     public String createRoom(String name, Integer rows, Integer columns) {
-        if (roomService.existsByName(name)) {
-            return "Room with this name already exist";
-        }
         RoomDto roomDto = new RoomDto.Builder()
                 .withRoomName(name)
                 .withSeatRows(rows)
                 .withSeatColumns(columns)
                 .build();
-
-        roomService.createRoom(roomDto);
-        return roomDto.toString();
+        try {
+            roomService.createRoom(roomDto);
+            return roomDto.toString();
+        } catch (IllegalArgumentException e) {
+            return e.getMessage();
+        }
     }
 
     @ShellMethod(value = "List the available rooms", key = "list rooms")
@@ -47,19 +47,29 @@ public class RoomCommand extends CommandAvailability {
 
     @ShellMethodAvailability(value = "isUserAdmin")
     @ShellMethod(value = "Delete a room from rooms", key = "delete room")
-    public void deleteRoom(String name) {
-        roomService.deleteRoomByName(name);
+    public String deleteRoom(String name) {
+        try {
+            roomService.deleteRoomByName(name);
+            return "Delete was successful";
+        } catch (IllegalArgumentException e) {
+            return e.getMessage();
+        }
     }
 
     @ShellMethodAvailability(value = "isUserAdmin")
     @ShellMethod(value = "Update a room from rooms", key = "update room")
-    public void updateRoom(String name, Integer rows, Integer columns) {
+    public String updateRoom(String name, Integer rows, Integer columns) {
         RoomDto roomDto = new RoomDto.Builder()
                 .withRoomName(name)
                 .withSeatRows(rows)
                 .withSeatColumns(columns)
                 .build();
-        roomService.updateRoom(roomDto);
+        try {
+            roomService.updateRoom(roomDto);
+            return "Update was successful";
+        } catch (IllegalArgumentException e) {
+            return e.getMessage();
+        }
     }
 
 }

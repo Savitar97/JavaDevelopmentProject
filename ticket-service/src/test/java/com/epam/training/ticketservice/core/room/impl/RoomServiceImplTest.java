@@ -224,7 +224,7 @@ class RoomServiceImplTest {
                 .existsByName("A1"))
                 .thenReturn(true);
         Mockito.when(roomRepository
-                .findByName("A1"))
+                .getRoomByName("A1"))
                 .thenReturn(room);
 
         RoomDto requiredRoom = new RoomDto.Builder()
@@ -244,11 +244,11 @@ class RoomServiceImplTest {
 
         //Then
         Assertions.assertEquals(expected, roomRepository
-                .findByName("A1"));
+                .getRoomByName("A1"));
         Mockito.verify(roomRepository)
                 .existsByName("A1");
         Mockito.verify(roomRepository, Mockito.times(2))
-                .findByName("A1");
+                .getRoomByName("A1");
         Mockito.verify(roomRepository)
                 .save(expected);
 
