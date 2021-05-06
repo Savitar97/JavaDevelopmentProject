@@ -21,6 +21,7 @@ import org.mockito.Mockito;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 
 class ScreeningServiceImplTest {
@@ -96,12 +97,6 @@ class ScreeningServiceImplTest {
     @Test
     public void testCreateScreeningShouldCallMovieRepositoryAndRoomRepositoryAndScreeningRepositoryWhenTheInputIsValidAndNotHaveOverlapping() {
         //Given
-        Mockito.when(movieRepository
-                .existsByTitle(TITLE))
-                .thenReturn(true);
-        Mockito.when(roomRepository
-                .existsByName(ROOM_NAME))
-                .thenReturn(true);
         Mockito.when(screeningRepository
                 .existsById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE
                         , ROOM_NAME, DATE))
@@ -113,11 +108,9 @@ class ScreeningServiceImplTest {
                 .save(SCREENING_ENTITY))
                 .thenReturn(SCREENING_ENTITY);
         Mockito.when(movieRepository
-                .getMovieByTitle(TITLE))
-                .thenReturn(MOVIE_ENTITY);
+                .findByTitle(TITLE)).thenReturn(Optional.of(MOVIE_ENTITY));
         Mockito.when(roomRepository
-                .getRoomByName(ROOM_NAME))
-                .thenReturn(ROOM_ENTITY);
+                .findByName(ROOM_NAME)).thenReturn(Optional.of(ROOM_ENTITY));
         //When
         String actual = underTest.createScreening(TITLE, ROOM_NAME, DATE);
 
@@ -126,20 +119,15 @@ class ScreeningServiceImplTest {
         Assertions.assertEquals(SCREENING_ENTITY.toString()
                 , actual);
 
-        Mockito.verify(movieRepository)
-                .existsByTitle(TITLE);
-        Mockito.verify(roomRepository)
-                .existsByName(ROOM_NAME);
+
+        Mockito.verify(movieRepository).findByTitle(TITLE);
+        Mockito.verify(roomRepository).findByName(ROOM_NAME);
         Mockito.verify(screeningRepository)
                 .existsById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE, ROOM_NAME, DATE);
         Mockito.verify(screeningRepository)
                 .getAllByIdRoomNameEquals(ROOM_NAME);
         Mockito.verify(screeningRepository)
                 .save(SCREENING_ENTITY);
-        Mockito.verify(movieRepository)
-                .getMovieByTitle(TITLE);
-        Mockito.verify(roomRepository)
-                .getRoomByName(ROOM_NAME);
         Mockito.verifyNoMoreInteractions(movieRepository);
         Mockito.verifyNoMoreInteractions(roomRepository);
         Mockito.verifyNoMoreInteractions(screeningRepository);
@@ -148,16 +136,15 @@ class ScreeningServiceImplTest {
     @Test
     public void testCreateScreeningShouldCallMovieRepositoryAndRoomRepositoryAndScreeningRepositoryWhenTheInputIsValidAndNotHaveOverlappingAndHaveAnotherScreening() {
         //Given
+        Mockito.when(movieRepository.findByTitle(TITLE))
+                .thenReturn(Optional.of(MOVIE_ENTITY));
+        Mockito.when(roomRepository.findByName(ROOM_NAME))
+                .thenReturn(Optional.of(ROOM_ENTITY));
         ScreeningId screeningId = new ScreeningId(MOVIE_ENTITY,
                 ROOM_ENTITY,
                 stringToDate.convert("2021-03-14 13:45"));
         Screening screening = new Screening(screeningId);
-        Mockito.when(movieRepository
-                .existsByTitle(TITLE))
-                .thenReturn(true);
-        Mockito.when(roomRepository
-                .existsByName(ROOM_NAME))
-                .thenReturn(true);
+
         Mockito.when(screeningRepository
                 .existsById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE, ROOM_NAME
                         , DATE)).thenReturn(false);
@@ -167,21 +154,14 @@ class ScreeningServiceImplTest {
         Mockito.when(screeningRepository
                 .save(SCREENING_ENTITY))
                 .thenReturn(SCREENING_ENTITY);
-        Mockito.when(movieRepository
-                .getMovieByTitle(TITLE))
-                .thenReturn(MOVIE_ENTITY);
-        Mockito.when(roomRepository
-                .getRoomByName(ROOM_NAME))
-                .thenReturn(ROOM_ENTITY);
 
 
         //When
         underTest.createScreening(TITLE, ROOM_NAME, DATE);
         //Then
-        Mockito.verify(movieRepository)
-                .existsByTitle(TITLE);
-        Mockito.verify(roomRepository)
-                .existsByName(ROOM_NAME);
+
+        Mockito.verify(movieRepository).findByTitle(TITLE);
+        Mockito.verify(roomRepository).findByName(ROOM_NAME);
         Mockito.verify(screeningRepository)
                 .existsById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE
                         , ROOM_NAME, DATE);
@@ -189,10 +169,6 @@ class ScreeningServiceImplTest {
                 .getAllByIdRoomNameEquals(ROOM_NAME);
         Mockito.verify(screeningRepository)
                 .save(SCREENING_ENTITY);
-        Mockito.verify(movieRepository)
-                .getMovieByTitle(TITLE);
-        Mockito.verify(roomRepository)
-                .getRoomByName(ROOM_NAME);
         Mockito.verifyNoMoreInteractions(movieRepository);
         Mockito.verifyNoMoreInteractions(roomRepository);
         Mockito.verifyNoMoreInteractions(screeningRepository);
@@ -207,43 +183,30 @@ class ScreeningServiceImplTest {
 
         Screening screening = new Screening(screeningId);
 
-        Mockito.when(movieRepository
-                .existsByTitle(TITLE))
-                .thenReturn(true);
-        Mockito.when(roomRepository
-                .existsByName(ROOM_NAME))
-                .thenReturn(true);
+        Mockito.when(roomRepository.findByName(ROOM_NAME))
+                .thenReturn(Optional.of(ROOM_ENTITY));
+        Mockito.when(movieRepository.findByTitle(TITLE))
+                .thenReturn(Optional.of(MOVIE_ENTITY));
         Mockito.when(screeningRepository
                 .existsById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE, ROOM_NAME
                         , DATE)).thenReturn(false);
         Mockito.when(screeningRepository
                 .getAllByIdRoomNameEquals(ROOM_NAME))
                 .thenReturn(List.of(screening));
-        Mockito.when(movieRepository
-                .getMovieByTitle(TITLE))
-                .thenReturn(MOVIE_ENTITY);
-        Mockito.when(roomRepository
-                .getRoomByName(ROOM_NAME))
-                .thenReturn(ROOM_ENTITY);
 
 
         //When
         Assertions.assertThrows(IllegalArgumentException.class,
                 () -> underTest.createScreening(TITLE, ROOM_NAME, DATE));
         //Then
-        Mockito.verify(movieRepository)
-                .existsByTitle(TITLE);
-        Mockito.verify(roomRepository)
-                .existsByName(ROOM_NAME);
+        Mockito.verify(roomRepository).findByName(ROOM_NAME);
+        Mockito.verify(movieRepository).findByTitle(TITLE);
         Mockito.verify(screeningRepository)
                 .existsById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE
                         , ROOM_NAME, DATE);
         Mockito.verify(screeningRepository)
                 .getAllByIdRoomNameEquals(ROOM_NAME);
-        Mockito.verify(movieRepository)
-                .getMovieByTitle(TITLE);
-        Mockito.verify(roomRepository)
-                .getRoomByName(ROOM_NAME);
+
 
         Mockito.verifyNoMoreInteractions(movieRepository);
         Mockito.verifyNoMoreInteractions(roomRepository);
@@ -258,24 +221,17 @@ class ScreeningServiceImplTest {
                 stringToDate.convert("2021-03-14 13:50"));
         Screening screening = new Screening(screeningId);
 
-        Mockito.when(movieRepository
-                .existsByTitle(TITLE))
-                .thenReturn(true);
-        Mockito.when(roomRepository
-                .existsByName(ROOM_NAME))
-                .thenReturn(true);
+        Mockito.when(roomRepository.findByName(ROOM_NAME))
+                .thenReturn(Optional.of(ROOM_ENTITY));
+        Mockito.when(movieRepository.findByTitle(TITLE))
+                .thenReturn(Optional.of(MOVIE_ENTITY));
         Mockito.when(screeningRepository
                 .existsById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE, ROOM_NAME
                         , DATE)).thenReturn(false);
         Mockito.when(screeningRepository
                 .getAllByIdRoomNameEquals(ROOM_NAME))
                 .thenReturn(List.of(screening));
-        Mockito.when(movieRepository
-                .getMovieByTitle(TITLE))
-                .thenReturn(MOVIE_ENTITY);
-        Mockito.when(roomRepository
-                .getRoomByName(ROOM_NAME))
-                .thenReturn(ROOM_ENTITY);
+
 
         //When
         Assertions.assertThrows(IllegalArgumentException.class,
@@ -283,19 +239,14 @@ class ScreeningServiceImplTest {
 
 
         //Then
-        Mockito.verify(movieRepository)
-                .existsByTitle(TITLE);
-        Mockito.verify(roomRepository)
-                .existsByName(ROOM_NAME);
+
         Mockito.verify(screeningRepository)
                 .existsById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE
                         , ROOM_NAME, DATE);
         Mockito.verify(screeningRepository)
                 .getAllByIdRoomNameEquals(ROOM_NAME);
-        Mockito.verify(movieRepository)
-                .getMovieByTitle(TITLE);
-        Mockito.verify(roomRepository)
-                .getRoomByName(ROOM_NAME);
+        Mockito.verify(roomRepository).findByName(ROOM_NAME);
+        Mockito.verify(movieRepository).findByTitle(TITLE);
 
         Mockito.verifyNoMoreInteractions(movieRepository);
         Mockito.verifyNoMoreInteractions(roomRepository);
@@ -304,12 +255,10 @@ class ScreeningServiceImplTest {
 
     @Test
     public void testCreateScreeningShouldThrowIllegalArgumentExceptionWhenMovieByTitleNotExist() {
-        //given
-        Mockito.when(movieRepository.existsByTitle(TITLE)).thenReturn(false);
         //When
         Assertions.assertThrows(IllegalArgumentException.class, () -> underTest.createScreening(TITLE, ROOM_NAME, DATE));
         //Then
-        Mockito.verify(movieRepository).existsByTitle(TITLE);
+        Mockito.verify(movieRepository).findByTitle(TITLE);
 
         Mockito.verifyNoMoreInteractions(movieRepository);
         Mockito.verifyNoMoreInteractions(roomRepository);
@@ -320,23 +269,16 @@ class ScreeningServiceImplTest {
     @Test
     public void testCreateScreeningShouldThrowIllegalArgumentExceptionWhenMovieByTitleExistButRoomByNameNotExist() {
         //given
-        Mockito.when(movieRepository
-                .existsByTitle(TITLE))
-                .thenReturn(true);
-        Mockito.when(roomRepository
-                .existsByName(ROOM_NAME))
-                .thenReturn(false);
+        Mockito.when(movieRepository.findByTitle(TITLE))
+                .thenReturn(Optional.of(MOVIE_ENTITY));
 
         //When
         Assertions.assertThrows(IllegalArgumentException.class,
                 () -> underTest.createScreening(TITLE, ROOM_NAME, DATE));
 
         //Then
-        Mockito.verify(movieRepository)
-                .existsByTitle(TITLE);
-        Mockito.verify(roomRepository)
-                .existsByName(ROOM_NAME);
-
+        Mockito.verify(movieRepository).findByTitle(TITLE);
+        Mockito.verify(roomRepository).findByName(ROOM_NAME);
         Mockito.verifyNoMoreInteractions(movieRepository);
         Mockito.verifyNoMoreInteractions(roomRepository);
         Mockito.verifyNoMoreInteractions(screeningRepository);
@@ -345,12 +287,10 @@ class ScreeningServiceImplTest {
     @Test
     public void testCreateScreeningShouldThrowIllegalArgumentExceptionWhenMovieByTitleExistAndRoomByNameExistAndScreeningAlreadyExist() {
         //Given
-        Mockito.when(movieRepository
-                .existsByTitle(TITLE))
-                .thenReturn(true);
-        Mockito.when(roomRepository
-                .existsByName(ROOM_NAME))
-                .thenReturn(true);
+        Mockito.when(roomRepository.findByName(ROOM_NAME))
+                .thenReturn(Optional.of(ROOM_ENTITY));
+        Mockito.when(movieRepository.findByTitle(TITLE))
+                .thenReturn(Optional.of(MOVIE_ENTITY));
         Mockito.when(screeningRepository
                 .existsById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE
                         , ROOM_NAME, DATE))
@@ -361,10 +301,8 @@ class ScreeningServiceImplTest {
                 () -> underTest.createScreening(TITLE, ROOM_NAME, DATE));
 
         //Then
-        Mockito.verify(movieRepository)
-                .existsByTitle(TITLE);
-        Mockito.verify(roomRepository)
-                .existsByName(ROOM_NAME);
+        Mockito.verify(movieRepository).findByTitle(TITLE);
+        Mockito.verify(roomRepository).findByName(ROOM_NAME);
         Mockito.verify(screeningRepository)
                 .existsById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE, ROOM_NAME, DATE);
 

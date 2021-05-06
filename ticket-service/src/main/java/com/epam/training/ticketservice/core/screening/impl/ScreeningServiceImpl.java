@@ -51,18 +51,19 @@ public class ScreeningServiceImpl implements ScreeningService {
         Objects.requireNonNull(movieTitle, "Movie title cannot be null");
         Objects.requireNonNull(roomName, "Room name cannot be null");
         Objects.requireNonNull(startTime, "Start time cannot be null");
-        if (!movieRepository.existsByTitle(movieTitle)) {
-            throw new IllegalArgumentException("Movie with this title not exist");
-        }
-        if (!roomRepository.existsByName(roomName)) {
-            throw new IllegalArgumentException("Room with this name not exist");
-        }
+
+        Movie movie = movieRepository.findByTitle(movieTitle).orElseThrow(() ->
+                new IllegalArgumentException("Movie with this title not exist")
+        );
+        Room room = roomRepository.findByName(roomName).orElseThrow(() ->
+                new IllegalArgumentException("Room with this name not exist")
+        );
+
         if (screeningRepository.existsById_Movie_TitleAndId_Room_NameAndId_StartTime(
                 movieTitle, roomName, startTime)) {
             throw new IllegalArgumentException("Screening already exist");
         }
-        Movie movie = movieRepository.getMovieByTitle(movieTitle);
-        Room room = roomRepository.getRoomByName(roomName);
+
         checkOverlapping(room.getName(), startTime, movie.getLength());
         ScreeningId screeningId = new ScreeningId(movie, room, startTime);
         Screening screening = new Screening(screeningId);
