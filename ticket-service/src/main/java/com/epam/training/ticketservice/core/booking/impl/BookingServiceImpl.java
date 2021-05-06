@@ -1,10 +1,12 @@
 package com.epam.training.ticketservice.core.booking.impl;
 
 import com.epam.training.ticketservice.core.booking.BookingService;
+import com.epam.training.ticketservice.core.booking.model.BookingDto;
 import com.epam.training.ticketservice.core.booking.model.SeatDto;
 import com.epam.training.ticketservice.core.booking.persistence.entity.Booking;
 import com.epam.training.ticketservice.core.booking.persistence.entity.Seat;
 import com.epam.training.ticketservice.core.booking.persistence.repository.BookingRepository;
+import com.epam.training.ticketservice.core.mapper.EntityToDtoMapper;
 import com.epam.training.ticketservice.core.screening.persistence.repository.ScreeningRepository;
 import com.epam.training.ticketservice.core.user.persistence.repository.UserRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,15 +22,17 @@ public class BookingServiceImpl implements BookingService {
     private final ScreeningRepository screeningRepository;
     private final BookingRepository bookingRepository;
     private final UserRepository userRepository;
+    private final EntityToDtoMapper entityToDtoMapper;
 
     private static final Integer TICKET_PRICE = 1500;
 
     public BookingServiceImpl(ScreeningRepository screeningRepository,
                               BookingRepository bookingRepository,
-                              UserRepository userRepository) {
+                              UserRepository userRepository, EntityToDtoMapper entityToDtoMapper) {
         this.screeningRepository = screeningRepository;
         this.bookingRepository = bookingRepository;
         this.userRepository = userRepository;
+        this.entityToDtoMapper = entityToDtoMapper;
     }
 
     @Override
@@ -58,6 +62,13 @@ public class BookingServiceImpl implements BookingService {
         checkSeatAlreadyBooked(booking);
         bookingRepository.save(booking);
         return booking.toString();
+    }
+
+    @Override
+    public List<BookingDto> getBookingForUser(String userName) {
+        return bookingRepository.getBookingByUser_Username(userName).stream()
+                .map(entityToDtoMapper::convertEntityToDto)
+                .collect(Collectors.toUnmodifiableList());
     }
 
     public void checkSeatExisting(Booking booking) {

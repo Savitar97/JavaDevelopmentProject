@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -29,7 +30,8 @@ public class BookingDto {
                 .collect(Collectors.joining(", "))
                 + " on " + screeningDto.getMovie().getTitle()
                 + " in room " + screeningDto.getRoom().getRoomName()
-                + " starting at " + screeningDto.getStartTime()
+                + " starting at " + new SimpleDateFormat("yyyy-MM-dd HH:mm")
+                .format(screeningDto.getStartTime())
                 + " for " + ticketPrice + " HUF";
     }
 }

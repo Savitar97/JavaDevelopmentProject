@@ -375,3 +375,28 @@
 1620251933797:sign in privileged
 1620251940412:sign in privileged admin admin
 1620251941903:exit
+1620294630248:sign in privileged
+1620294635548:sign in privileged admin admin
+1620294664558:create movie Sátántangó drama 450
+1620294673358:create room Pedersoli 10 10
+1620294722730:create screening Sátántangó Pedersoli 2021-03-15 10:45
+1620294734428:create screening Sátántangó Pedersoli "2021-03-15 10:45"
+1620294772062:book Sátántangó Pedersoli "2021-03-15 10:45" ",5 5,6"
+1620294785840:book Sátántangó Pedersoli "2021-03-15 10:45" "5,5 5,6"
+1620294795559:describe account
+1620294802828:exit
+1620294844154:sign in privileged admin admin
+1620294855166:create room Pedersoli 20 10
+1620294868639:create movie Sátántangó drama 450
+1620294890295:create screening Sátántangó Pedersoli "2021-03-15 10:45"
+1620294893722:sign out
+1620294908814:sign up asd asd
+1620294912360:sign in asd asd
+1620294939263:create book Sátántangó Pedersoli "2021-03-15 10:45" ",5\n"
+1620294948334:Pedersoli "2021-03-15 10:45" "5,5 5,6"
+1620294974866:book Sátántangó Pedersoli "2021-03-15 10:45" "5,5 5,6"
+1620294980160:describe account
+1620295132476:sign in asd asd
+1620295137257:describe account
+1620295180472:sign in asd asd
+1620295184065:describe account

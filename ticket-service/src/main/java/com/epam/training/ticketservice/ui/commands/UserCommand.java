@@ -1,26 +1,35 @@
 package com.epam.training.ticketservice.ui.commands;
 
+import com.epam.training.ticketservice.core.booking.BookingService;
+import com.epam.training.ticketservice.core.booking.model.BookingDto;
 import com.epam.training.ticketservice.core.user.LoginService;
 import com.epam.training.ticketservice.core.user.UserService;
 import com.epam.training.ticketservice.core.user.model.RegistrationUserDto;
 import com.epam.training.ticketservice.core.user.model.UserDto;
 import com.epam.training.ticketservice.core.user.persistence.entity.Role;
-import org.springframework.security.core.context.SecurityContextHolder;
+import com.epam.training.ticketservice.ui.utilities.out.helper.ConvertListToString;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellMethodAvailability;
+
+import java.util.List;
 
 @ShellComponent
 public class UserCommand extends CommandAvailability {
 
     private final UserService userService;
-
+    private final BookingService bookingService;
     private final LoginService loginService;
+    private final ConvertListToString convertListToString;
 
 
-    public UserCommand(UserService userService, LoginService loginService) {
+    public UserCommand(UserService userService, BookingService bookingService,
+                       LoginService loginService,
+                       ConvertListToString convertListToString) {
         this.userService = userService;
+        this.bookingService = bookingService;
         this.loginService = loginService;
+        this.convertListToString = convertListToString;
     }
 
     @ShellMethod(value = "Login as Admin", key = "sign in privileged")
@@ -59,16 +68,30 @@ public class UserCommand extends CommandAvailability {
                         + userDto.getUsername()
                         + "'";
             } else {
-                return "Signed in with account '"
-                        + userDto.getUsername()
-                        + "'"
-                        + System.lineSeparator()
-                        + "You have not booked any tickets yet";
+                return createOutputForNormalUser(userDto);
             }
         } catch (IllegalStateException e) {
             return e.getMessage();
         }
     }
 
+    private String createOutputForNormalUser(UserDto userDto) {
+        List<BookingDto> bookings = bookingService
+                .getBookingForUser(userDto.getUsername());
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("Signed in with account '")
+                .append(userDto.getUsername())
+                .append("'")
+                .append(System.lineSeparator());
+        if (bookings.isEmpty()) {
+            sb.append("You have not booked any tickets yet");
+            return sb.toString();
+        }
+        sb.append("Your previous bookings are")
+                .append(System.lineSeparator())
+                .append(convertListToString.listToString(bookings));
+        return sb.toString();
+    }
 
 }
