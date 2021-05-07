@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface MovieService {
     List<MovieDto> getMovieList();
 
-    String createMovie(MovieDto movieDto);
+    void createMovie(MovieDto movieDto);
 
     void deleteMovieByTitle(String title);
 

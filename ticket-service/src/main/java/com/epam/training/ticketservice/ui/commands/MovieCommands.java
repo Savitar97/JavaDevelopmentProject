@@ -37,7 +37,8 @@ public class MovieCommands extends CommandAvailability {
                 .withLength(length)
                 .build();
         try {
-            return movieService.createMovie(movieDto);
+            movieService.createMovie(movieDto);
+            return "Create was successful";
         } catch (IllegalArgumentException e) {
             return e.getMessage();
         }

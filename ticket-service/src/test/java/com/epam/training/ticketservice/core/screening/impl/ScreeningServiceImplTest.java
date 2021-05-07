@@ -1,5 +1,7 @@
 package com.epam.training.ticketservice.core.screening.impl;
 
+import com.epam.training.ticketservice.core.booking.persistence.entity.Booking;
+import com.epam.training.ticketservice.core.booking.persistence.entity.Seat;
 import com.epam.training.ticketservice.core.mapper.EntityToDtoMapper;
 import com.epam.training.ticketservice.core.mapper.impl.EntityToDtoMapperImpl;
 import com.epam.training.ticketservice.core.movie.model.MovieDto;
@@ -12,6 +14,8 @@ import com.epam.training.ticketservice.core.screening.model.ScreeningDto;
 import com.epam.training.ticketservice.core.screening.persistence.entity.Screening;
 import com.epam.training.ticketservice.core.screening.persistence.entity.ScreeningId;
 import com.epam.training.ticketservice.core.screening.persistence.repository.ScreeningRepository;
+import com.epam.training.ticketservice.core.user.persistence.entity.Role;
+import com.epam.training.ticketservice.core.user.persistence.entity.User;
 import com.epam.training.ticketservice.ui.utilities.StringToDate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,7 +56,6 @@ class ScreeningServiceImplTest {
     private static final Movie MOVIE_ENTITY = new Movie(null, "Sprited Away", "animation", 125);
     private static final ScreeningId SCREENING_ID = new ScreeningId(MOVIE_ENTITY, ROOM_ENTITY, DATE);
     private static final Screening SCREENING_ENTITY = new Screening(SCREENING_ID);
-
 
     private ScreeningServiceImpl underTest;
     private ScreeningRepository screeningRepository;
@@ -111,13 +114,10 @@ class ScreeningServiceImplTest {
                 .findByTitle(TITLE)).thenReturn(Optional.of(MOVIE_ENTITY));
         Mockito.when(roomRepository
                 .findByName(ROOM_NAME)).thenReturn(Optional.of(ROOM_ENTITY));
+
+
         //When
-        String actual = underTest.createScreening(TITLE, ROOM_NAME, DATE);
-
-
-        //Then
-        Assertions.assertEquals(SCREENING_ENTITY.toString()
-                , actual);
+        underTest.createScreening(TITLE, ROOM_NAME, DATE);
 
 
         Mockito.verify(movieRepository).findByTitle(TITLE);

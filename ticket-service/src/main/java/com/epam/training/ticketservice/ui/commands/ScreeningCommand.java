@@ -24,7 +24,8 @@ public class ScreeningCommand extends CommandAvailability {
     @ShellMethod(value = "Store a screening", key = "create screening")
     public String createScreening(String movieTitle, String roomName, Date date) {
         try {
-            return screeningService.createScreening(movieTitle, roomName, date);
+            screeningService.createScreening(movieTitle, roomName, date);
+            return "Create was successful";
         } catch (IllegalArgumentException e) {
             return e.getMessage();
         }

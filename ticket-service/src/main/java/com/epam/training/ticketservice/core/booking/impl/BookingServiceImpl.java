@@ -51,7 +51,7 @@ public class BookingServiceImpl implements BookingService {
                 userRepository.findByUsername(
                         SecurityContextHolder.getContext()
                                 .getAuthentication()
-                                .getName()).orElseThrow(IllegalStateException::new),
+                                .getName()).orElseThrow(() -> new IllegalStateException("You are not signed in")),
                 screeningRepository
                         .getScreeningById_Movie_TitleAndId_Room_NameAndId_StartTime(movieTitle,
                                 roomName,

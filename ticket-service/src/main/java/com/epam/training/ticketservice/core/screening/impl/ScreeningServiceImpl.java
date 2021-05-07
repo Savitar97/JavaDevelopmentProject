@@ -47,7 +47,7 @@ public class ScreeningServiceImpl implements ScreeningService {
     }
 
     @Override
-    public String createScreening(String movieTitle, String roomName, Date startTime) {
+    public void createScreening(String movieTitle, String roomName, Date startTime) {
         Objects.requireNonNull(movieTitle, "Movie title cannot be null");
         Objects.requireNonNull(roomName, "Room name cannot be null");
         Objects.requireNonNull(startTime, "Start time cannot be null");
@@ -68,8 +68,6 @@ public class ScreeningServiceImpl implements ScreeningService {
         ScreeningId screeningId = new ScreeningId(movie, room, startTime);
         Screening screening = new Screening(screeningId);
         screeningRepository.save(screening);
-        return screening.toString();
-
     }
 
     @Override

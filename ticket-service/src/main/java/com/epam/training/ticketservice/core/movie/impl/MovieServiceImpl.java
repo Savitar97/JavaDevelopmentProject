@@ -32,7 +32,7 @@ public class MovieServiceImpl implements MovieService {
 
 
     @Override
-    public String createMovie(MovieDto movieDto) {
+    public void createMovie(MovieDto movieDto) {
         Objects.requireNonNull(movieDto, "Movie cannot be null");
         Objects.requireNonNull(movieDto.getTitle(), "Movie Title cannot be null");
         Objects.requireNonNull(movieDto.getLength(), "Movie Length cannot be null");
@@ -46,7 +46,6 @@ public class MovieServiceImpl implements MovieService {
                 movieDto.getLength()
         );
         movieRepository.save(movie);
-        return entityToDtoMapper.convertEntityToDto(movie).toString();
     }
 
     public void deleteMovieByTitle(String title) {

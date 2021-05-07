@@ -86,10 +86,7 @@ class MovieCommandsTest {
     @Test
     public void createMovieShouldCallTheMovieServiceAndReturnWithMovieDtoToString(){
         //Given
-        Mockito.when(movieService
-                .createMovie(MOVIE))
-                .thenReturn(MOVIE.toString());
-        String expected = MOVIE.toString();
+        String expected = "Create was successful";
         //When
         String actual = underTest.createMovie(TITLE,GENRE,LENGTH);
         //Then
