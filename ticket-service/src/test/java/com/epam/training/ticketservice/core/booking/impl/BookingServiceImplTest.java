@@ -5,8 +5,8 @@ import com.epam.training.ticketservice.core.booking.model.SeatDto;
 import com.epam.training.ticketservice.core.booking.persistence.entity.Booking;
 import com.epam.training.ticketservice.core.booking.persistence.entity.Seat;
 import com.epam.training.ticketservice.core.booking.persistence.repository.BookingRepository;
-import com.epam.training.ticketservice.core.mapper.EntityToDtoMapper;
-import com.epam.training.ticketservice.core.mapper.impl.EntityToDtoMapperImpl;
+import com.epam.training.ticketservice.core.mapper.*;
+import com.epam.training.ticketservice.core.mapper.impl.*;
 import com.epam.training.ticketservice.core.movie.model.MovieDto;
 import com.epam.training.ticketservice.core.movie.persistence.entity.Movie;
 import com.epam.training.ticketservice.core.room.model.RoomDto;
@@ -39,7 +39,12 @@ class BookingServiceImplTest {
     private ScreeningRepository screeningRepository;
     private BookingRepository bookingRepository;
     private UserRepository userRepository;
-    private EntityToDtoMapper entityToDtoMapper;
+    private BookingEntityToDtoMapper entityToDtoMapper;
+    private ScreeningEntityToDtoMapper screeningEntityToDtoMapper;
+    private MovieEntityToDtoMapper movieEntityToDtoMapper;
+    private RoomEntityToDtoMapper roomEntityToDtoMapper;
+    private UserEntityToDtoMapper userEntityToDtoMapper;
+    private SeatEntityToDtoMapper seatEntityToDtoMapper;
 
 
     private static final String DATE_STRING = "2021-03-14 16:00";
@@ -85,7 +90,14 @@ class BookingServiceImplTest {
         screeningRepository = Mockito.mock(ScreeningRepository.class);
         bookingRepository = Mockito.mock(BookingRepository.class);
         userRepository = Mockito.mock(UserRepository.class);
-        entityToDtoMapper= new EntityToDtoMapperImpl();
+        movieEntityToDtoMapper = new MovieEntityToDtoMapperImpl();
+        roomEntityToDtoMapper = new RoomEntityToDtoMapperImpl();
+        screeningEntityToDtoMapper =
+                new ScreeningEntityToDtoMapperImpl(movieEntityToDtoMapper,roomEntityToDtoMapper);
+        seatEntityToDtoMapper = new SeatEntityToDtoMapperImpl();
+        userEntityToDtoMapper = new UserEntityToDtoMapperImpl();
+        entityToDtoMapper= new BookingEntityToDtoMapperImpl(screeningEntityToDtoMapper,
+                seatEntityToDtoMapper,userEntityToDtoMapper);
         underTest = new BookingServiceImpl(screeningRepository,
                 bookingRepository,
                 userRepository,
@@ -123,7 +135,7 @@ class BookingServiceImplTest {
                 .thenReturn(false);
         //When
         Assertions.assertThrows(IllegalArgumentException.class,
-                ()->underTest.createBooking(TITLE,ROOM_NAME,DATE,entityToDtoMapper.convertEntityToDto(SEATS)));
+                ()->underTest.createBooking(TITLE,ROOM_NAME,DATE,seatEntityToDtoMapper.convertEntityToDto(SEATS)));
         //Then
         Mockito.verify(screeningRepository)
                 .existsById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE,ROOM_NAME,DATE);
@@ -138,7 +150,7 @@ class BookingServiceImplTest {
 
         //When
         Assertions.assertThrows(IllegalStateException.class,
-                ()->underTest.createBooking(TITLE,ROOM_NAME,DATE,entityToDtoMapper.convertEntityToDto(SEATS)));
+                ()->underTest.createBooking(TITLE,ROOM_NAME,DATE,seatEntityToDtoMapper.convertEntityToDto(SEATS)));
         //Then
         Mockito.verify(screeningRepository)
                 .existsById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE,ROOM_NAME,DATE);
@@ -158,7 +170,7 @@ class BookingServiceImplTest {
         Mockito.when(bookingRepository.save(BOOKING_ENTITY)).thenReturn(BOOKING_ENTITY);
         String expected = BOOKING_ENTITY.toString();
         //When
-        String actual = underTest.createBooking(TITLE,ROOM_NAME,DATE,entityToDtoMapper.convertEntityToDto(SEATS));
+        String actual = underTest.createBooking(TITLE,ROOM_NAME,DATE,seatEntityToDtoMapper.convertEntityToDto(SEATS));
         //Then
         Assertions.assertEquals(expected,actual);
 
@@ -211,7 +223,7 @@ class BookingServiceImplTest {
                 .thenReturn(SCREENING_ENTITY);
         Mockito.when(bookingRepository.getBookingByScreening(SCREENING_ENTITY)).thenReturn(List.of(BOOKING_ENTITY));
         //When
-        Assertions.assertThrows(IllegalArgumentException.class,()->underTest.createBooking(TITLE,ROOM_NAME,DATE,entityToDtoMapper.convertEntityToDto(SEATS)));
+        Assertions.assertThrows(IllegalArgumentException.class,()->underTest.createBooking(TITLE,ROOM_NAME,DATE,seatEntityToDtoMapper.convertEntityToDto(SEATS)));
         //Then
         Mockito.verify(screeningRepository).existsById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE,ROOM_NAME,DATE);
         Mockito.verify(screeningRepository).getScreeningById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE,ROOM_NAME,DATE);

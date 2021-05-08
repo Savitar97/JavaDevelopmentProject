@@ -39,7 +39,7 @@ public class RoomCommand extends CommandAvailability {
     @ShellMethod(value = "List the available rooms", key = "list rooms")
     public String getRoomList() {
         List<RoomDto> rooms = roomService.getRoomList();
-        if (rooms == null || rooms.isEmpty()) {
+        if (rooms.isEmpty()) {
             return "There are no rooms at the moment";
         }
         return convertListToString.listToString(rooms);

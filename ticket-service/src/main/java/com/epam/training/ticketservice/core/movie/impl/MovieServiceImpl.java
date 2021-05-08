@@ -1,6 +1,6 @@
 package com.epam.training.ticketservice.core.movie.impl;
 
-import com.epam.training.ticketservice.core.mapper.EntityToDtoMapper;
+import com.epam.training.ticketservice.core.mapper.MovieEntityToDtoMapper;
 import com.epam.training.ticketservice.core.movie.MovieService;
 import com.epam.training.ticketservice.core.movie.model.MovieDto;
 import com.epam.training.ticketservice.core.movie.persistence.entity.Movie;
@@ -16,9 +16,9 @@ import java.util.stream.Collectors;
 public class MovieServiceImpl implements MovieService {
 
     private final MovieRepository movieRepository;
-    private final EntityToDtoMapper entityToDtoMapper;
+    private final MovieEntityToDtoMapper entityToDtoMapper;
 
-    MovieServiceImpl(MovieRepository movieRepository, EntityToDtoMapper entityToDtoMapper) {
+    MovieServiceImpl(MovieRepository movieRepository, MovieEntityToDtoMapper entityToDtoMapper) {
         this.movieRepository = movieRepository;
         this.entityToDtoMapper = entityToDtoMapper;
     }

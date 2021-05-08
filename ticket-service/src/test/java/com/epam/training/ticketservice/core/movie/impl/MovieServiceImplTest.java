@@ -1,7 +1,7 @@
 package com.epam.training.ticketservice.core.movie.impl;
 
-import com.epam.training.ticketservice.core.mapper.EntityToDtoMapper;
-import com.epam.training.ticketservice.core.mapper.impl.EntityToDtoMapperImpl;
+import com.epam.training.ticketservice.core.mapper.MovieEntityToDtoMapper;
+import com.epam.training.ticketservice.core.mapper.impl.MovieEntityToDtoMapperImpl;
 import com.epam.training.ticketservice.core.movie.model.MovieDto;
 import com.epam.training.ticketservice.core.movie.persistence.entity.Movie;
 import com.epam.training.ticketservice.core.movie.persistence.repository.MovieRepository;
@@ -31,7 +31,7 @@ public class MovieServiceImplTest {
     @BeforeEach
     public void init() {
         movieRepository = Mockito.mock(MovieRepository.class);
-        EntityToDtoMapper entityToDtoMapper = new EntityToDtoMapperImpl();
+        MovieEntityToDtoMapper entityToDtoMapper = new MovieEntityToDtoMapperImpl();
         underTest = new MovieServiceImpl(movieRepository, entityToDtoMapper);
     }
 

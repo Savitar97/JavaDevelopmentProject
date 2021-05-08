@@ -1,6 +1,6 @@
 package com.epam.training.ticketservice.core.room.impl;
 
-import com.epam.training.ticketservice.core.mapper.EntityToDtoMapper;
+import com.epam.training.ticketservice.core.mapper.RoomEntityToDtoMapper;
 import com.epam.training.ticketservice.core.room.RoomService;
 import com.epam.training.ticketservice.core.room.model.RoomDto;
 import com.epam.training.ticketservice.core.room.persistence.entity.Room;
@@ -15,9 +15,9 @@ import java.util.stream.Collectors;
 public class RoomServiceImpl implements RoomService {
 
     private final RoomRepository roomRepository;
-    private final EntityToDtoMapper entityToDtoMapper;
+    private final RoomEntityToDtoMapper entityToDtoMapper;
 
-    RoomServiceImpl(RoomRepository roomRepository, EntityToDtoMapper entityToDtoMapper) {
+    RoomServiceImpl(RoomRepository roomRepository, RoomEntityToDtoMapper entityToDtoMapper) {
         this.roomRepository = roomRepository;
         this.entityToDtoMapper = entityToDtoMapper;
     }

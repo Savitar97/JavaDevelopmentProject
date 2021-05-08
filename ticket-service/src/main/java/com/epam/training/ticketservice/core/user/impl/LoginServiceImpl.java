@@ -20,14 +20,14 @@ public class LoginServiceImpl implements LoginService {
 
 
     @Override
-    public String signIn(String username, String password) {
+    public void signIn(String username, String password) {
         try {
             Authentication result = authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(username, password));
             SecurityContextHolder.getContext().setAuthentication(result);
-            return "Login success";
         } catch (AuthenticationException e) {
-            return "Login failed due to incorrect credentials";
+            throw new AuthenticationException("Login failed due to incorrect credentials") {
+            };
         }
     }
 

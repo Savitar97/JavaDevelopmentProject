@@ -8,6 +8,7 @@ import com.epam.training.ticketservice.core.user.model.RegistrationUserDto;
 import com.epam.training.ticketservice.core.user.model.UserDto;
 import com.epam.training.ticketservice.core.user.persistence.entity.Role;
 import com.epam.training.ticketservice.ui.utilities.out.helper.ConvertListToString;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellMethodAvailability;
@@ -34,7 +35,12 @@ public class UserCommand extends CommandAvailability {
 
     @ShellMethod(value = "Login as Admin", key = "sign in privileged")
     public String loginPrivileged(String name, String password) {
-        return loginService.signIn(name, password);
+        try {
+            loginService.signIn(name, password);
+            return "Login Successful";
+        } catch (AuthenticationException e) {
+            return e.getMessage();
+        }
     }
 
     @ShellMethod(value = "Register as User", key = "sign up")
@@ -49,7 +55,12 @@ public class UserCommand extends CommandAvailability {
 
     @ShellMethod(value = "Login as User", key = "sign in")
     public String login(String name, String password) {
-        return loginService.signIn(name, password);
+        try {
+            loginService.signIn(name, password);
+            return "Login Successful";
+        } catch (AuthenticationException e) {
+            return e.getMessage();
+        }
     }
 
     @ShellMethodAvailability(value = "isUserSignedIn")

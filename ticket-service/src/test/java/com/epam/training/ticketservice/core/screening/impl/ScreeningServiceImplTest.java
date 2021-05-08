@@ -1,9 +1,11 @@
 package com.epam.training.ticketservice.core.screening.impl;
 
-import com.epam.training.ticketservice.core.booking.persistence.entity.Booking;
-import com.epam.training.ticketservice.core.booking.persistence.entity.Seat;
-import com.epam.training.ticketservice.core.mapper.EntityToDtoMapper;
-import com.epam.training.ticketservice.core.mapper.impl.EntityToDtoMapperImpl;
+import com.epam.training.ticketservice.core.mapper.MovieEntityToDtoMapper;
+import com.epam.training.ticketservice.core.mapper.RoomEntityToDtoMapper;
+import com.epam.training.ticketservice.core.mapper.ScreeningEntityToDtoMapper;
+import com.epam.training.ticketservice.core.mapper.impl.MovieEntityToDtoMapperImpl;
+import com.epam.training.ticketservice.core.mapper.impl.RoomEntityToDtoMapperImpl;
+import com.epam.training.ticketservice.core.mapper.impl.ScreeningEntityToDtoMapperImpl;
 import com.epam.training.ticketservice.core.movie.model.MovieDto;
 import com.epam.training.ticketservice.core.movie.persistence.entity.Movie;
 import com.epam.training.ticketservice.core.movie.persistence.repository.MovieRepository;
@@ -14,8 +16,6 @@ import com.epam.training.ticketservice.core.screening.model.ScreeningDto;
 import com.epam.training.ticketservice.core.screening.persistence.entity.Screening;
 import com.epam.training.ticketservice.core.screening.persistence.entity.ScreeningId;
 import com.epam.training.ticketservice.core.screening.persistence.repository.ScreeningRepository;
-import com.epam.training.ticketservice.core.user.persistence.entity.Role;
-import com.epam.training.ticketservice.core.user.persistence.entity.User;
 import com.epam.training.ticketservice.ui.utilities.StringToDate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -71,7 +71,13 @@ class ScreeningServiceImplTest {
     @BeforeEach
     public void init() throws ParseException {
 
-        EntityToDtoMapper entityToDtoMapper = new EntityToDtoMapperImpl();
+        MovieEntityToDtoMapper movieEntityToDtoMapper =
+                new MovieEntityToDtoMapperImpl();
+        RoomEntityToDtoMapper roomEntityToDtoMapper =
+                new RoomEntityToDtoMapperImpl();
+        ScreeningEntityToDtoMapper entityToDtoMapper =
+                new ScreeningEntityToDtoMapperImpl(movieEntityToDtoMapper,
+                        roomEntityToDtoMapper);
         screeningRepository = Mockito.mock(ScreeningRepository.class);
         roomRepository = Mockito.mock(RoomRepository.class);
         movieRepository = Mockito.mock(MovieRepository.class);

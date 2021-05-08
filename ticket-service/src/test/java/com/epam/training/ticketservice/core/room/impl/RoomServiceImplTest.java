@@ -1,7 +1,7 @@
 package com.epam.training.ticketservice.core.room.impl;
 
-import com.epam.training.ticketservice.core.mapper.EntityToDtoMapper;
-import com.epam.training.ticketservice.core.mapper.impl.EntityToDtoMapperImpl;
+import com.epam.training.ticketservice.core.mapper.RoomEntityToDtoMapper;
+import com.epam.training.ticketservice.core.mapper.impl.RoomEntityToDtoMapperImpl;
 import com.epam.training.ticketservice.core.room.model.RoomDto;
 import com.epam.training.ticketservice.core.room.persistence.entity.Room;
 import com.epam.training.ticketservice.core.room.persistence.repository.RoomRepository;
@@ -29,7 +29,7 @@ class RoomServiceImplTest {
 
     @BeforeEach
     public void init() {
-        EntityToDtoMapper entityToDtoMapper = new EntityToDtoMapperImpl();
+        RoomEntityToDtoMapper entityToDtoMapper = new RoomEntityToDtoMapperImpl();
         roomRepository = Mockito.mock(RoomRepository.class);
         underTest = new RoomServiceImpl(roomRepository, entityToDtoMapper);
     }
