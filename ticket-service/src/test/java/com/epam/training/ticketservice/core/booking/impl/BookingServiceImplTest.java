@@ -213,6 +213,48 @@ class BookingServiceImplTest {
     }
 
     @Test
+    public void createBookingShouldThrowIllegalArgumentExceptionIfSeatNotExistInTheRoomWhenSeatColumnLessThanZero(){
+        //Given
+        Mockito.when(screeningRepository.existsById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE,ROOM_NAME,DATE))
+                .thenReturn(true);
+        Mockito.when(userRepository.findByUsername(USERNAME)).thenReturn(Optional.of(USER));
+        Mockito.when(screeningRepository
+                .getScreeningById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE,ROOM_NAME,DATE))
+                .thenReturn(SCREENING_ENTITY);
+        //When
+        Assertions.assertThrows(IllegalArgumentException.class,()->underTest.createBooking(TITLE,ROOM_NAME,DATE,List.of(new SeatDto(11,-2))));
+        //Then
+        Mockito.verify(screeningRepository).existsById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE,ROOM_NAME,DATE);
+        Mockito.verify(screeningRepository).getScreeningById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE,ROOM_NAME,DATE);
+        Mockito.verify(userRepository).findByUsername(USERNAME);
+        Mockito.verifyNoMoreInteractions(screeningRepository);
+        Mockito.verifyNoMoreInteractions(userRepository);
+        Mockito.verifyNoMoreInteractions(bookingRepository);
+
+    }
+
+    @Test
+    public void createBookingShouldThrowIllegalArgumentExceptionIfSeatNotExistInTheRoomWhenSeatRowLessThanZero(){
+        //Given
+        Mockito.when(screeningRepository.existsById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE,ROOM_NAME,DATE))
+                .thenReturn(true);
+        Mockito.when(userRepository.findByUsername(USERNAME)).thenReturn(Optional.of(USER));
+        Mockito.when(screeningRepository
+                .getScreeningById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE,ROOM_NAME,DATE))
+                .thenReturn(SCREENING_ENTITY);
+        //When
+        Assertions.assertThrows(IllegalArgumentException.class,()->underTest.createBooking(TITLE,ROOM_NAME,DATE,List.of(new SeatDto(-1,11))));
+        //Then
+        Mockito.verify(screeningRepository).existsById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE,ROOM_NAME,DATE);
+        Mockito.verify(screeningRepository).getScreeningById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE,ROOM_NAME,DATE);
+        Mockito.verify(userRepository).findByUsername(USERNAME);
+        Mockito.verifyNoMoreInteractions(screeningRepository);
+        Mockito.verifyNoMoreInteractions(userRepository);
+        Mockito.verifyNoMoreInteractions(bookingRepository);
+
+    }
+
+    @Test
     public void createBookingShouldThrowIllegalArgumentExceptionIfSeatAlreadyTakenInTheRoom(){
         //Given
         Mockito.when(screeningRepository.existsById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE,ROOM_NAME,DATE))

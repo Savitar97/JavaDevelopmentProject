@@ -401,3 +401,9 @@
 1620295180472:sign in asd asd
 1620295184065:describe account
 1620300360295:exit
+1620494354570:sign in privileged admin admin
+1620494403807:create movie "\n"
+1620494421028:create movie "Spirited Away" 125
+1620494441688:create movie "Spirited Away" animation 125
+1620494445677:list movies
+1620495991588:exit

@@ -86,7 +86,8 @@ public class BookingServiceImpl implements BookingService {
                 .getSeatRows();
 
         booking.getSeats().forEach(seat -> {
-            if (seatRows < seat.getSeatRow() || seatColumns < seat.getSeatColumn()) {
+            if (seatRows < 0 || seatColumns < 0
+                    || seatRows < seat.getSeatRow() || seatColumns < seat.getSeatColumn()) {
                 throw new IllegalArgumentException("Seat " + seat + " does not exist in this room");
             }
         });
