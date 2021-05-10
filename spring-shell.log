@@ -407,3 +407,57 @@
 1620494441688:create movie "Spirited Away" animation 125
 1620494445677:list movies
 1620495991588:exit
+1620608610036:create price component asd 1500
+1620608619268:sign in privileged admin admin
+1620608628074:create price component asd 1500
+1620608633330:exit
+1620609234110:sign in privileged admin admin
+1620609253070:create movie Sátántangó drama 450
+1620609279740:create price component asd
+1620609289083:create price component asd 1500
+1620609309729:attach price component to movie Sátántangó asd
+1620610589135:exit
+1620611537741:sign in privileged admin admin
+1620611544183:create room Pedersoli 10 10
+1620611580880:attach price to room Pedersoli asd
+1620611596830:attach price component to room Pedersoli asd
+1620611658820:create screening Sátántangó Pedersoli "2021-03-14 16:00"
+1620611678382:attach price to screening Sátántangó Pedersoli "2021-03-14 16:00" asd
+1620611705534:attach price component to screening Sátántangó Pedersoli "2021-03-14 16:00"
+1620611715549:attach price component to screening Sátántangó Pedersoli "2021-03-14 16:00" asd
+1620611773410:show price for Sátántangó Pedersoli "2021-03-14 16:00" "\n"
+1620611796446:show price for Sátántangó Pedersoli "2021-03-14 16:00" "5,5 5,6"
+1620611934792:create screening Sátántangó Pedersoli "2021-03-14 22:00"
+1620611945090:create screening Sátántangó Pedersoli "2021-03-15 16:00"
+1620611978620:show price for Sátántangó Pedersoli "2021-03-15 16:00" "\n"
+1620611988790:show price for Sátántangó Pedersoli "2021-03-15 16:00" "5,5 5,6"
+1620612347451:sign in privileged admin admin
+1620612408830:show price for Sátántangó Pedersoli "2021-03-15 16:00" "5,5"
+1620612414177:stacktrace
+1620612573237:show price for Sátántangó Pedersoli "2021-03-15 16:00" "5,5"
+1620612580583:sign in privileged admin admin
+1620612582166:show price for Sátántangó Pedersoli "2021-03-15 16:00" "5,5"
+1620622303362:sign in privileged admin admin
+1620622312740:create price component additionalFeeForSatantango 100
+1620622323885:attach price component to movie additionalFeeForSatantango Sátántangó
+1620622348874:create movie Sátántangó 125
+1620622365920:create movie Sátántangó 450
+1620622371146:stacktrace
+1620622411324:create movie Sátántangó drama 450
+1620622429894:create price component additionalFeeForSatantango 100
+1620622440002:attach price component to movie additionalFeeForSatantango Sátántangó
+1620622769727:sign in privileged admin admin
+1620622771394:attach price component to movie additionalFeeForSatantango Sátántangó
+1620622897133:sign in privileged admin admin
+1620622911290:create price component additionalFeeForSatantango 100
+1620622922297:create movie Sátántangó drama 450
+1620622928538:attach price component to movie additionalFeeForSatantango Sátántangó
+1620623138970:sign in privileged admin admin
+1620623140406:attach price component to movie additionalFeeForSatantango Sátántangó
+1620623553590:sign in privileged admin admin
+1620623560818:create price component additionalFeeForPulpFictionScreening 100
+1620623583633:create movie "\n"
+1620623600894:create movie "Pulp Fiction" dunno 125
+1620623612133:create room Girotti 11 10
+1620623647054:create screening "Pulp Fiction" Girotti "2021-03-14 16:00"
+1620623673241:attach price component to screening additionalFeeForPulpFictionScreening "Pulp Fiction" Girotti "2021-03-14 16:00"
