@@ -8,7 +8,7 @@ import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Repository
-public interface MovieRepository extends JpaRepository<Movie,Long> {
+public interface MovieRepository extends JpaRepository<Movie, Long> {
     Optional<Movie> findByTitle(String title);
 
     boolean existsByTitle(String title);

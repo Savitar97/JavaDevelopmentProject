@@ -7,6 +7,8 @@ import com.epam.training.ticketservice.core.booking.persistence.entity.Booking;
 import com.epam.training.ticketservice.core.booking.persistence.entity.Seat;
 import com.epam.training.ticketservice.core.booking.persistence.repository.BookingRepository;
 import com.epam.training.ticketservice.core.mapper.BookingEntityToDtoMapper;
+import com.epam.training.ticketservice.core.pricecomponent.persistence.repository.BasePriceRepository;
+import com.epam.training.ticketservice.core.screening.persistence.entity.Screening;
 import com.epam.training.ticketservice.core.screening.persistence.repository.ScreeningRepository;
 import com.epam.training.ticketservice.core.user.persistence.repository.UserRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,17 +25,18 @@ public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
     private final UserRepository userRepository;
     private final BookingEntityToDtoMapper entityToDtoMapper;
+    private final BasePriceRepository basePriceRepository;
 
-    private static final Integer TICKET_PRICE = 1500;
 
     public BookingServiceImpl(ScreeningRepository screeningRepository,
                               BookingRepository bookingRepository,
                               UserRepository userRepository,
-                              BookingEntityToDtoMapper entityToDtoMapper) {
+                              BookingEntityToDtoMapper entityToDtoMapper, BasePriceRepository basePriceRepository) {
         this.screeningRepository = screeningRepository;
         this.bookingRepository = bookingRepository;
         this.userRepository = userRepository;
         this.entityToDtoMapper = entityToDtoMapper;
+        this.basePriceRepository = basePriceRepository;
     }
 
     @Override
@@ -58,7 +61,8 @@ public class BookingServiceImpl implements BookingService {
                                 roomName,
                                 startTime),
                 seatEntities,
-                seatEntities.size() * TICKET_PRICE);
+                calculatePrice(movieTitle, roomName, startTime, seats)
+        );
         checkSeatExisting(booking);
         checkSeatAlreadyBooked(booking);
         bookingRepository.save(booking);
@@ -72,7 +76,7 @@ public class BookingServiceImpl implements BookingService {
                 .collect(Collectors.toUnmodifiableList());
     }
 
-    public void checkSeatExisting(Booking booking) {
+    private void checkSeatExisting(Booking booking) {
         Integer seatColumns = booking
                 .getScreening()
                 .getId()
@@ -93,7 +97,7 @@ public class BookingServiceImpl implements BookingService {
         });
     }
 
-    public void checkSeatAlreadyBooked(Booking booking) {
+    private void checkSeatAlreadyBooked(Booking booking) {
         List<Seat> seats = bookingRepository
                 .getBookingByScreening(booking.getScreening())
                 .stream()
@@ -105,5 +109,35 @@ public class BookingServiceImpl implements BookingService {
                 throw new IllegalArgumentException("Seat " + seat + " is already taken");
             }
         });
+    }
+
+    public Integer calculatePrice(String movieTitle, String roomName, Date startTime, List<SeatDto> seats) {
+        Screening screening = screeningRepository
+                .findById_Movie_TitleAndId_Room_NameAndId_StartTime(movieTitle, roomName, startTime)
+                .orElseThrow(() -> new IllegalArgumentException("Screening with this parameter not exist!"));
+
+        Integer moviePrice;
+        Integer roomPrice;
+        Integer screeningPrice;
+
+        try {
+            moviePrice = screening.getId().getMovie().getPriceComponent().getPrice();
+        } catch (NullPointerException e) {
+            moviePrice = 0;
+        }
+
+        try {
+            roomPrice = screening.getId().getRoom().getPriceComponent().getPrice();
+        } catch (NullPointerException e) {
+            roomPrice = 0;
+        }
+
+        try {
+            screeningPrice = screening.getPriceComponent().getPrice();
+        } catch (NullPointerException e) {
+            screeningPrice = 0;
+        }
+        Integer basePrice = basePriceRepository.getBasePriceById(1).getPrice();
+        return seats.size() * (moviePrice + roomPrice + screeningPrice + basePrice);
     }
 }

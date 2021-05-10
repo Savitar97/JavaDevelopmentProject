@@ -3,12 +3,13 @@ package com.epam.training.ticketservice.core.screening.impl;
 import com.epam.training.ticketservice.core.mapper.ScreeningEntityToDtoMapper;
 import com.epam.training.ticketservice.core.movie.persistence.entity.Movie;
 import com.epam.training.ticketservice.core.movie.persistence.repository.MovieRepository;
+import com.epam.training.ticketservice.core.pricecomponent.persistence.entity.PriceComponent;
 import com.epam.training.ticketservice.core.room.persistence.entity.Room;
 import com.epam.training.ticketservice.core.room.persistence.repository.RoomRepository;
 import com.epam.training.ticketservice.core.screening.ScreeningService;
 import com.epam.training.ticketservice.core.screening.model.ScreeningDto;
-import com.epam.training.ticketservice.core.screening.persistence.entity.ScreeningId;
 import com.epam.training.ticketservice.core.screening.persistence.entity.Screening;
+import com.epam.training.ticketservice.core.screening.persistence.entity.ScreeningId;
 import com.epam.training.ticketservice.core.screening.persistence.repository.ScreeningRepository;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.stereotype.Service;
@@ -66,7 +67,7 @@ public class ScreeningServiceImpl implements ScreeningService {
 
         checkOverlapping(room.getName(), startTime, movie.getLength());
         ScreeningId screeningId = new ScreeningId(movie, room, startTime);
-        Screening screening = new Screening(screeningId);
+        Screening screening = new Screening(screeningId, null);
         screeningRepository.save(screening);
     }
 
@@ -83,6 +84,18 @@ public class ScreeningServiceImpl implements ScreeningService {
 
         screeningRepository.deleteScreeningById_Movie_TitleAndId_Room_NameAndId_StartTime(
                 movieTitle, roomName, startTime);
+    }
+
+    @Override
+    public void updatePriceComponent(PriceComponent priceComponent,
+                                     String movieTitle,
+                                     String roomName,
+                                     Date startTime) {
+        Screening screening = screeningRepository
+                .findById_Movie_TitleAndId_Room_NameAndId_StartTime(movieTitle, roomName, startTime)
+                .orElseThrow(() -> new IllegalArgumentException("Screening with this parameter not exist!"));
+        screening.setPriceComponent(priceComponent);
+        screeningRepository.save(screening);
     }
 
     public void checkOverlapping(String roomName, Date desiredDate, Integer movieLength) {

@@ -20,7 +20,7 @@ class RoomServiceImplTest {
     private static final String ROOM_NAME = "A1";
     private static final Integer ROWS = 10;
     private static final Integer COLUMNS = 10;
-    private static final Room ROOM_ENTITY = new Room(null, "A1", 10, 10);
+    private static final Room ROOM_ENTITY = new Room(null, "A1", 10, 10, null);
     private static final RoomDto ROOM = new RoomDto.Builder()
             .withRoomName(ROOM_NAME)
             .withSeatRows(ROWS)
@@ -218,7 +218,7 @@ class RoomServiceImplTest {
     @Test
     public void testUpdateRoomShouldCallRoomRepositoryAndShouldModifyTheEntityWhenTheInputValid() {
         //Given
-        Room room = new Room(null, "A1", 10, 10);
+        Room room = new Room(null, "A1", 10, 10, null);
 
         Mockito.when(roomRepository
                 .existsByName("A1"))
@@ -236,7 +236,7 @@ class RoomServiceImplTest {
         Room expected = new Room(null,
                 requiredRoom.getRoomName(),
                 requiredRoom.getSeatRows(),
-                requiredRoom.getSeatColumns());
+                requiredRoom.getSeatColumns(), null);
         //When
 
         underTest.updateRoom(requiredRoom);

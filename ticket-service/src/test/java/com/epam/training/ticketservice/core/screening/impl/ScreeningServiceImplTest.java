@@ -52,10 +52,10 @@ class ScreeningServiceImplTest {
             .withLength(LENGTH)
             .build();
 
-    private static final Room ROOM_ENTITY = new Room(null, "A1", 10, 10);
-    private static final Movie MOVIE_ENTITY = new Movie(null, "Sprited Away", "animation", 125);
+    private static final Room ROOM_ENTITY = new Room(null, "A1", 10, 10, null);
+    private static final Movie MOVIE_ENTITY = new Movie(null, "Sprited Away", "animation", 125, null);
     private static final ScreeningId SCREENING_ID = new ScreeningId(MOVIE_ENTITY, ROOM_ENTITY, DATE);
-    private static final Screening SCREENING_ENTITY = new Screening(SCREENING_ID);
+    private static final Screening SCREENING_ENTITY = new Screening(SCREENING_ID, null);
 
     private ScreeningServiceImpl underTest;
     private ScreeningRepository screeningRepository;
@@ -149,7 +149,7 @@ class ScreeningServiceImplTest {
         ScreeningId screeningId = new ScreeningId(MOVIE_ENTITY,
                 ROOM_ENTITY,
                 stringToDate.convert("2021-03-14 13:45"));
-        Screening screening = new Screening(screeningId);
+        Screening screening = new Screening(screeningId, null);
 
         Mockito.when(screeningRepository
                 .existsById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE, ROOM_NAME
@@ -187,7 +187,7 @@ class ScreeningServiceImplTest {
                 ROOM_ENTITY,
                 stringToDate.convert("2021-03-14 16:00"));
 
-        Screening screening = new Screening(screeningId);
+        Screening screening = new Screening(screeningId, null);
 
         Mockito.when(roomRepository.findByName(ROOM_NAME))
                 .thenReturn(Optional.of(ROOM_ENTITY));
@@ -225,7 +225,7 @@ class ScreeningServiceImplTest {
         ScreeningId screeningId = new ScreeningId(MOVIE_ENTITY,
                 ROOM_ENTITY,
                 stringToDate.convert("2021-03-14 13:50"));
-        Screening screening = new Screening(screeningId);
+        Screening screening = new Screening(screeningId,null);
 
         Mockito.when(roomRepository.findByName(ROOM_NAME))
                 .thenReturn(Optional.of(ROOM_ENTITY));

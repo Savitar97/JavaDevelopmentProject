@@ -9,6 +9,9 @@ import com.epam.training.ticketservice.core.mapper.*;
 import com.epam.training.ticketservice.core.mapper.impl.*;
 import com.epam.training.ticketservice.core.movie.model.MovieDto;
 import com.epam.training.ticketservice.core.movie.persistence.entity.Movie;
+import com.epam.training.ticketservice.core.pricecomponent.persistence.entity.BasePrice;
+import com.epam.training.ticketservice.core.pricecomponent.persistence.entity.PriceComponent;
+import com.epam.training.ticketservice.core.pricecomponent.persistence.repository.BasePriceRepository;
 import com.epam.training.ticketservice.core.room.model.RoomDto;
 import com.epam.training.ticketservice.core.room.persistence.entity.Room;
 import com.epam.training.ticketservice.core.screening.persistence.entity.Screening;
@@ -21,6 +24,7 @@ import com.epam.training.ticketservice.ui.utilities.StringToDate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -30,8 +34,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class BookingServiceImplTest {
 
@@ -45,7 +47,7 @@ class BookingServiceImplTest {
     private RoomEntityToDtoMapper roomEntityToDtoMapper;
     private UserEntityToDtoMapper userEntityToDtoMapper;
     private SeatEntityToDtoMapper seatEntityToDtoMapper;
-
+    private BasePriceRepository basePriceRepository;
 
     private static final String DATE_STRING = "2021-03-14 16:00";
     private static final StringToDate stringToDate = new StringToDate();
@@ -75,10 +77,10 @@ class BookingServiceImplTest {
     private static final Role ROLE = Role.ROLE_USER;
     private static final Integer PRICE = 1500;
 
-    private static final Room ROOM_ENTITY = new Room(null, "A1", 10, 10);
-    private static final Movie MOVIE_ENTITY = new Movie(null, "Sprited Away", "animation", 125);
+    private static final Room ROOM_ENTITY = new Room(null, "A1", 10, 10,null);
+    private static final Movie MOVIE_ENTITY = new Movie(null, "Sprited Away", "animation", 125, null);
     private static final ScreeningId SCREENING_ID = new ScreeningId(MOVIE_ENTITY, ROOM_ENTITY, DATE);
-    private static final Screening SCREENING_ENTITY = new Screening(SCREENING_ID);
+    private static final Screening SCREENING_ENTITY = new Screening(SCREENING_ID, null);
     private static final User USER = new User(null,USERNAME,PASSWORD, ROLE);
     private static final List<Seat> SEATS = List.of(new Seat(5,5),new Seat(5,6));
     private static final Booking BOOKING_ENTITY = new Booking(null,USER,SCREENING_ENTITY,SEATS,SEATS.size()*PRICE);
@@ -90,6 +92,7 @@ class BookingServiceImplTest {
         screeningRepository = Mockito.mock(ScreeningRepository.class);
         bookingRepository = Mockito.mock(BookingRepository.class);
         userRepository = Mockito.mock(UserRepository.class);
+        basePriceRepository = Mockito.mock(BasePriceRepository.class);
         movieEntityToDtoMapper = new MovieEntityToDtoMapperImpl();
         roomEntityToDtoMapper = new RoomEntityToDtoMapperImpl();
         screeningEntityToDtoMapper =
@@ -98,10 +101,11 @@ class BookingServiceImplTest {
         userEntityToDtoMapper = new UserEntityToDtoMapperImpl();
         entityToDtoMapper= new BookingEntityToDtoMapperImpl(screeningEntityToDtoMapper,
                 seatEntityToDtoMapper,userEntityToDtoMapper);
+
         underTest = new BookingServiceImpl(screeningRepository,
                 bookingRepository,
                 userRepository,
-                entityToDtoMapper);
+                entityToDtoMapper, basePriceRepository);
 
         Authentication authentication = Mockito.mock(UsernamePasswordAuthenticationToken.class);
         SecurityContext securityContext = Mockito.mock(SecurityContext.class);
@@ -166,6 +170,9 @@ class BookingServiceImplTest {
         Mockito.when(screeningRepository
                 .getScreeningById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE,ROOM_NAME,DATE))
                 .thenReturn(SCREENING_ENTITY);
+        Mockito.when(screeningRepository.findById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE,ROOM_NAME,DATE))
+                .thenReturn(Optional.of(SCREENING_ENTITY));
+        Mockito.when(basePriceRepository.getBasePriceById(1)).thenReturn(new BasePrice(1,1500));
         Mockito.when(bookingRepository.getBookingByScreening(SCREENING_ENTITY)).thenReturn(List.of());
         Mockito.when(bookingRepository.save(BOOKING_ENTITY)).thenReturn(BOOKING_ENTITY);
         String expected = BOOKING_ENTITY.toString();
@@ -180,6 +187,8 @@ class BookingServiceImplTest {
                 .getScreeningById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE,ROOM_NAME,DATE);
         Mockito.verify(userRepository)
                 .findByUsername(USERNAME);
+        Mockito.verify(screeningRepository).findById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE,ROOM_NAME,DATE);
+        Mockito.verify(basePriceRepository).getBasePriceById(1);
         Mockito.verify(bookingRepository).save(BOOKING_ENTITY);
         Mockito.verify(bookingRepository)
                 .getBookingByScreening(SCREENING_ENTITY);
@@ -189,6 +198,7 @@ class BookingServiceImplTest {
                 .verifyNoMoreInteractions(userRepository);
         Mockito
                 .verifyNoMoreInteractions(bookingRepository);
+        Mockito.verifyNoMoreInteractions(basePriceRepository);
     }
 
     @Test
@@ -200,15 +210,21 @@ class BookingServiceImplTest {
         Mockito.when(screeningRepository
                 .getScreeningById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE,ROOM_NAME,DATE))
                 .thenReturn(SCREENING_ENTITY);
+        Mockito.when(basePriceRepository.getBasePriceById(1)).thenReturn(new BasePrice(1,1500));
+        Mockito.when(screeningRepository.findById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE,ROOM_NAME,DATE))
+                .thenReturn(Optional.of(SCREENING_ENTITY));
         //When
         Assertions.assertThrows(IllegalArgumentException.class,()->underTest.createBooking(TITLE,ROOM_NAME,DATE,List.of(new SeatDto(11,12))));
         //Then
         Mockito.verify(screeningRepository).existsById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE,ROOM_NAME,DATE);
         Mockito.verify(screeningRepository).getScreeningById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE,ROOM_NAME,DATE);
         Mockito.verify(userRepository).findByUsername(USERNAME);
+        Mockito.verify(screeningRepository).findById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE,ROOM_NAME,DATE);
+        Mockito.verify(basePriceRepository).getBasePriceById(1);
         Mockito.verifyNoMoreInteractions(screeningRepository);
         Mockito.verifyNoMoreInteractions(userRepository);
         Mockito.verifyNoMoreInteractions(bookingRepository);
+        Mockito.verifyNoMoreInteractions(basePriceRepository);
 
     }
 
@@ -221,15 +237,21 @@ class BookingServiceImplTest {
         Mockito.when(screeningRepository
                 .getScreeningById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE,ROOM_NAME,DATE))
                 .thenReturn(SCREENING_ENTITY);
+        Mockito.when(basePriceRepository.getBasePriceById(1)).thenReturn(new BasePrice(1,1500));
+        Mockito.when(screeningRepository.findById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE,ROOM_NAME,DATE))
+                .thenReturn(Optional.of(SCREENING_ENTITY));
         //When
         Assertions.assertThrows(IllegalArgumentException.class,()->underTest.createBooking(TITLE,ROOM_NAME,DATE,List.of(new SeatDto(11,-2))));
         //Then
         Mockito.verify(screeningRepository).existsById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE,ROOM_NAME,DATE);
         Mockito.verify(screeningRepository).getScreeningById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE,ROOM_NAME,DATE);
+        Mockito.verify(screeningRepository).findById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE,ROOM_NAME,DATE);
         Mockito.verify(userRepository).findByUsername(USERNAME);
+        Mockito.verify(basePriceRepository).getBasePriceById(1);
         Mockito.verifyNoMoreInteractions(screeningRepository);
         Mockito.verifyNoMoreInteractions(userRepository);
         Mockito.verifyNoMoreInteractions(bookingRepository);
+        Mockito.verifyNoMoreInteractions(basePriceRepository);
 
     }
 
@@ -242,15 +264,21 @@ class BookingServiceImplTest {
         Mockito.when(screeningRepository
                 .getScreeningById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE,ROOM_NAME,DATE))
                 .thenReturn(SCREENING_ENTITY);
+        Mockito.when(basePriceRepository.getBasePriceById(1)).thenReturn(new BasePrice(1,1500));
+        Mockito.when(screeningRepository.findById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE,ROOM_NAME,DATE))
+                .thenReturn(Optional.of(SCREENING_ENTITY));
         //When
         Assertions.assertThrows(IllegalArgumentException.class,()->underTest.createBooking(TITLE,ROOM_NAME,DATE,List.of(new SeatDto(-1,11))));
         //Then
         Mockito.verify(screeningRepository).existsById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE,ROOM_NAME,DATE);
         Mockito.verify(screeningRepository).getScreeningById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE,ROOM_NAME,DATE);
         Mockito.verify(userRepository).findByUsername(USERNAME);
+        Mockito.verify(basePriceRepository).getBasePriceById(1);
+        Mockito.verify(screeningRepository).findById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE,ROOM_NAME,DATE);
         Mockito.verifyNoMoreInteractions(screeningRepository);
         Mockito.verifyNoMoreInteractions(userRepository);
         Mockito.verifyNoMoreInteractions(bookingRepository);
+        Mockito.verifyNoMoreInteractions(basePriceRepository);
 
     }
 
@@ -264,6 +292,9 @@ class BookingServiceImplTest {
                 .getScreeningById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE,ROOM_NAME,DATE))
                 .thenReturn(SCREENING_ENTITY);
         Mockito.when(bookingRepository.getBookingByScreening(SCREENING_ENTITY)).thenReturn(List.of(BOOKING_ENTITY));
+        Mockito.when(basePriceRepository.getBasePriceById(1)).thenReturn(new BasePrice(1,1500));
+        Mockito.when(screeningRepository.findById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE,ROOM_NAME,DATE))
+                .thenReturn(Optional.of(SCREENING_ENTITY));
         //When
         Assertions.assertThrows(IllegalArgumentException.class,()->underTest.createBooking(TITLE,ROOM_NAME,DATE,seatEntityToDtoMapper.convertEntityToDto(SEATS)));
         //Then
@@ -271,10 +302,36 @@ class BookingServiceImplTest {
         Mockito.verify(screeningRepository).getScreeningById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE,ROOM_NAME,DATE);
         Mockito.verify(userRepository).findByUsername(USERNAME);
         Mockito.verify(bookingRepository).getBookingByScreening(SCREENING_ENTITY);
+        Mockito.verify(screeningRepository).findById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE,ROOM_NAME,DATE);
+        Mockito.verify(basePriceRepository).getBasePriceById(1);
         Mockito.verifyNoMoreInteractions(bookingRepository);
         Mockito.verifyNoMoreInteractions(screeningRepository);
         Mockito.verifyNoMoreInteractions(userRepository);
+        Mockito.verifyNoMoreInteractions(basePriceRepository);
 
     }
 
+    @Test
+    public void calculatePriceShouldCountTheGivenPriceComponentsIfExist(){
+        //Given
+        PriceComponent priceComponent = new PriceComponent(null,"asd",1500);
+        Movie movie = new Movie(null,TITLE,GENRE,LENGTH,priceComponent);
+        Room room = new Room(null,ROOM_NAME,ROWS,COLUMNS,priceComponent);
+        ScreeningId screeningId = new ScreeningId(movie,room,DATE);
+        Screening screening = new Screening(screeningId,priceComponent);
+        Mockito.when(basePriceRepository.getBasePriceById(1)).thenReturn(new BasePrice(1,1500));
+        Mockito.when(screeningRepository.findById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE,ROOM_NAME,DATE))
+                .thenReturn(Optional.of(screening));
+        Integer expected = 6000;
+        //When
+        Integer actual = underTest.calculatePrice(TITLE,ROOM_NAME,DATE,List.of(new SeatDto(5,5)));
+
+        //Then
+        Assertions.assertEquals(expected,actual);
+        Mockito.verify(basePriceRepository).getBasePriceById(1);
+        Mockito.verify(screeningRepository).findById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE,ROOM_NAME,DATE);
+        Mockito.verifyNoMoreInteractions(basePriceRepository);
+        Mockito.verifyNoMoreInteractions(screeningRepository);
+
+    }
 }

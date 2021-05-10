@@ -5,6 +5,7 @@ import com.epam.training.ticketservice.core.movie.MovieService;
 import com.epam.training.ticketservice.core.movie.model.MovieDto;
 import com.epam.training.ticketservice.core.movie.persistence.entity.Movie;
 import com.epam.training.ticketservice.core.movie.persistence.repository.MovieRepository;
+import com.epam.training.ticketservice.core.pricecomponent.persistence.entity.PriceComponent;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -43,7 +44,8 @@ public class MovieServiceImpl implements MovieService {
         Movie movie = new Movie(null,
                 movieDto.getTitle(),
                 movieDto.getGenre(),
-                movieDto.getLength()
+                movieDto.getLength(),
+                null
         );
         movieRepository.save(movie);
     }
@@ -74,6 +76,14 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public Boolean existsByTitle(String title) {
         return movieRepository.existsByTitle(title);
+    }
+
+    @Override
+    public void updatePriceComponent(PriceComponent priceComponent, String movieTitle) {
+        Movie movie = movieRepository.findByTitle(movieTitle)
+                .orElseThrow(() -> new IllegalArgumentException("Movie with this title not exist!"));
+        movie.setPriceComponent(priceComponent);
+        movieRepository.save(movie);
     }
 
 

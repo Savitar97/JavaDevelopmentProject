@@ -5,6 +5,7 @@ import com.epam.training.ticketservice.core.mapper.impl.MovieEntityToDtoMapperIm
 import com.epam.training.ticketservice.core.movie.model.MovieDto;
 import com.epam.training.ticketservice.core.movie.persistence.entity.Movie;
 import com.epam.training.ticketservice.core.movie.persistence.repository.MovieRepository;
+import com.epam.training.ticketservice.core.pricecomponent.persistence.entity.PriceComponent;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,7 +18,7 @@ public class MovieServiceImplTest {
     private static final String TITLE = "Sprited Away";
     private static final String GENRE = "animation";
     private static final Integer LENGTH = 125;
-    private static final Movie MOVIE_ENTITY = new Movie(null, "Sprited Away", "animation", 125);
+    private static final Movie MOVIE_ENTITY = new Movie(null, "Sprited Away", "animation", 125, null);
     private static final MovieDto MOVIE = new MovieDto.Builder()
             .withTitle(TITLE)
             .withGenre(GENRE)
@@ -230,7 +231,7 @@ public class MovieServiceImplTest {
         Movie movie = new Movie(null
                 , "Sprited Away"
                 , "animation"
-                , 125);
+                , 125, null);
         Mockito.when(movieRepository
                 .getMovieByTitle("Sprited Away"))
                 .thenReturn(movie);
@@ -247,7 +248,7 @@ public class MovieServiceImplTest {
         Movie expected = new Movie(null,
                 requiredMovie.getTitle(),
                 requiredMovie.getGenre(),
-                requiredMovie.getLength());
+                requiredMovie.getLength(), null);
         //When
         underTest.updateMovie(requiredMovie);
 
@@ -319,5 +320,38 @@ public class MovieServiceImplTest {
                 .existsByTitle("Sprited Away");
         Mockito.verifyNoMoreInteractions(movieRepository);
 
+    }
+
+    @Test
+    public void updatePriceComponentShouldThrowIllegalArgumentExceptionIfMovieNotExist(){
+        //Given
+        PriceComponent priceComponent = new PriceComponent(null,"asd",1500);
+        //When
+        Assertions.assertThrows(IllegalArgumentException.class
+                , () -> underTest.updatePriceComponent(priceComponent,"Sprited Away"));
+        //Then
+        Mockito.verify(movieRepository).findByTitle("Sprited Away");
+        Mockito.verifyNoMoreInteractions(movieRepository);
+    }
+
+    @Test
+    public void updatePriceComponentShouldUpdateTheMoviePriceComponentIfMovieExist() {
+        //Given
+        PriceComponent priceComponent = new PriceComponent(null,"asd",1500);
+        Movie movie = new Movie(null
+                , "Sprited Away"
+                , "animation"
+                , 125, null);
+        Mockito.when(movieRepository.findByTitle("Sprited Away")).thenReturn(Optional.of(movie));
+        Movie expected = new Movie(null,
+                "Sprited Away",
+                "animation",
+                125,
+                priceComponent);
+        //When
+        underTest.updatePriceComponent(priceComponent,"Sprited Away");
+        //Then
+        Mockito.verify(movieRepository).findByTitle("Sprited Away");
+        Mockito.verify(movieRepository).save(expected);
     }
 }

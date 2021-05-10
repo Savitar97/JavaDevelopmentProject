@@ -1,5 +1,7 @@
 package com.epam.training.ticketservice.core.configuration;
 
+import com.epam.training.ticketservice.core.pricecomponent.persistence.entity.BasePrice;
+import com.epam.training.ticketservice.core.pricecomponent.persistence.repository.BasePriceRepository;
 import com.epam.training.ticketservice.core.user.persistence.entity.Role;
 import com.epam.training.ticketservice.core.user.persistence.entity.User;
 import com.epam.training.ticketservice.core.user.persistence.repository.UserRepository;
@@ -13,10 +15,14 @@ public class DbInitializer {
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final BasePriceRepository basePriceRepository;
 
-    public DbInitializer(PasswordEncoder passwordEncoder, UserRepository userRepository) {
+    public DbInitializer(PasswordEncoder passwordEncoder,
+                         UserRepository userRepository,
+                         BasePriceRepository basePriceRepository) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
+        this.basePriceRepository = basePriceRepository;
     }
 
     @PostConstruct
@@ -26,6 +32,10 @@ public class DbInitializer {
                     passwordEncoder.encode("admin"),
                     Role.ROLE_ADMIN);
             userRepository.save(user);
+        }
+        if (!basePriceRepository.existsById(1)) {
+            BasePrice basePrice = new BasePrice(1,1500);
+            basePriceRepository.save(basePrice);
         }
     }
 }

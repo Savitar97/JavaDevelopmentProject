@@ -10,4 +10,6 @@ public interface BookingService {
     public String createBooking(String movieTitle, String roomName, Date startTime, List<SeatDto> seats);
 
     public List<BookingDto> getBookingForUser(String userName);
+
+    Integer calculatePrice(String movieTitle, String roomName, Date startTime, List<SeatDto> seats);
 }

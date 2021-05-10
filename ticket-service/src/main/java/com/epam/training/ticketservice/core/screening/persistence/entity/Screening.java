@@ -1,13 +1,14 @@
 package com.epam.training.ticketservice.core.screening.persistence.entity;
 
+import com.epam.training.ticketservice.core.pricecomponent.persistence.entity.PriceComponent;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.EmbeddedId;
+import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;
 
 @Entity
 @Data
@@ -17,6 +18,9 @@ public class Screening {
     @EmbeddedId
     ScreeningId id;
 
+    @ManyToOne
+    @JoinColumn(name = "price_id", referencedColumnName = "id")
+    private PriceComponent priceComponent;
 
     @Override
     public String toString() {

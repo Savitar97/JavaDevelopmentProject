@@ -1,6 +1,7 @@
 package com.epam.training.ticketservice.core.room.impl;
 
 import com.epam.training.ticketservice.core.mapper.RoomEntityToDtoMapper;
+import com.epam.training.ticketservice.core.pricecomponent.persistence.entity.PriceComponent;
 import com.epam.training.ticketservice.core.room.RoomService;
 import com.epam.training.ticketservice.core.room.model.RoomDto;
 import com.epam.training.ticketservice.core.room.persistence.entity.Room;
@@ -39,9 +40,9 @@ public class RoomServiceImpl implements RoomService {
             throw new IllegalArgumentException("Room with this name already exist");
         }
         roomRepository.save(new Room(null,
-                    roomDto.getRoomName(),
-                    roomDto.getSeatRows(),
-                    roomDto.getSeatColumns()));
+                roomDto.getRoomName(),
+                roomDto.getSeatRows(),
+                roomDto.getSeatColumns(), null));
     }
 
     @Override
@@ -67,5 +68,13 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public boolean existsByName(String name) {
         return roomRepository.existsByName(name);
+    }
+
+    @Override
+    public void updatePriceComponent(PriceComponent priceComponent, String roomName) {
+        Room room = roomRepository.findByName(roomName)
+                .orElseThrow(() -> new IllegalArgumentException("Room with this name not exist!"));
+        room.setPriceComponent(priceComponent);
+        roomRepository.save(room);
     }
 }
