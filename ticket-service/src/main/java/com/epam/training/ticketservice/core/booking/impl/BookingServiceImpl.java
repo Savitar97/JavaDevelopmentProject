@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -116,27 +117,26 @@ public class BookingServiceImpl implements BookingService {
                 .findById_Movie_TitleAndId_Room_NameAndId_StartTime(movieTitle, roomName, startTime)
                 .orElseThrow(() -> new IllegalArgumentException("Screening with this parameter not exist!"));
 
-        Integer moviePrice;
-        Integer roomPrice;
-        Integer screeningPrice;
+        int moviePrice;
+        int roomPrice;
+        int screeningPrice;
 
-        try {
-            moviePrice = screening.getId().getMovie().getPriceComponent().getPrice();
-        } catch (NullPointerException e) {
-            moviePrice = 0;
-        }
+        moviePrice = Optional.of(screening
+                .getId()
+                .getMovie()
+                .getPriceComponent()
+                .getPrice())
+                .orElse(0);
+        roomPrice = Optional.of(screening
+                .getId().getRoom()
+                .getPriceComponent()
+                .getPrice())
+                .orElse(0);
+        screeningPrice = Optional.of(screening
+                .getPriceComponent()
+                .getPrice())
+                .orElse(0);
 
-        try {
-            roomPrice = screening.getId().getRoom().getPriceComponent().getPrice();
-        } catch (NullPointerException e) {
-            roomPrice = 0;
-        }
-
-        try {
-            screeningPrice = screening.getPriceComponent().getPrice();
-        } catch (NullPointerException e) {
-            screeningPrice = 0;
-        }
         Integer basePrice = basePriceRepository.getBasePriceById(1).getPrice();
         return seats.size() * (moviePrice + roomPrice + screeningPrice + basePrice);
     }
