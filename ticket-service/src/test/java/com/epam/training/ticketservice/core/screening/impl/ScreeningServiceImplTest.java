@@ -69,7 +69,7 @@ class ScreeningServiceImplTest {
             .build();
 
     @BeforeEach
-    public void init() throws ParseException {
+    public void init() {
 
         MovieEntityToDtoMapper movieEntityToDtoMapper =
                 new MovieEntityToDtoMapperImpl();
@@ -381,6 +381,15 @@ class ScreeningServiceImplTest {
                 .deleteScreeningById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE, ROOM_NAME, DATE);
 
         Mockito.verifyNoMoreInteractions(screeningRepository);
+    }
+
+    @Test
+    public void testUpdatePriceComponentShouldThrowIllegalArgumentExceptionWhenTheScreeningNotExist() {
+        //When
+        Assertions.assertThrows(IllegalArgumentException.class,()->underTest.updatePriceComponent(null,TITLE,ROOM_NAME,DATE));
+        Mockito.verify(screeningRepository).findById_Movie_TitleAndId_Room_NameAndId_StartTime(TITLE,ROOM_NAME,DATE);
+        Mockito.verifyNoMoreInteractions(screeningRepository);
+
     }
 
 }

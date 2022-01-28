@@ -7,9 +7,11 @@ import com.epam.training.ticketservice.core.booking.persistence.entity.Booking;
 import com.epam.training.ticketservice.core.booking.persistence.entity.Seat;
 import com.epam.training.ticketservice.core.booking.persistence.repository.BookingRepository;
 import com.epam.training.ticketservice.core.mapper.BookingEntityToDtoMapper;
+import com.epam.training.ticketservice.core.pricecomponent.persistence.entity.PriceComponent;
 import com.epam.training.ticketservice.core.pricecomponent.persistence.repository.BasePriceRepository;
 import com.epam.training.ticketservice.core.screening.persistence.entity.Screening;
 import com.epam.training.ticketservice.core.screening.persistence.repository.ScreeningRepository;
+import com.epam.training.ticketservice.core.user.persistence.entity.User;
 import com.epam.training.ticketservice.core.user.persistence.repository.UserRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -52,18 +54,21 @@ public class BookingServiceImpl implements BookingService {
                 .map(seat -> new Seat(seat.getRow(), seat.getColumn()))
                 .collect(Collectors.toList());
 
-        Booking booking = new Booking(null,
-                userRepository.findByUsername(
-                        SecurityContextHolder.getContext()
-                                .getAuthentication()
-                                .getName()).orElseThrow(() -> new IllegalStateException("You are not signed in")),
-                screeningRepository
-                        .getScreeningById_Movie_TitleAndId_Room_NameAndId_StartTime(movieTitle,
-                                roomName,
-                                startTime),
-                seatEntities,
-                calculatePrice(movieTitle, roomName, startTime, seats)
-        );
+        User user = userRepository.findByUsername(
+                SecurityContextHolder.getContext()
+                        .getAuthentication()
+                        .getName()).orElseThrow(() -> new IllegalStateException("You are not signed in"));
+
+        Screening screening = screeningRepository
+                .getScreeningById_Movie_TitleAndId_Room_NameAndId_StartTime(movieTitle, roomName, startTime);
+
+        Integer ticketPrice = calculatePrice(movieTitle, roomName, startTime, seats);
+        Booking booking = Booking.builder()
+                .user(user)
+                .screening(screening)
+                .seats(seatEntities)
+                .ticketPrice(ticketPrice).build();
+
         checkSeatExisting(booking);
         checkSeatAlreadyBooked(booking);
         bookingRepository.save(booking);
@@ -90,12 +95,16 @@ public class BookingServiceImpl implements BookingService {
                 .getRoom()
                 .getSeatRows();
 
-        booking.getSeats().forEach(seat -> {
-            if (seatRows < 0 || seatColumns < 0
-                    || seatRows < seat.getSeatRow() || seatColumns < seat.getSeatColumn()) {
-                throw new IllegalArgumentException("Seat " + seat + " does not exist in this room");
-            }
-        });
+        booking.getSeats().forEach(seat ->
+            checkSeatExistInRoom(seatColumns, seatRows, seat)
+        );
+    }
+
+    private void checkSeatExistInRoom(Integer seatColumns, Integer seatRows, Seat seat) {
+        if (seatRows < 0 || seatColumns < 0
+                || seatRows < seat.getSeatRow() || seatColumns < seat.getSeatColumn()) {
+            throw new IllegalArgumentException("Seat " + seat + " does not exist in this room");
+        }
     }
 
     private void checkSeatAlreadyBooked(Booking booking) {
@@ -117,24 +126,20 @@ public class BookingServiceImpl implements BookingService {
                 .findById_Movie_TitleAndId_Room_NameAndId_StartTime(movieTitle, roomName, startTime)
                 .orElseThrow(() -> new IllegalArgumentException("Screening with this parameter not exist!"));
 
-        int moviePrice;
-        int roomPrice;
-        int screeningPrice;
-
-        moviePrice = Optional.of(screening
+        int moviePrice = Optional.ofNullable(screening
                 .getId()
                 .getMovie()
-                .getPriceComponent()
-                .getPrice())
+                .getPriceComponent())
+                .map(PriceComponent::getPrice)
                 .orElse(0);
-        roomPrice = Optional.of(screening
+        int roomPrice = Optional.ofNullable(screening
                 .getId().getRoom()
-                .getPriceComponent()
-                .getPrice())
+                .getPriceComponent())
+                .map(PriceComponent::getPrice)
                 .orElse(0);
-        screeningPrice = Optional.of(screening
-                .getPriceComponent()
-                .getPrice())
+        int screeningPrice = Optional.ofNullable(screening
+                .getPriceComponent())
+                .map(PriceComponent::getPrice)
                 .orElse(0);
 
         Integer basePrice = basePriceRepository.getBasePriceById(1).getPrice();
