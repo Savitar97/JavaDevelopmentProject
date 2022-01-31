@@ -20,11 +20,13 @@ import com.epam.training.ticketservice.core.screening.persistence.repository.Scr
 import com.epam.training.ticketservice.core.user.persistence.entity.Role;
 import com.epam.training.ticketservice.core.user.persistence.entity.User;
 import com.epam.training.ticketservice.core.user.persistence.repository.UserRepository;
+import com.epam.training.ticketservice.core.writer.OutputStringWriter;
+import com.epam.training.ticketservice.core.writer.impl.BookingStringWriter;
+import com.epam.training.ticketservice.core.writer.impl.SeatStringWriter;
 import com.epam.training.ticketservice.ui.utilities.StringToDate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -42,12 +44,9 @@ class BookingServiceImplTest {
     private BookingRepository bookingRepository;
     private UserRepository userRepository;
     private BookingEntityToDtoMapper entityToDtoMapper;
-    private ScreeningEntityToDtoMapper screeningEntityToDtoMapper;
-    private MovieEntityToDtoMapper movieEntityToDtoMapper;
-    private RoomEntityToDtoMapper roomEntityToDtoMapper;
-    private UserEntityToDtoMapper userEntityToDtoMapper;
     private SeatEntityToDtoMapper seatEntityToDtoMapper;
     private BasePriceRepository basePriceRepository;
+    private OutputStringWriter<Booking> bookingStringWriter;
 
     private static final String DATE_STRING = "2021-03-14 16:00";
     private static final StringToDate stringToDate = new StringToDate();
@@ -93,19 +92,21 @@ class BookingServiceImplTest {
         bookingRepository = Mockito.mock(BookingRepository.class);
         userRepository = Mockito.mock(UserRepository.class);
         basePriceRepository = Mockito.mock(BasePriceRepository.class);
-        movieEntityToDtoMapper = new MovieEntityToDtoMapperImpl();
-        roomEntityToDtoMapper = new RoomEntityToDtoMapperImpl();
-        screeningEntityToDtoMapper =
-                new ScreeningEntityToDtoMapperImpl(movieEntityToDtoMapper,roomEntityToDtoMapper);
+        MovieEntityToDtoMapper movieEntityToDtoMapper = new MovieEntityToDtoMapperImpl();
+        RoomEntityToDtoMapper roomEntityToDtoMapper = new RoomEntityToDtoMapperImpl();
+        SeatStringWriter seatStringWriter = new SeatStringWriter();
+        bookingStringWriter = new BookingStringWriter(seatStringWriter);
+        ScreeningEntityToDtoMapper screeningEntityToDtoMapper = new ScreeningEntityToDtoMapperImpl(movieEntityToDtoMapper, roomEntityToDtoMapper);
         seatEntityToDtoMapper = new SeatEntityToDtoMapperImpl();
-        userEntityToDtoMapper = new UserEntityToDtoMapperImpl();
+        UserEntityToDtoMapper userEntityToDtoMapper = new UserEntityToDtoMapperImpl();
         entityToDtoMapper= new BookingEntityToDtoMapperImpl(screeningEntityToDtoMapper,
-                seatEntityToDtoMapper,userEntityToDtoMapper);
+                seatEntityToDtoMapper, userEntityToDtoMapper);
+
 
         underTest = new BookingServiceImpl(screeningRepository,
                 bookingRepository,
                 userRepository,
-                entityToDtoMapper, basePriceRepository);
+                entityToDtoMapper, basePriceRepository, bookingStringWriter, seatStringWriter);
 
         Authentication authentication = Mockito.mock(UsernamePasswordAuthenticationToken.class);
         SecurityContext securityContext = Mockito.mock(SecurityContext.class);
@@ -175,7 +176,7 @@ class BookingServiceImplTest {
         Mockito.when(basePriceRepository.getBasePriceById(1)).thenReturn(new BasePrice(1,1500));
         Mockito.when(bookingRepository.getBookingByScreening(SCREENING_ENTITY)).thenReturn(List.of());
         Mockito.when(bookingRepository.save(BOOKING_ENTITY)).thenReturn(BOOKING_ENTITY);
-        String expected = BOOKING_ENTITY.toString();
+        String expected = bookingStringWriter.writeOutAsString(BOOKING_ENTITY);
         //When
         String actual = underTest.createBooking(TITLE,ROOM_NAME,DATE,seatEntityToDtoMapper.convertEntityToDto(SEATS));
         //Then

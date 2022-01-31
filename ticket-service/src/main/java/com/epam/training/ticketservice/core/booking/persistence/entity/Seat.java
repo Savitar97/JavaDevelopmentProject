@@ -17,8 +17,9 @@ public class Seat {
 
     @Override
     public String toString() {
-        return "(" + seatRow
-                + "," + seatColumn
-                + ')';
+        return "Seat{"
+                + "seatRow=" + seatRow
+                + ", seatColumn=" + seatColumn
+                + '}';
     }
 }

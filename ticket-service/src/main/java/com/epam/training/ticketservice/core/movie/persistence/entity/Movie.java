@@ -41,6 +41,7 @@ public class Movie {
                 + ", title='" + title + '\''
                 + ", genre='" + genre + '\''
                 + ", length=" + length
+                + ", priceComponent=" + priceComponent
                 + '}';
     }
 }

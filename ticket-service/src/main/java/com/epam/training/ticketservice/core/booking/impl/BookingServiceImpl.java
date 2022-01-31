@@ -13,8 +13,10 @@ import com.epam.training.ticketservice.core.screening.persistence.entity.Screeni
 import com.epam.training.ticketservice.core.screening.persistence.repository.ScreeningRepository;
 import com.epam.training.ticketservice.core.user.persistence.entity.User;
 import com.epam.training.ticketservice.core.user.persistence.repository.UserRepository;
+import com.epam.training.ticketservice.core.writer.OutputStringWriter;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
 
 import java.util.Collection;
 import java.util.Date;
@@ -29,17 +31,23 @@ public class BookingServiceImpl implements BookingService {
     private final UserRepository userRepository;
     private final BookingEntityToDtoMapper entityToDtoMapper;
     private final BasePriceRepository basePriceRepository;
-
+    private final OutputStringWriter<Booking> outputStringWriter;
+    private final OutputStringWriter<Seat> outputSeatWriter;
 
     public BookingServiceImpl(ScreeningRepository screeningRepository,
                               BookingRepository bookingRepository,
                               UserRepository userRepository,
-                              BookingEntityToDtoMapper entityToDtoMapper, BasePriceRepository basePriceRepository) {
+                              BookingEntityToDtoMapper entityToDtoMapper,
+                              BasePriceRepository basePriceRepository,
+                              OutputStringWriter<Booking> outputStringWriter,
+                              OutputStringWriter<Seat> outputSeatWriter) {
         this.screeningRepository = screeningRepository;
         this.bookingRepository = bookingRepository;
         this.userRepository = userRepository;
         this.entityToDtoMapper = entityToDtoMapper;
         this.basePriceRepository = basePriceRepository;
+        this.outputStringWriter = outputStringWriter;
+        this.outputSeatWriter = outputSeatWriter;
     }
 
     @Override
@@ -72,8 +80,10 @@ public class BookingServiceImpl implements BookingService {
         checkSeatExisting(booking);
         checkSeatAlreadyBooked(booking);
         bookingRepository.save(booking);
-        return booking.toString();
+        return outputStringWriter.writeOutAsString(booking);
     }
+
+
 
     @Override
     public List<BookingDto> getBookingForUser(String userName) {
@@ -103,7 +113,9 @@ public class BookingServiceImpl implements BookingService {
     private void checkSeatExistInRoom(Integer seatColumns, Integer seatRows, Seat seat) {
         if (seatRows < 0 || seatColumns < 0
                 || seatRows < seat.getSeatRow() || seatColumns < seat.getSeatColumn()) {
-            throw new IllegalArgumentException("Seat " + seat + " does not exist in this room");
+            throw new IllegalArgumentException("Seat "
+                    + outputSeatWriter.writeOutAsString(seat)
+                    + " does not exist in this room");
         }
     }
 
@@ -116,7 +128,9 @@ public class BookingServiceImpl implements BookingService {
                 .collect(Collectors.toList());
         booking.getSeats().forEach(seat -> {
             if (seats.contains(seat)) {
-                throw new IllegalArgumentException("Seat " + seat + " is already taken");
+                throw new IllegalArgumentException("Seat "
+                        + outputSeatWriter.writeOutAsString(seat)
+                        + " is already taken");
             }
         });
     }
@@ -145,4 +159,6 @@ public class BookingServiceImpl implements BookingService {
         Integer basePrice = basePriceRepository.getBasePriceById(1).getPrice();
         return seats.size() * (moviePrice + roomPrice + screeningPrice + basePrice);
     }
+
+
 }
